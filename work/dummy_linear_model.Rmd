@@ -145,7 +145,7 @@ est <- rbind( param %>% unlist, dt[nrow(dt),]) %>%
 names(est) <- c('Valeur réelle', 'Valeur estimée')
   
 est <- est %>%
-  mutate( Rrmse = abs(`Valeur réelle` -`Valeur estimée`)/max(abs(`Valeur réelle`)))
+  mutate( Rrmse = abs(`Valeur réelle` -`Valeur estimée`)/abs(`Valeur réelle`))
  
 est %>% t %>%
   knitr::kable(caption = "résultat de l'algo SAEM-MCMC") %>%

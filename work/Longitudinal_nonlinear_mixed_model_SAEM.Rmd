@@ -31,21 +31,23 @@ require(SAEM4JLS)
 
 ```{r init}
 m <- function(phi, eta) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
-#m <- function(phi, eta) phi[1] * t + phi[2]
+m <- function(phi, eta) phi[1] * (t-phi[2]) + eta
+m <- function(phi, eta) eta * t
+m <- function(phi, eta) phi[1] * t + phi[2]
 
-ni <- 10 #nombre observation
+ni <- 20 #nombre observation
 ng <- 1 #nombre d'individu par groupe
 G <- 20 # nombre groupe
-F. <- 3#dimention du vecteur phi
+F. <- 2#dimention du vecteur phi
 
 n <- G*ng*ni #nombre total de data
 N <- G*ng #nombre total d'individu
 
 #=======================================#
 param <- list(rho2 = 0.4,
-              sigma2 = 0.5,
-              mu = c(5,4,0.5),
-              omega2 = c(0.5,0.1,0.01))
+              sigma2 = 0.05,
+              mu = sample(1:5, size = F.),#c(5,4,0.5),
+              omega2 = sample(seq(0.3,0.6, length.out = 10 ), F.) ) #c(0.5,0.1,0.01))
 #=======================================#
 
 eps <- rnorm(n, 0, sqrt(param$sigma2))
@@ -68,7 +70,7 @@ data.frame(Y = Y, t = t ) %>% melt(id = 't') %>% mutate(gen = rep(X$gen, each = 
 ```
 
 ## SAEM avec simulation par MCMC
-$$\log f(Y, Z ; \theta) = \langle P(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
+$$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
 ```{r setup stat exhaustive}
 Phi <- function(rho2, sigma2, mu, omega2)
@@ -84,33 +86,36 @@ S <- function(eta, phi)
   attr(s, '1') <- 1
   attr(s, '2') <- 2
   attr(s, '3') <- 2 + 1:nrow(phi)
-  attr(s, '4') <- 1 + nrow(phi) + 1:nrow(phi)
+  attr(s, '4') <- 2 + nrow(phi) + 1:nrow(phi)
   return(s)
 }
+
+#S(eta, phi) %>% maxi
 ```
 ## Metropolis Hastings
 
 ```{r MH}
 #=============================================================================#
-transi <- function(x) rnorm(length(x), x, 0.01)
+transi <- function(x) rnorm(length(x), x, 0.1)
 loglik.phi <- function(x, eta, P)
 {
-  stat <- S(eta,x)
-  # sum(P*stat)
-  id <- c(1,2+1:F., 2+F.+1:F.) #indice de S_1 et S_{2,.} puis S_{3,.}
-  sum(P[id]*stat[id])
+  s <- S(eta,x)
+  
+  id <- c(attr(s,'1'),attr(s,'3'), attr(s,'4')) #indice de S_1 et S_{2,.} puis S_{3,.}
+  sum(P[id]*s[id])
 }
 
 loglik.eta <- function(x, phi, P) 
 { 
-  stat <- S(x, phi)
-  sum(P[1:2]*stat[1:2])
+  s <- S(x, phi)
+  id <- c(attr(s,'1'),attr(s,'2'))
+  sum(P[id]*s[id])
 }
 ```
 
-```{r MH phi}
+```{r MH phi, eval=FALSE}
 phi.MH <- matrix(rnorm(F.*G, 0, 1), ncol = G, nrow = F.)
-phi.MH <- MH_High_Dim(20000, phi.MH, transi, loglik.phi, eta, do.call(Phi, param), verbatim = T)
+phi.MH <- MH_High_Dim(2000, phi.MH, transi, loglik.phi, eta, do.call(Phi, param), verbatim = T)
 
 attr(phi.MH, 'acceptation_rate')
 
@@ -121,12 +126,10 @@ v %>% mutate(composante = factor(rep(1:nrow(phi.MH), max(v$iter)+1) )) %>% melt(
 
 ```
 
-```{r MH eta}
-eta.MH <- MH_High_Dim(10000, matrix(rnorm(N, 0, 1), nrow = 1), transi, loglik.eta,  phi, do.call(Phi, param), verbatim = T)
+```{r MH eta, eval=FALSE}
+eta.MH <- MH_High_Dim(1000, matrix(rnorm(N, 0, 1), nrow = 1), transi, loglik.eta,  phi, do.call(Phi, param), verbatim = T)
 
 attr(eta.MH, 'acceptation_rate')
-
-
 
 v <- attr(eta.MH, "value")
 v %>% mutate(composante = factor(rep(1:nrow(eta.MH), max(v$iter)+1) )) %>% melt(id = c('iter', 'composante')) %>%
@@ -135,9 +138,6 @@ v %>% mutate(composante = factor(rep(1:nrow(eta.MH), max(v$iter)+1) )) %>% melt(
 
 
 ```
-
-
-
 
 # SAEM
 ### initialisation
@@ -173,6 +173,11 @@ sim <- function(niter, Phih, etagivenY, phigivenY)
 maxi <- function(S)
 {
   mu <- S[attr(S,'4')]/G # = S[4]
+  return( list(rho2 =  param$rho2,#S[attr(S,'2')]/N,
+               sigma2 = param$sigma2, #S[attr(S,'1')]/n,
+               mu = mu,
+               omega2 = S[attr(S,'3')]/G - mu^2))
+  
   return(list(rho2 = S[attr(S,'2')]/N,
               sigma2 = S[attr(S,'1')]/n,
               mu = mu,
@@ -180,44 +185,16 @@ maxi <- function(S)
   )
 }
 
-niter <- 200
+#para$rho2 = param$rho2
+para$mu = param$mu ; para$omega2 = param$omega2
+
+niter <- 300
 Z <- list(etagivenY, phigivenY)
-res <- SAEM(niter, 10, u, para, Phi, S, Z, sim, maxi, eps = 1e-2, verbatim = T)
+res <- SAEM(niter, 20, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)
 ```
 
-
-
-
 ```{r res, echo = F}
-dt <- res[[1]] %>% as.data.frame %>% na.omit
-
-#Resultat de l'estimations
-est <- rbind( param %>% unlist, dt[nrow(dt),]) %>%
-  t %>% data.frame
-
-names(est) <- c('Valeur réelle', 'Valeur estimée')
-  
-est <- est %>%
-  mutate( Rrmse = abs(`Valeur réelle` -`Valeur estimée`)/max(abs(`Valeur réelle`)))
- 
-est %>% t %>%
-  knitr::kable(caption = "résultat de l'algo SAEM-MCMC") %>%
-  kable_styling(full_width = F)
-
-# MCMC des paramètres
-dt %>% mutate(i = 1:nrow(.)) %>% melt(id = 'i') %>%
-  ggplot(aes(i, value, col = variable)) + geom_line() +
-  labs(title = "représentation de l'algorithme SAEM pour les paramètres",
-       x = 'iteration')
-
-# MCMC de Z
-v <- attr(res$Z, 'value')[[1]] %>% lapply(function(x) as.numeric(x)) %>% as.data.frame %>% t %>% as.data.frame()
-
-v %>% mutate(i = 1:nrow(.)) %>% melt(id = 'i') %>% #mutate(phi = rep(factor(c(1:F.)), each = nrow(v)*G)) %>%
-  ggplot(aes(i, value, col = variable)) + theme(legend.position = 'null') +
-  geom_line() + 
-  labs(title = "représentation des variables latentes de l'algorithme SAEM ",
-       x = 'iteration')
+SAEM_plot(res)
 ```
 
 
