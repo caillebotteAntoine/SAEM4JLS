@@ -30,9 +30,8 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
 
   M <- length(Z[[1]])
   if(verbatim)
-  {
     value <- Z %>% lapply(function(z) list(z[[1]]))
-  }
+
 
   h <- 2
   stopCondi <- function(h) para %>% lapply(function(p) abs(p[h-1] - p[h]) < eps) %>% as.logical %>% prod
@@ -69,7 +68,15 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
   if(verbatim)
     attr(Z, 'value') <- value
 
-  return(list(parameter = para, Z = Z))
+  if(cmp >= 20)
+  {
+    attr(para, 'stop') <- h - cmp
+  }
+
+  res <- list(parameter = para, Z = Z)
+  class(res) <- 'SAEM'
+
+  return(res)
 }
 
 

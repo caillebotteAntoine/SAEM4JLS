@@ -1,0 +1,110 @@
+---
+title: "MH in high dimension"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+  
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.weightedidth = 12,
+               fig.asp = 0.8,
+               out.weightedidth = "100%")
+
+# require(ggplot2)
+# require(reshape2)
+# require(dplyr)
+# require(tidyr)
+# 
+# source('R/include.R')
+
+require(SAEM4JLS)
+```
+
+```{r data generation}
+G <- 40
+n <- 10
+
+param <- list(sigma2 = 0.5, 
+              rho2 = 0.1,
+              mu = 3)
+
+t <- seq(-5,5, length.out = n) %>% matrix(nrow = 1)
+
+Z <- rnorm(G, param$mu, sqrt(param$rho2)) %>% matrix(ncol = 1)
+eps <- rnorm(G*n, 0, sqrt(param$sigma2))
+
+dt <- data.frame(id = rep(1:G, each = n) %>% factor,
+                t = rep(t, times = G),
+                obs = Z %*% t %>% t %>% as.numeric + eps)
+                       
+#sapply(1:nrow(dt), function(i) dt$t[i] * Z[dt$id[i]] ) + eps)
+
+dt %>% ggplot(aes(t, obs, col = id)) +
+  geom_point() + geom_line() + theme(legend.position = 'null')
+```
+
+
+
+```{r}
+Y <- matrix(dt$obs, ncol = G) %>% t
+
+transi <- function(x) rnorm(length(x), x, 0.2)
+
+Phi <- function(sigma2, rho2, mu)
+  c(-1/(2*sigma2), -1/(2*rho2), mu)
+
+loglik <- function(Z, Phi)
+{
+  #return(sum( (Y - Z%*%t )^2 ) * Phi[1] + sum( (Z - Phi[3])^2 )*Phi[2])
+  #(sum(Y^2) - 2*sum(Y*(Z %*% t)) + sum((Z%*%t)^2) )* Phi[1] + sum( (Z - Phi[3])^2 )*Phi[2] #- Phi[3]*Phi[2]* sum(Z) + sum(Z^2)/Phi[2]
+  sum( (Y - Z%*%t )^2 ) * Phi[1] + (- 2*Phi[3]* sum(Z) + sum(Z^2) )*Phi[2]
+  #(- 2*sum(Y*(Z %*% t)) + sum((Z%*%t)^2) )* Phi[1] + (-2*Phi[3]*sum(Z) + sum(Z^2) )*Phi[2]
+  
+}
+
+Z.MH <- matrix(rnorm(G), ncol = 1) #valeur initial
+Z.MH <- MH_High_Dim(2000, Z.MH, transi, loglik, do.call(Phi, param), verbatim = T)
+plot(Z.MH, dim = G)
+```
+
+```{r Z given Y}
+omega2 <- (sum(t^2)/param$sigma2 + 1/param$rho2)^-1
+nu <- 1:G %>% sapply( function(i) omega2 * (sum(Y[i,]*t)/param$sigma2 + param$mu/(2*param$rho2) ) )
+
+# burn in des 250 premières valeurs
+z <- MH_burnin(Z.MH, 500)
+
+plot(z, acceptation = F)
+
+#Moyennes et variance sachant Y de Z
+est <- attr(z, 'value') %>% group_by(id) %>% summarise(nu = mean(x), o2 = var(x))
+
+#Calcule de l'erreur moyenne des estimations des moyennes et variances
+mean( abs(est$nu-nu)/abs(nu) )
+mean( abs(est$o2-omega2)/abs(omega2) )
+```
+
+
+
+
+
+
+
+
+
+
+

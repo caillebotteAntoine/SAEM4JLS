@@ -1,7 +1,18 @@
 
 
-SAEM_plot <- function(res)
+#' plot the result of the SAEM funciton
+#'
+#' @param res
+#' @param MCMC
+#'
+#' @return
+#' @export
+#'
+#' @examples
+plot.SAEM <- function(res, MCMC = T)
 {
+  gg <- list()
+
   dt <- res$parameter %>% as.data.frame %>% na.omit
 
   #Resultat de l'estimations
@@ -13,27 +24,49 @@ SAEM_plot <- function(res)
   est <- est %>%
     mutate( Rrmse = abs(`Valeur réelle` -`Valeur estimée`)/abs(`Valeur réelle`))
 
-  print(
-  est %>% t %>%
-    knitr::kable(caption = "résultat de l'algo SAEM-MCMC") %>%
-    kable_styling(full_width = F) )
+  gg$table_estimation <-
+    est %>% t %>%
+      knitr::kable(caption = "résultat de l'algo SAEM-MCMC", format = 'pipe') %>%
+      kable_styling(full_width = F)
 
   # MCMC des paramètres
-  plot(
-  dt %>% mutate(i = 1:nrow(.)) %>% melt(id = 'i') %>%# filter( i < 25) %>%
-    ggplot(aes(i, value, col = variable)) + geom_line() +
-    labs(title = "représentation de l'algorithme SAEM pour les paramètres",
-         x = 'iteration') )
+  gg$plot_paramater <-
+    dt %>% mutate(i = 1:nrow(.)) %>% melt(id = 'i') %>%
+      mutate(hline = param %>% unlist %>% rep(each = nrow(dt)) ) %>%# filter( i < 25) %>%
+      ggplot(aes(i, value, col = variable)) + geom_line() +
+      geom_hline(aes(yintercept = hline, col = variable), linetype='dashed') +
+      labs(title = "représentation de l'algorithme SAEM pour les paramètres",
+           x = 'iteration') +  facet_grid( vars(variable), scales = 'free')
 
-  # MCMC de Z
-  v <- attr(res$Z, 'value')[[1]] %>% lapply(function(x) as.numeric(x)) %>% as.data.frame %>% t %>% as.data.frame()
+  if(!is.null( attr(res$parameter, 'stop')))
+  {
+    gg$plot_paramater <- gg$plot_paramater +
+      geom_vline(xintercept = attr(res$parameter, 'stop'), size = 1, col = 'red')
+  }
 
-  plot(
-  v %>% mutate(i = 1:nrow(.)) %>% melt(id = 'i') %>%
-    ggplot(aes(i, value, col = variable)) + theme(legend.position = 'null') +
-    geom_line() +
-    labs(title = "représentation des variables latentes de l'algorithme SAEM ",
-         x = 'iteration') )
+
+  if(MCMC && !is.null( attr(res$Z, 'value')))
+  {
+    # MCMC de Z
+    v <- attr(res$Z, 'value')
+    dt <- data.frame()
+    for(var in names(v))
+    {
+      dt <- rbind(dt,
+                  1:length(v[[var]]) %>%
+                    lapply(function(i) cbind(i, v[[var]][[i]], row = 1:length(v[[var]][[i]])) ) %>%
+                    {do.call(rbind, .) } %>% as.data.frame %>%
+                    melt(id = c('i','row')) %>% mutate(col = variable, variable = factor(var)) )
+    }
+
+    gg$plot_MCMC <-
+      dt %>% ggplot(aes(i, value, group = interaction(row, col, variable), color = col)) +
+        geom_line() +
+        labs(title = "représentation des variables latentes de l'algorithme SAEM ",
+             x = 'iteration') + facet_grid( vars(variable), scales = 'free')
+  }
+
+  gg
 }
 
 

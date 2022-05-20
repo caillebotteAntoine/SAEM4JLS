@@ -20,6 +20,6 @@ MH_High_Dim(niter, x, transition, loglik, ..., verbatim = F)
 \item{verbatim}{boolean value, true will return the whole chain, false will return by default only the last value}
 }
 \description{
-Will run the metropolis hasting algorithm on the columns of x.
-For example if we have x = (x_{i,j}), we will do an iteration of MH for each x_{.,j}
+Will run the metropolis hasting algorithm on the rows of x.
+For example if we have x = (x_{i,j}), we will do an iteration of MH for each x_{i,.}
 }

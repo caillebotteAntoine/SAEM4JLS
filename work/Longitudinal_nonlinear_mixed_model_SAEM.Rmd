@@ -1,5 +1,5 @@
 ---
-title: "Longitudinal data and nonlinear mixed model"
+title: "Test NLME SEAM"
 author: "Antoine caillebotte"
 date: "`r Sys.time()`"
 output: html_document
@@ -30,43 +30,35 @@ require(SAEM4JLS)
 ## Initialisation
 
 ```{r init}
-m <- function(phi, eta) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
-m <- function(phi, eta) phi[1] * (t-phi[2]) + eta
-m <- function(phi, eta) eta * t
-m <- function(phi, eta) phi[1] * t + phi[2]
+m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
+m <- function(t, eta, phi) phi[1] * t + phi[2] + eta
+m <- function(t, eta, phi) phi[1] * t #+ phi[2] + eta
+m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
+m <- function(t, eta, phi) (phi[1] )/(1+exp((phi[2]-t)/phi[3]))
 
-ni <- 20 #nombre observation
-ng <- 1 #nombre d'individu par groupe
-G <- 20 # nombre groupe
-F. <- 2#dimention du vecteur phi
+#=======================================#
+param <- list(rho2 = 0.1,
+              sigma2 = 0.05,
+              mu = c(5,4,0.5),
+              omega2 = c(0.5,0.1,0.01))
 
-n <- G*ng*ni #nombre total de data
+F. <- length(param$omega2) #dimension de phi
+#=======================================#
+
+t <- seq(2,6, length.out = 10) #valeur des temps
+
+G <- 40
+ng = 1
+n <- G*ng*length(t) #nombre total de data
 N <- G*ng #nombre total d'individu
 
-#=======================================#
-param <- list(rho2 = 0.4,
-              sigma2 = 0.05,
-              mu = sample(1:5, size = F.),#c(5,4,0.5),
-              omega2 = sample(seq(0.3,0.6, length.out = 10 ), F.) ) #c(0.5,0.1,0.01))
-#=======================================#
 
-eps <- rnorm(n, 0, sqrt(param$sigma2))
-eta <- rnorm(N, 0, sqrt(param$rho2))
-phi <- 1:G %>% sapply(function(i) rnorm(F., param$mu, sqrt(param$omega2)))
+dt <- NLME_obs(G, ng, t, param, m)
+Y <- dt$obs
 
-X <- data.frame('gen' = rep(1:G, each = ng) %>% as.factor) #Matrice de design
-t <- seq(2,6, length.out = ni) #valeur des temps
-
-# Y_{g,i,j} = m(s_j, phi_g) + \epsilon_{g,i,j}
-# Y_{i,j} = m(s_j, phi_{X[i]}) + \epsilon_{i,j}
-get.Y <- function(phi, eta) 1:N %>% sapply(function(i) m(phi[,X[i, 'gen']], eta[i]))
-Y <- get.Y(phi, eta) + eps
-#```
-
-#```{r plot, echo = F}
-data.frame(Y = Y, t = t ) %>% melt(id = 't') %>% mutate(gen = rep(X$gen, each = ni)) %>%
-  ggplot(aes(t, value, col = variable, shape = gen)) + geom_point() + geom_line() +#+ theme(legend.position = 'null')
-  guides(color = 'none')
+dt %>% ggplot(aes(t, obs, col = gen, group = id)) + 
+  geom_point() + geom_line() + 
+  theme(legend.position = 'null')
 ```
 
 ## SAEM avec simulation par MCMC
@@ -78,65 +70,49 @@ Phi <- function(rho2, sigma2, mu, omega2)
 
 S <- function(eta, phi)
 {
-  s <- c(sum((Y - get.Y(phi, eta))^2 ), #id = 1
+  s <- c(sum((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #id = 1
     sum(eta^2),          #id = 2
-    apply(phi^2, 1, sum),          #id = 3
-    apply(phi  , 1, sum) )         #id = 4
+    apply(phi^2, 2, sum),          #id = 3
+    apply(phi  , 2, sum) )         #id = 4
 
   attr(s, '1') <- 1
   attr(s, '2') <- 2
-  attr(s, '3') <- 2 + 1:nrow(phi)
-  attr(s, '4') <- 2 + nrow(phi) + 1:nrow(phi)
+  attr(s, '3') <- 2 + 1:ncol(phi)
+  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
   return(s)
 }
-
-#S(eta, phi) %>% maxi
 ```
 ## Metropolis Hastings
 
 ```{r MH}
 #=============================================================================#
-transi <- function(x) rnorm(length(x), x, 0.1)
-loglik.phi <- function(x, eta, P)
+loglik.phi <- function(x, eta, Phi)
 {
   s <- S(eta,x)
   
-  id <- c(attr(s,'1'),attr(s,'3'), attr(s,'4')) #indice de S_1 et S_{2,.} puis S_{3,.}
-  sum(P[id]*s[id])
+  id <- c(attr(s,'1'), attr(s,'3'), attr(s,'4')) #indice de S_1 et S_{3,.} puis S_{4,.}
+  sum(Phi[id]*s[id])
 }
-
-loglik.eta <- function(x, phi, P) 
+loglik.eta <- function(x, phi, Phi) 
 { 
   s <- S(x, phi)
-  id <- c(attr(s,'1'),attr(s,'2'))
-  sum(P[id]*s[id])
+  id <- c(attr(s,'1'), attr(s,'2'))
+  sum(Phi[id]*s[id])
 }
 ```
 
 ```{r MH phi, eval=FALSE}
-phi.MH <- matrix(rnorm(F.*G, 0, 1), ncol = G, nrow = F.)
-phi.MH <- MH_High_Dim(2000, phi.MH, transi, loglik.phi, eta, do.call(Phi, param), verbatim = T)
+phi.MH <- matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t
+phi.MH <- MH_High_Dim(2000, phi.MH, transi.phi, loglik.phi, attr(dt, 'eta'), do.call(Phi, param), verbatim = T)
+plot(phi.MH, dim = G)
 
-attr(phi.MH, 'acceptation_rate')
 
-v <- attr(phi.MH, "value")
-v %>% mutate(composante = factor(rep(1:nrow(phi.MH), max(v$iter)+1) )) %>% melt(id = c('iter', 'composante')) %>%
-  ggplot(aes(iter, value, col = interaction(composante, variable))) + geom_line() + theme(legend.position = 'null') +
-  labs(title = 'Resultat de Metropolis Hastings : phi', x = 'iteration', y = 'valeur de Z')
 
 ```
 
 ```{r MH eta, eval=FALSE}
-eta.MH <- MH_High_Dim(1000, matrix(rnorm(N, 0, 1), nrow = 1), transi, loglik.eta,  phi, do.call(Phi, param), verbatim = T)
-
-attr(eta.MH, 'acceptation_rate')
-
-v <- attr(eta.MH, "value")
-v %>% mutate(composante = factor(rep(1:nrow(eta.MH), max(v$iter)+1) )) %>% melt(id = c('iter', 'composante')) %>%
-  ggplot(aes(iter, value, col = interaction(composante, variable))) + geom_line() + theme(legend.position = 'null') +
-  labs(title = 'Resultat de Metropolis Hastings : eta', x = 'iteration', y = 'valeur de Z')
-
-
+eta.MH <- MH_High_Dim(100, matrix(rnorm(N, 0, 1), nrow = 1), transi, loglik.eta,  attr(dt, 'phi'), do.call(Phi, param), verbatim = T)
+plot(eta.MH)
 ```
 
 # SAEM
@@ -144,15 +120,26 @@ v %>% mutate(composante = factor(rep(1:nrow(eta.MH), max(v$iter)+1) )) %>% melt(
 ```{r SAEM init}
 # --- Nombre iteration --- #
 M <- 1
-u <- function(k) 1
-#---
-para <- list( rho2 = sample(1:5, size = 1),
-              sigma2 = sample(1:5, size = 1),
-              mu = rep(0, F.),
+u <- function(k) ifelse(k<200, 1, 1/(k-199) )
+
+# ---  Initialisation des paramètres --- #
+
+para <- list( rho2 = 1, #sample(1:5, size = 1),
+              sigma2 = 1, #sample(1:5, size = 1),
+              mu = rep(1, F.),
               omega2 = rep(1, F.) )
 
-etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0,1) )
-phigivenY <- 1:M %>% lapply(function(i) rnorm(F.*G, 0,1) %>% matrix(ncol = G, nrow = F.) )
+para <- param %>% sapply(function(x) x + runif(1))
+
+
+# --- Initialisation des chaines MC : Z_0 --- #
+etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0,0.1)  %>% matrix(ncol = 1) )
+phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t  )
+
+#Fonction de transition du MH
+transi <- function(x) rnorm(length(x), x, c(.02, .02, 0.03))
+transi.phi <- function(x) rnorm(length(x), x, c(.03, .02, .01))
+
 ```
 
 ## Boucle
@@ -161,11 +148,11 @@ phigivenY <- 1:M %>% lapply(function(i) rnorm(F.*G, 0,1) %>% matrix(ncol = G, nr
 sim <- function(niter, Phih, etagivenY, phigivenY)
 {
   M <- length(phigivenY)
-  etagivenY <- 1:M %>% lapply( function(i) 
-    MH_High_Dim(niter, matrix(etagivenY[[i]], nrow = 1), transi, loglik.eta, phigivenY[[i]], Phih ))
+  # etagivenY <- 1:M %>% lapply( function(i) 
+  #   MH_High_Dim(niter, etagivenY[[i]], transi, loglik.eta, phigivenY[[i]], Phih ))
 
   phigivenY <- 1:M %>% lapply( function(i)
-    MH_High_Dim(niter, phigivenY[[i]], transi, loglik.phi, etagivenY[[i]], Phih ))
+    MH_High_Dim(niter, phigivenY[[i]], transi.phi, loglik.phi, etagivenY[[i]], Phih ))
 
   list(eta = etagivenY, phi = phigivenY)
 }
@@ -173,28 +160,30 @@ sim <- function(niter, Phih, etagivenY, phigivenY)
 maxi <- function(S)
 {
   mu <- S[attr(S,'4')]/G # = S[4]
-  return( list(rho2 =  param$rho2,#S[attr(S,'2')]/N,
-               sigma2 = param$sigma2, #S[attr(S,'1')]/n,
-               mu = mu,
-               omega2 = S[attr(S,'3')]/G - mu^2))
+  omega2 <- S[attr(S,'3')]/G - mu^2
+  #omega2[2:3] <- param$omega2[2:3]
   
-  return(list(rho2 = S[attr(S,'2')]/N,
-              sigma2 = S[attr(S,'1')]/n,
-              mu = mu,
-              omega2 = S[attr(S,'3')]/G - mu^2)
-  )
+  return( list(rho2 = param$rho2,#S[attr(S,'2')]/N,
+               sigma2 = S[attr(S,'1')]/n,
+               mu = mu,
+               omega2 = omega2) )
+  
 }
 
-#para$rho2 = param$rho2
-para$mu = param$mu ; para$omega2 = param$omega2
+maxi(S(attr(dt, 'eta'), attr(dt, 'phi')))
+
 
 niter <- 300
-Z <- list(etagivenY, phigivenY)
-res <- SAEM(niter, 20, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)
-```
+MH.iter <- 20
+Z <- list(eta = etagivenY, phi = phigivenY)
+res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)
 
-```{r res, echo = F}
-SAEM_plot(res)
+plot(res)
+plot(res$Z$phi[[1]], dim = G*MH.iter)
+plot(res$Z$eta[[1]], dim = G*MH.iter)
+
+
+
 ```
 
 
