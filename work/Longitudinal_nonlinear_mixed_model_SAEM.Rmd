@@ -31,10 +31,6 @@ require(SAEM4JLS)
 
 ```{r init}
 m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
-m <- function(t, eta, phi) phi[1] * t + phi[2] + eta
-m <- function(t, eta, phi) phi[1] * t #+ phi[2] + eta
-m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
-m <- function(t, eta, phi) (phi[1] )/(1+exp((phi[2]-t)/phi[3]))
 
 #=======================================#
 param <- list(rho2 = 0.1,
@@ -71,7 +67,7 @@ Phi <- function(rho2, sigma2, mu, omega2)
 S <- function(eta, phi)
 {
   s <- c(sum((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #id = 1
-    sum(eta^2),          #id = 2
+    sum(eta^2),                    #id = 2
     apply(phi^2, 2, sum),          #id = 3
     apply(phi  , 2, sum) )         #id = 4
 
@@ -105,9 +101,6 @@ loglik.eta <- function(x, phi, Phi)
 phi.MH <- matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t
 phi.MH <- MH_High_Dim(2000, phi.MH, transi.phi, loglik.phi, attr(dt, 'eta'), do.call(Phi, param), verbatim = T)
 plot(phi.MH, dim = G)
-
-
-
 ```
 
 ```{r MH eta, eval=FALSE}
@@ -124,10 +117,10 @@ u <- function(k) ifelse(k<200, 1, 1/(k-199) )
 
 # ---  Initialisation des paramètres --- #
 
-para <- list( rho2 = 1, #sample(1:5, size = 1),
-              sigma2 = 1, #sample(1:5, size = 1),
+para <- list( rho2 = 0.5,
+              sigma2 = 0.1,
               mu = rep(1, F.),
-              omega2 = rep(1, F.) )
+              omega2 = rep(0.3, F.) )
 
 para <- param %>% sapply(function(x) x + runif(1))
 
@@ -137,7 +130,7 @@ etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0,0.1)  %>% matrix(ncol = 1) )
 phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t  )
 
 #Fonction de transition du MH
-transi <- function(x) rnorm(length(x), x, c(.02, .02, 0.03))
+transi <- function(x) rnorm(length(x), x, .02)
 transi.phi <- function(x) rnorm(length(x), x, c(.03, .02, .01))
 
 ```
@@ -148,8 +141,8 @@ transi.phi <- function(x) rnorm(length(x), x, c(.03, .02, .01))
 sim <- function(niter, Phih, etagivenY, phigivenY)
 {
   M <- length(phigivenY)
-  # etagivenY <- 1:M %>% lapply( function(i) 
-  #   MH_High_Dim(niter, etagivenY[[i]], transi, loglik.eta, phigivenY[[i]], Phih ))
+  etagivenY <- 1:M %>% lapply( function(i)
+    MH_High_Dim(niter, etagivenY[[i]], transi, loglik.eta, phigivenY[[i]], Phih ))
 
   phigivenY <- 1:M %>% lapply( function(i)
     MH_High_Dim(niter, phigivenY[[i]], transi.phi, loglik.phi, etagivenY[[i]], Phih ))
@@ -160,13 +153,10 @@ sim <- function(niter, Phih, etagivenY, phigivenY)
 maxi <- function(S)
 {
   mu <- S[attr(S,'4')]/G # = S[4]
-  omega2 <- S[attr(S,'3')]/G - mu^2
-  #omega2[2:3] <- param$omega2[2:3]
-  
-  return( list(rho2 = param$rho2,#S[attr(S,'2')]/N,
+  return( list(rho2 = S[attr(S,'2')]/N,
                sigma2 = S[attr(S,'1')]/n,
                mu = mu,
-               omega2 = omega2) )
+               omega2 = S[attr(S,'3')]/G - mu^2) )
   
 }
 
@@ -181,9 +171,6 @@ res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim 
 plot(res)
 plot(res$Z$phi[[1]], dim = G*MH.iter)
 plot(res$Z$eta[[1]], dim = G*MH.iter)
-
-
-
 ```
 
 

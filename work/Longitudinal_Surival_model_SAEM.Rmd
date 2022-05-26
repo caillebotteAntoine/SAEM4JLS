@@ -1,0 +1,222 @@
+---
+title: "Longitudinal and survival data modelisation"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.weightedidth = 12,
+               fig.asp = 0.8,
+               out.weightedidth = "100%")
+
+require(SAEM4JLS)
+```
+
+## Initialisation
+
+```{r init}
+#Phi[1] ; eta = valeur de fin
+#Phi[2] = valeur du noeud
+#Phi[3] = echelle
+m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
+
+#=======================================#
+param <- list(rho2 = 0.1,
+              sigma2 = 0.05,
+              mu = c(5,90,5),
+              omega2 = c(0.5,0.1,0.01),
+              #Survival data,
+              nu2 = 0.5,
+              a = 90,
+              b = 50,
+              alpha = 7,
+              beta = 10)
+
+F. <- length(param$omega2) #dimension de phi
+#=======================================#
+t <- seq(60,120, length.out = 10) #valeur des temps
+
+# --- longitudinal data --- #
+G = 40 ; ng = 1
+dt_NLME <- NLME_obs(G, ng, t, param, m)
+Y <- dt_NLME$obs
+
+dt_NLME %>% ggplot(aes(t, obs, col = gen, group = id)) + 
+  geom_point() + geom_line() + theme(legend.position = 'null')
+
+# --- Survival data --- #
+dt_SF <- SF_obs(dt_NLME, param, m)
+dt_SF %>% ggplot(aes(obs, fill = factor(gen))) + 
+  geom_histogram(position = 'dodge', bins = 20) + theme(legend.position = 'null')
+```
+
+## SAEM avec simulation par MCMC
+$$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
+
+```{r setup stat exhaustive}
+sigma2_a <- 0.1
+sigma2_b <- 0.1
+sigma2_alpha <- 0.1
+
+Phi <- function(rho2, sigma2, mu, omega2, nu2, a, b, alpha, beta)
+  c(- 1/(2*sigma2), -1/(2*rho2), -1/(2*omega2), G*mu/omega2,
+    -1/(2*nu2), a/sigma2_a,         -1/(2*sigma2_a), 
+                b/sigma2_b        , -1/(2*sigma2_b), 
+                alpha/sigma2_alpha, -1/(2*sigma2_alpha)  )
+
+zeta <- function(beta, eta, phi, gamma, a, b, alpha)
+{
+  lbd <- function(t,g) t^{b-1} * exp(alpha*m(t, eta[g], phi[g,]))
+  P1 <- 1:nrow(dt_SF) %>% sapply(function(i) integrate(function(t) lbd(t,dt_SF$gen[i]) , 0, dt_SF$obs[i])$value )
+  
+  P2 <- 1:nrow(dt_SF) %>% sapply(function(i) dt_SF$U[i]*exp(beta*dt_SF$U[i] + gamma[dt_SF$gen[i]] )  )
+  
+  sum(dt_SF$U) -  b*a^-b * sum(P2*P1)
+}
+
+S <- function(eta, phi, gamma, a, b, alpha)
+{
+  beta <- uniroot(function(beta)zeta(beta, eta, phi, gamma, a,b,alpha), lower = -100, upper = 100)$root
+  
+  s <- c(mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ),
+         mean(eta^2),
+         apply(phi^2, 2, mean), apply(phi  , 2, mean),
+         mean(gamma^2),
+         a, a^2,
+         b, b^2,
+         alpha^2, alpha,
+         beta )
+
+  attr(s, '1') <- 1
+  attr(s, '2') <- 2
+  attr(s, '3') <- 2 + 1:ncol(phi)
+  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
+  attr(s, '5') <- 2 + 2*ncol(phi) + 1
+  
+  for(i in 6:12) attr(s, as.character(i)) <- attr(s, as.character(i-1)) + 1 
+  return(s)
+}
+```
+
+```{r MH}
+#=============================================================================#
+loglik.phi <- function(x, eta, Phi)
+{
+  Phi[1] * sum((Y - get_obs(m, dt_NLME, eta = eta, phi = x) )^2) +
+    Phi[3] * apply(x^2, 2, sum) + Phi[4] * apply(x  , 2, sum)
+}
+loglik.eta <- function(x, phi, Phi) 
+{ 
+  Phi[1] * sum((Y - get_obs(m, dt_NLME, eta = x, phi = phi) )^2) +
+    Phi[2] * sum(x^2)
+}
+
+loglik.gamma <- function(x, Phi) Phi[5]  * mean(x)
+loglik.a     <- function(x, Phi) Phi[5]  * x + Phi[7] * x^2
+loglik.b     <- function(x, Phi) Phi[8]  * x + Phi[9] * x^2
+loglik.alpha <- function(x, Phi) Phi[10] * x + Phi[11] * x^2
+```
+
+# SAEM
+### initialisation
+```{r SAEM init}
+# --- Nombre iteration --- #
+M <- 1
+u <- function(k) ifelse(k<200, 1, 1/(k-199) )
+# ---  Initialisation des paramètres --- #
+para <- param %>% sapply(function(x) x + runif(1))
+
+# --- Initialisation des chaines MC : Z_0 --- #
+etagivenY   <- 1:M %>% lapply(function(i) rnorm(G*ng, 0,0.1)  %>% matrix(ncol = 1) )
+phigivenY   <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, c(5,90,5), 0.1), nrow = F.) %>% t  )
+
+gammagivenY <- 1:M %>% lapply(function(i) matrix(rnorm(G, 0, 0.1), ncol = 1) )
+agivenY <- list(matrix(90))
+bgivenY <- list(matrix(50))
+alphagivenY <- list(matrix(7))
+
+#Fonction de transition du MH
+transi.phi   <- function(x) rnorm(length(x), x, c(.03, .02, .01))
+transi.eta   <- function(x) rnorm(length(x), x, .02)
+
+transi.gamma <- function(x) rnorm(length(x), x, .02)
+transi.a     <- function(x) rnorm(length(x), x, .02)
+transi.b     <- function(x) rnorm(length(x), x, .02)
+transi.alpha <- function(x) rnorm(length(x), x, .02)
+```
+
+## Boucle
+
+```{r SAEM}
+sim <- function(niter, Phih, eta, phi, gamma, a, b, alpha)
+{
+  M <- length(phi)
+
+  eta <- 1:M %>% lapply( function(i) MH_High_Dim(niter, eta[[i]],     transi.eta,   loglik.eta, phi[[i]], Phih ))
+  phi <- 1:M %>% lapply( function(i) MH_High_Dim(niter, phi[[i]],     transi.phi,   loglik.phi, eta[[i]], Phih ))
+
+  gamma <- 1:M %>% lapply( function(i) MH_High_Dim(niter, gamma[[i]], transi.gamma, loglik.gamma, Phih ))
+  a     <- 1:M %>% lapply( function(i) MH_High_Dim(niter, a[[i]],     transi.a,     loglik.a,     Phih ))
+  b     <- 1:M %>% lapply( function(i) MH_High_Dim(niter, b[[i]],     transi.b,     loglik.b,     Phih ))
+  alpha <- 1:M %>% lapply( function(i) MH_High_Dim(niter, alpha[[i]], transi.alpha, loglik.alpha, Phih ))
+
+  list(eta = eta, phi = phi, gamma = gamma, a = a, b = b, alpha = alpha)
+}
+
+maxi <- function(S)
+{
+  list(rho2 =   S[attr(S,'2')],
+       sigma2 = S[attr(S,'1')],
+       mu =     S[attr(S,'4')],
+       omega2 = S[attr(S,'3')] - S[attr(S,'4')]^2,
+       nu2 =    S[attr(S,'5')],
+       a =      S[attr(S,'6')],  b =      S[attr(S,'8')],
+       alpha =  S[attr(S,'11')], beta =   S[attr(S,'12')] )
+}
+
+maxi(S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi'), attr(dt_SF, 'gamma'), param$a, param$b, param$alpha  ))
+# do.call(Phi, param)
+# do.call(sim, c(list(1, do.call(Phi, param)), Z))
+
+
+niter <- 40
+MH.iter <- 20
+Z <- list(eta = etagivenY, phi = phigivenY, gamma = gammagivenY, a = agivenY, b = bgivenY, alpha = alphagivenY)
+res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-1, verbatim = T)
+
+plot(res)
+plot(res$Z$phi[[1]], dim = G*MH.iter)
+plot(res$Z$eta[[1]], dim = G*MH.iter)
+plot(res$Z$gamma[[1]], dim = G*MH.iter)
+plot(res$Z$a[[1]], dim = MH.iter)
+plot(res$Z$b[[1]], dim = MH.iter)
+plot(res$Z$alpha[[1]], dim = MH.iter)
+
+saveRDS(list(param, res), "saem_res.rds")
+
+```
+
+
+
+
+
+
+
+
+
+
