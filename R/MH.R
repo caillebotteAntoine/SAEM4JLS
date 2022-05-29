@@ -47,7 +47,7 @@ MH <- function(niter, x, transition, loglik, ..., verbatim = F)
 
   }
 
-  a$acceptation_rate <- a$naccept/a$niter
+  a$acceptation <- a$naccept/a$niter
   attributes(x) <- a
   return(x)
 }

@@ -54,7 +54,7 @@ plot.SAEM <- function(res, MCMC = T)
     {
       dt <- rbind(dt,
                   1:length(v[[var]]) %>%
-                    lapply(function(i) cbind(i, v[[var]][[i]], row = 1:length(v[[var]][[i]])) ) %>%
+                    lapply(function(i) cbind(i, v[[var]][[i]], row = 1:nrow(v[[var]][[i]])) ) %>%
                     {do.call(rbind, .) } %>% as.data.frame %>%
                     melt(id = c('i','row')) %>% mutate(col = variable, variable = factor(var)) )
     }

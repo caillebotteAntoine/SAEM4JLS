@@ -44,7 +44,7 @@ F. <- length(param$omega2) #dimension de phi
 t <- seq(2,6, length.out = 10) #valeur des temps
 
 G <- 40
-ng = 1
+ng = 4
 n <- G*ng*length(t) #nombre total de data
 N <- G*ng #nombre total d'individu
 
@@ -62,14 +62,14 @@ $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
 ```{r setup stat exhaustive}
 Phi <- function(rho2, sigma2, mu, omega2)
-  c(- 1/(2*sigma2), -1/(2*rho2), -1/(2*omega2), mu/omega2)
+  c(- n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2)
 
 S <- function(eta, phi)
 {
-  s <- c(sum((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #id = 1
-    sum(eta^2),                    #id = 2
-    apply(phi^2, 2, sum),          #id = 3
-    apply(phi  , 2, sum) )         #id = 4
+  s <- c(mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #id = 1
+         mean(eta^2),                    #id = 2
+         apply(phi^2, 2, mean),          #id = 3
+         apply(phi  , 2, mean) )         #id = 4
 
   attr(s, '1') <- 1
   attr(s, '2') <- 2
@@ -99,12 +99,14 @@ loglik.eta <- function(x, phi, Phi)
 
 ```{r MH phi, eval=FALSE}
 phi.MH <- matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t
-phi.MH <- MH_High_Dim(2000, phi.MH, transi.phi, loglik.phi, attr(dt, 'eta'), do.call(Phi, param), verbatim = T)
+phi.MH <- MH_High_Dim_para(100, phi.MH, sd = c(.03, .02, .01), loglik.phi, attr(dt, 'eta'), do.call(Phi, param),
+                           verbatim = T, cores = future::availableCores()-2)
 plot(phi.MH, dim = G)
 ```
 
 ```{r MH eta, eval=FALSE}
-eta.MH <- MH_High_Dim(100, matrix(rnorm(N, 0, 1), nrow = 1), transi, loglik.eta,  attr(dt, 'phi'), do.call(Phi, param), verbatim = T)
+eta.MH <- MH_High_Dim_para(100, matrix(rnorm(N, 0, 0.5), nrow = 1), sd = .02, loglik.eta,  attr(dt, 'phi'), do.call(Phi, param),
+                           verbatim = T, cores = future::availableCores()-2)
 plot(eta.MH)
 ```
 
@@ -126,13 +128,8 @@ para <- param %>% sapply(function(x) x + runif(1))
 
 
 # --- Initialisation des chaines MC : Z_0 --- #
-etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0,0.1)  %>% matrix(ncol = 1) )
+etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0,0.2)  %>% matrix(ncol = 1) )
 phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t  )
-
-#Fonction de transition du MH
-transi <- function(x) rnorm(length(x), x, .02)
-transi.phi <- function(x) rnorm(length(x), x, c(.03, .02, .01))
-
 ```
 
 ## Boucle
@@ -142,35 +139,35 @@ sim <- function(niter, Phih, etagivenY, phigivenY)
 {
   M <- length(phigivenY)
   etagivenY <- 1:M %>% lapply( function(i)
-    MH_High_Dim(niter, etagivenY[[i]], transi, loglik.eta, phigivenY[[i]], Phih ))
+    MH_High_Dim_para(niter, etagivenY[[i]], sd = .02,loglik.eta, phigivenY[[i]], Phih,
+                     cores = future::availableCores()-2) )
 
   phigivenY <- 1:M %>% lapply( function(i)
-    MH_High_Dim(niter, phigivenY[[i]], transi.phi, loglik.phi, etagivenY[[i]], Phih ))
+    MH_High_Dim_para(niter, phigivenY[[i]], sd = c(.03, .02, .01), loglik.phi, etagivenY[[i]], Phih,
+                     cores = future::availableCores()-2) )
 
   list(eta = etagivenY, phi = phigivenY)
 }
 
+
 maxi <- function(S)
 {
-  mu <- S[attr(S,'4')]/G # = S[4]
-  return( list(rho2 = S[attr(S,'2')]/N,
-               sigma2 = S[attr(S,'1')]/n,
-               mu = mu,
-               omega2 = S[attr(S,'3')]/G - mu^2) )
-  
+  list(rho2 =   S[attr(S,'2')],
+       sigma2 = S[attr(S,'1')],
+       mu =     S[attr(S,'4')],
+       omega2 = S[attr(S,'3')] - S[attr(S,'4')]^2 )
 }
 
 maxi(S(attr(dt, 'eta'), attr(dt, 'phi')))
 
-
-niter <- 300
-MH.iter <- 20
+niter <- 200
+MH.iter <- 10
 Z <- list(eta = etagivenY, phi = phigivenY)
-res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)
+res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 51e-1, verbatim = T)
 
 plot(res)
-plot(res$Z$phi[[1]], dim = G*MH.iter)
-plot(res$Z$eta[[1]], dim = G*MH.iter)
+plot(res$Z$phi[[1]], dim = G)
+plot(res$Z$eta[[1]], dim = G)
 ```
 
 

@@ -36,7 +36,7 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
   h <- 2
   stopCondi <- function(h) para %>% lapply(function(p) abs(p[h-1] - p[h]) < eps) %>% as.logical %>% prod
   cmp <- 0
-  while(h < niter+1 && cmp < 20 ) #  for(h in 1:niter+1)
+  while(h <= niter+1 && cmp < 20 ) #  for(h in 1:niter+1)
   {
 
     # --- Step S : simulation --- #

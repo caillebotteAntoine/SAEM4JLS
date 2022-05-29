@@ -52,7 +52,7 @@ F. <- length(param$omega2) #dimension de phi
 t <- seq(60,120, length.out = 10) #valeur des temps
 
 # --- longitudinal data --- #
-G = 40 ; ng = 1
+G = 40 ; ng = 4
 dt_NLME <- NLME_obs(G, ng, t, param, m)
 Y <- dt_NLME$obs
 
@@ -68,7 +68,7 @@ dt_SF %>% ggplot(aes(obs, fill = factor(gen))) +
 ## SAEM avec simulation par MCMC
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
-```{r setup stat exhaustive}
+```{r  stat exhaustive}
 sigma2_a <- 0.1
 sigma2_b <- 0.1
 sigma2_alpha <- 0.1
@@ -171,6 +171,7 @@ sim <- function(niter, Phih, eta, phi, gamma, a, b, alpha)
   phi <- 1:M %>% lapply( function(i) MH_High_Dim(niter, phi[[i]],     transi.phi,   loglik.phi, eta[[i]], Phih ))
 
   gamma <- 1:M %>% lapply( function(i) MH_High_Dim(niter, gamma[[i]], transi.gamma, loglik.gamma, Phih ))
+  
   a     <- 1:M %>% lapply( function(i) MH_High_Dim(niter, a[[i]],     transi.a,     loglik.a,     Phih ))
   b     <- 1:M %>% lapply( function(i) MH_High_Dim(niter, b[[i]],     transi.b,     loglik.b,     Phih ))
   alpha <- 1:M %>% lapply( function(i) MH_High_Dim(niter, alpha[[i]], transi.alpha, loglik.alpha, Phih ))

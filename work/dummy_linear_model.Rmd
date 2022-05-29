@@ -24,12 +24,6 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.asp = 0.8,
                out.weightedidth = "100%")
 
-# require(ggplot2)
-# require(reshape2)
-# require(dplyr)
-# require(tidyr)
-# 
-# source('R/include.R')
 require(SAEM4JLS)
 ```
 
@@ -40,7 +34,6 @@ m <- function(t, eta, phi) phi[1] * t
 
 ng <- 1 #nombre d'individu par groupe
 G <- 40 # nombre groupe
-
 #===============================#
 param <- list( sigma2 = 0.5,  #variance de l'erreur
                mu = 3,  #moyenne de phi
@@ -78,14 +71,14 @@ S <- function(phi)
   return(s)
 }
 #=============================================================================#
-transi.phi <- function(x) rnorm(length(x), x, 0.05)
 loglik.phi <- function(phi, Phi)
 {
   s <- S(phi)
   sum(s*Phi)
 }
 
-phi.MH <- MH_High_Dim(1000, matrix(rnorm(F.*G, 0,1), ncol = F.), transi.phi, loglik.phi, do.call(Phi, param), verbatim = T)
+phi.MH <- MH_High_Dim_para(1000, matrix(rnorm(F.*G, 0,1), ncol = F.), sd = .05, loglik.phi, do.call(Phi, param), 
+                           verbatim = T, cores = future::availableCores()-2)
 plot(phi.MH, dim = G)
 ```
 

@@ -17,7 +17,7 @@ MH_High_Dim <- function(niter, x, transition, loglik, ..., verbatim = F)
   stopifnot('matrix' %in% class(x) || 'MH_res' %in% class(x))
 
   args <- list(...) # initialization of the parameters for the calculation of the acceptance rate
-  x_lik <- do.call(loglik, c(list(x), args))
+  x_lik <- do.call(loglik, c(list(x), args)) #log-Likelihood of the initiale value x
   dim <- nrow(x) #dimension of the vector x
 
   a <- attributes(x)

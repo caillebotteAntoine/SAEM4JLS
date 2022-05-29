@@ -32,6 +32,7 @@ opts_chunk$set(echo = T, message = F, warning = F,
 # source('R/include.R')
 
 require(SAEM4JLS)
+require(tictoc)
 ```
 
 # Data generation
@@ -41,7 +42,7 @@ $$Y_{i,j} = a + (b+Z_i)\times t_j + \epsilon _{i,j}$$
 ```{r init}
 param <- list( sigma2 = 0.1, gamma2 = 4, a = 4, b = 10)
 
-n  <- 40*2 #nombre de courbe
+n  <- 200 #nombre de courbe
 J  <- 20  #nombre d'observation
 tj <- seq(0,1, length.out = J) %>% matrix(nrow = 1)
 
@@ -58,7 +59,7 @@ dt %>%
 
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
-```{r setup SAEM}
+```{r init SAEM}
 #Calcul des constantes
 mat12 <- mean(tj)
 mat21 <- sum(tj)
@@ -75,7 +76,6 @@ S <- function(Z) c(sum(Z^2), sum(dt$obs * as.numeric(t(Z%*%tj))) , sum(Z))
 ## Metropolis Hastings
 
 ```{r MH}
-transi.z <- function(x) rnorm(length(x), x, 0.1)
 loglik.z <- function(x, Phi) 
 { 
   stat <- S(x)
@@ -83,23 +83,24 @@ loglik.z <- function(x, Phi)
 }
 
 Z.MH <- matrix(rnorm(n), ncol = 1) #valeur initial
-Z.MH <- MH_High_Dim(2000, Z.MH, transi.z, loglik.z, do.call(Phi, param), verbatim = T)
+Z.MH <- MH_High_Dim_para(500, Z.MH, sd = 0.1, loglik.z, do.call(Phi, param), 
+                           verbatim = T, cores = future::availableCores()-2)
 
 plot(Z.MH)
 
 # burn in des premières valeurs
-z <- MH_burnin(Z.MH, 1000)
+z <- MH_burnin(Z.MH, 250)
 #Moyennes et variance sachant Y de Z
-est <- attr(z, 'value') %>% group_by(id) %>% summarise(mu = mean(x), o2 = var(x))
+est <- attr(z, 'value') %>% group_by(id) %>% summarise(mu = mean(V1), sd = sd(V1))
 
-o2.true <- (sum(tj^2)/param$sigma2 + 1/param$gamma2)^-1
+sd.true <- sqrt((sum(tj^2)/param$sigma2 + 1/param$gamma2)^-1)
 #mu.true <- 1:n %>% sapply( function(i) o2.true/param$sigma2 * sum( (Y[i,] -param$a - param$b*tj)*tj) )
 
-mu.true <- dt %>% group_by(id) %>% summarise(mu = o2.true/param$sigma2* sum((obs - param$a -param$b*t)*t)) %>% { .$mu }
+mu.true <- dt %>% group_by(id) %>% summarise(mu = sd.true^2/param$sigma2* sum((obs - param$a -param$b*t)*t)) %>% { .$mu }
 
 #Calcule de l'erreur moyenne des estimations des moyennes et variances
 mean( abs(est$mu-mu.true)/abs(mu.true) )
-mean( abs(est$o2-o2.true)/abs(o2.true) )
+mean( abs(est$sd-sd.true)/abs(sd.true) )
 
 ```
 
@@ -114,12 +115,12 @@ u <- function(k) ifelse(k < 100, 1, 1/(k-99) )
 #---
 Sh <- 0
 
-para <- list( sigma2 = sample(1:5, size = 1),
-               gamma2 = sample(1:5, size = 1),
-               a = sample(1:5, size = 1),
-               b = sample(1:5, size = 1) )
+para <- list( sigma2 = 0.5,
+               gamma2 = 2,
+               a = 2,
+               b = 5 )
 
-ZgivenY <- 1:M %>% lapply(function(i) rnorm(n, 0,1) )
+ZgivenY <- 1:M %>% lapply(function(i) rnorm(n, 0,1) %>% matrix(ncol = 1))
 ```
 
 ## Boucle
@@ -128,8 +129,10 @@ ZgivenY <- 1:M %>% lapply(function(i) rnorm(n, 0,1) )
 #Fonction qui renvoie les simultations de Z sachant Y à chaque iteration
 sim <- function(niter, Phih, ZgivenY)
 {
-  ZgivenY <- ZgivenY %>% lapply( function(z) 
-    MH_High_Dim(niter, matrix(z, ncol = 1), transi.z, loglik.z, Phih ) )
+  M <- length(ZgivenY)
+  ZgivenY <- 1:M %>% lapply( function(i) 
+    MH_High_Dim_para(niter, ZgivenY[[i]], sd = 0.1, loglik.z, Phih, 
+                           cores = future::availableCores()-2) )
   list(Z = ZgivenY)
 }
 
@@ -146,12 +149,17 @@ maxi <- function(S)
   
   return(list(sigma2 = sigma2, gamma2 = S[1]/n, a = a, b = b))
 }
+# Valeur empirique
+maxi(S(Z))
 
-niter <- 200
-res <- SAEM(niter, 100, u, para, Phi, S, list(Z = ZgivenY), sim, maxi, eps = 1e-2, verbatim = T)
+niter <- 25 #nombre d'itération du SEAM
+n.MH <- 10 #nombre d'itération lors de la simulation
+tic()
+res <- SAEM(niter, n.MH, u, para, Phi, S, list(Z = ZgivenY), sim, maxi, eps = 1e-1, verbatim = T)
+toc()
 
 plot(res)
-plot(res$Z$Z[[1]])
+plot(res$Z$Z[[1]], dim = n)
 ```
 
 
