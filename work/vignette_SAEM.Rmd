@@ -120,7 +120,7 @@ phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2)
 
 ## Boucle
 
-```{r SAEM}
+```{r SAEM, message=FALSE}
 sim <- function(niter, Phih, etagivenY, phigivenY)
 {
   M <- length(phigivenY)
@@ -145,7 +145,7 @@ maxi <- function(S)
 
 maxi(S(attr(dt, 'eta'), attr(dt, 'phi')))
 
-niter <- 200
+niter <- 2
 MH.iter <- 10
 Z <- list(eta = etagivenY, phi = phigivenY)
 res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)

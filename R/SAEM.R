@@ -38,7 +38,7 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
   cmp <- 0
   while(h <= niter+1 && cmp < 20 ) #  for(h in 1:niter+1)
   {
-
+    message(paste0('SAEM step ', h-1))
     # --- Step S : simulation --- #
     Phih <-  do.call(Phi, parameter(h-1) )
 
