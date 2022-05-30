@@ -34,7 +34,20 @@ include = function(folder = 'R/', files, env.name )
   #rm(list = c(env.name))
 }
 
-include()
-#rm(include)
+
+require(ggplot2)
+require(reshape2)
+require(dplyr)
+require(tidyr)
+require(furrr)
+require(future)
+
+if(exists('folder')){
+  include(folder)
+  rm(folder)
+}else
+  include()
+
+rm(include)
 
 

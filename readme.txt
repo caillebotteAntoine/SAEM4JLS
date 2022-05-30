@@ -7,13 +7,6 @@ Il faut donc le compiler et l'installer pour exécuter les scripts : onglet : Bu
 
 En cas de problème avec l'installation du package, remplacer la ligne (en début de script) : require(SAEM4JLS)
 En :
-require(ggplot2)
-require(reshape2)
-require(dplyr)
-require(tidyr)
-require(furrr)
-require(future)
-
 source('R/include.R')
 
 #=============================#

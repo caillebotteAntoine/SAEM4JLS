@@ -1,0 +1,156 @@
+---
+title: "SAEM function tutorial"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+  
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.weightedidth = 12,
+               fig.asp = 0.8,
+               out.weightedidth = "100%")
+
+folder <- '../R/'
+source('../R/include.R')
+
+require(tictoc)
+```
+
+## Initialisation et génération des données
+
+```{r init data}
+m <- function(t, eta, phi) phi[1] * t + eta
+
+ng <- 8 #nombre d'individu par groupe
+G <- 4 # nombre groupe
+#===============================#
+param <- list( sigma2 = 0.5,  #variance de l'erreur
+               rho2 = 0.05,
+               mu = 3,  #moyenne de phi
+               omega2 = 0.1 )  #variance de phi
+
+F. <- length(param$omega2) #dimension de phi
+#===============================#
+t <- seq(-5,5, length.out = 10) #valeur des temps
+
+dt <- NLME_obs(G, ng, t, param, m)
+Y <- dt$obs
+
+n <- nrow(dt) #nombre total de data
+N <- G*ng #nombre total d'individu
+
+#================================= Affichage ================================#
+dt %>% ggplot(aes(t, obs, col = gen, group = id)) + 
+  geom_point() + geom_line() + theme(legend.position = 'null')
+```
+
+# Statistique exhaustive
+$$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
+
+```{r setup stat exhaustive}
+Phi <- function(sigma2,rho2, mu, omega2)
+  c(- n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2)
+
+S <- function(eta, phi)
+{
+  s <- c(mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #id = 1
+         mean(eta^2),                    #id = 2
+         apply(phi^2, 2, mean),          #id = 3
+         apply(phi  , 2, mean) )         #id = 4
+
+  attr(s, '1') <- 1
+  attr(s, '2') <- 2
+  attr(s, '3') <- 2 + 1:ncol(phi)
+  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
+  return(s)
+}
+```
+# Metropolis Hastings
+
+### Vraisemblance
+
+```{r MH}
+#=============================================================================#
+loglik.phi <- function(x, eta, Phi)
+{
+  s <- S(eta,x)
+  
+  id <- c(attr(s,'1'), attr(s,'3'), attr(s,'4')) #indice de S_1 et S_{3,.} puis S_{4,.}
+  sum(Phi[id]*s[id])
+}
+loglik.eta <- function(x, phi, Phi) 
+{ 
+  s <- S(x, phi)
+  id <- c(attr(s,'1'), attr(s,'2'))
+  sum(Phi[id]*s[id])
+}
+```
+
+# SAEM
+### initialisation
+```{r SAEM init}
+M <- 1 #nombre de simulation
+u <- function(k) ifelse(k<200, 1, 1/(k-199) )
+
+# ---  Initialisation des paramètres --- #
+
+para <- list( sigma2 = 0.1,
+              rho2 = 0.5,
+              mu = 4,
+              omega2 = 0.3 )
+
+# --- Initialisation des chaines MC : Z_0 --- #
+etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0, para$rho2)  %>% matrix(ncol = 1) )
+phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t  )
+```
+
+## Boucle
+
+```{r SAEM}
+sim <- function(niter, Phih, etagivenY, phigivenY)
+{
+  M <- length(phigivenY)
+  etagivenY <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para(niter, etagivenY[[i]], sd = .03,loglik.eta, phigivenY[[i]], Phih,
+                     cores = future::availableCores()-2) )
+
+  phigivenY <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para(niter, phigivenY[[i]], sd = .02, loglik.phi, etagivenY[[i]], Phih,
+                     cores = future::availableCores()-2) )
+
+  list(eta = etagivenY, phi = phigivenY)
+}
+
+maxi <- function(S)
+{
+  list(sigma2 = S[attr(S,'1')],
+       rho2 =   S[attr(S,'2')],
+       mu =     S[attr(S,'4')],
+       omega2 = S[attr(S,'3')] - S[attr(S,'4')]^2 )
+}
+
+maxi(S(attr(dt, 'eta'), attr(dt, 'phi')))
+
+niter <- 200
+MH.iter <- 10
+Z <- list(eta = etagivenY, phi = phigivenY)
+res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)
+
+plot(res)
+plot(res$Z$phi[[1]], dim = G)
+plot(res$Z$eta[[1]], dim = N)
+```

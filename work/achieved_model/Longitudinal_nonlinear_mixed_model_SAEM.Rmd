@@ -118,18 +118,14 @@ M <- 1
 u <- function(k) ifelse(k<200, 1, 1/(k-199) )
 
 # ---  Initialisation des paramètres --- #
-
 para <- list( rho2 = 0.5,
               sigma2 = 0.1,
-              mu = rep(1, F.),
-              omega2 = rep(0.3, F.) )
-
-para <- param %>% sapply(function(x) x + runif(1))
-
+              mu = c(3,6,1),
+              omega2 = rep(0.6,F.) )
 
 # --- Initialisation des chaines MC : Z_0 --- #
-etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0,0.2)  %>% matrix(ncol = 1) )
-phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t  )
+etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0, para$rho2)  %>% matrix(ncol = 1) )
+phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t  )
 ```
 
 ## Boucle
