@@ -26,10 +26,6 @@ Des exemples d'utilisation des fonctions se trouvent dans le dossier work/vignet
 Le sous dossier work/achieved_model rassemble des .rmd présentant des applications de modèle achevé !
 
 
-test
-
-
-
 
 
 
