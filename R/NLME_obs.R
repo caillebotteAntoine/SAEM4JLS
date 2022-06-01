@@ -25,7 +25,7 @@ NLME_obs  <- function(G, ng, t, param, NLME_fct)
   eps <- rnorm(n, 0, sqrt(param$sigma2))
 
   if('rho2' %in% names(param)) #Varification de la présence de rho2
-    eta <- rnorm(N, 0, sqrt(param$rho2))
+    eta <- rnorm(N, 0, sqrt(param$rho2)) %>% matrix(ncol = 1)
   else
     eta <- rep(1,N)
 

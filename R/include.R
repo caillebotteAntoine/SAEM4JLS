@@ -35,11 +35,15 @@ include = function(folder = 'R/', files, env.name )
 }
 
 
-require(ggplot2)
-require(reshape2)
+require(ggplot2) #Affichage
+require(gridExtra) #grid.arrange pour regrouper des plot
+require(reshape2) #reformatage de data.frame
+
 require(dplyr)
 require(tidyr)
-require(furrr)
+
+require(purrr)
+require(furrr)# calcule en parallel
 require(future)
 
 if(exists('folder')){

@@ -20,24 +20,30 @@ library(kableExtra)
 rm(list = ls())
 
 opts_chunk$set(echo = T, message = F, warning = F,
-               fig.weightedidth = 12,
-               fig.asp = 0.8,
+               fig.width = 12, fig.asp = 0.8,
+               fig.align = "center",
                out.weightedidth = "100%")
 
-require(SAEM4JLS)
+folder <- '../R/'
+source('../R/include.R')
 ```
 
 ## Initialisation
+
+```{r number of cores, echo = F}
+ncores <- future::availableCores()
+message(paste('number of cores available =', ncores))
+print(paste('number of cores available =', ncores))
+```
 
 ```{r init}
 #Phi[1] ; eta = valeur de fin
 #Phi[2] = valeur du noeud
 #Phi[3] = echelle
 m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
-
 #=======================================#
-param <- list(rho2 = 0.1,
-              sigma2 = 0.05,
+param <- list(sigma2 = 0.05,
+              rho2 = 0.1,
               mu = c(5,90,5),
               omega2 = c(0.5,0.1,0.01),
               #Survival data,
@@ -49,35 +55,35 @@ param <- list(rho2 = 0.1,
 
 F. <- length(param$omega2) #dimension de phi
 #=======================================#
-t <- seq(60,120, length.out = 10) #valeur des temps
+t <- seq(60,120, length.out = 10) #value of times
 
 # --- longitudinal data --- #
-G = 40 ; ng = 4
+G = 40 ; ng = 4 #nombre de groupe et d'individu par groupe
 dt_NLME <- NLME_obs(G, ng, t, param, m)
 Y <- dt_NLME$obs
+dt_SF <- SF_obs(dt_NLME, param, m)
+```
 
+```{r data ploting}
 dt_NLME %>% ggplot(aes(t, obs, col = gen, group = id)) + 
   geom_point() + geom_line() + theme(legend.position = 'null')
 
 # --- Survival data --- #
-dt_SF <- SF_obs(dt_NLME, param, m)
-dt_SF %>% ggplot(aes(obs, fill = factor(gen))) + 
-  geom_histogram(position = 'dodge', bins = 20) + theme(legend.position = 'null')
+dt_SF %>% ggplot(aes(obs, fill = factor(U))) + 
+  geom_histogram(position = 'identity', bins = 20) + theme(legend.position = 'null')
 ```
 
 ## SAEM avec simulation par MCMC
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
 ```{r  stat exhaustive}
-sigma2_a <- 0.1
-sigma2_b <- 0.1
-sigma2_alpha <- 0.1
+sigma2_a <- sigma2_b <- sigma2_alpha <- 0.1
 
-Phi <- function(rho2, sigma2, mu, omega2, nu2, a, b, alpha, beta)
-  c(- 1/(2*sigma2), -1/(2*rho2), -1/(2*omega2), G*mu/omega2,
-    -1/(2*nu2), a/sigma2_a,         -1/(2*sigma2_a), 
-                b/sigma2_b        , -1/(2*sigma2_b), 
-                alpha/sigma2_alpha, -1/(2*sigma2_alpha)  )
+Phi <- function(sigma2, rho2, mu, omega2, nu2, a, b, alpha, beta)
+  c(- 1/(2*sigma2), -1/(2*rho2), -1/(2*omega2), G*mu/omega2,  #1, 2, 3, 4
+    -1/(2*nu2), a/sigma2_a,         -1/(2*sigma2_a),          #5, 6, 7
+                b/sigma2_b        , -1/(2*sigma2_b),          #8, 9
+                alpha/sigma2_alpha, -1/(2*sigma2_alpha)  )    #10, 11
 
 zeta <- function(beta, eta, phi, gamma, a, b, alpha)
 {
@@ -93,14 +99,14 @@ S <- function(eta, phi, gamma, a, b, alpha)
 {
   beta <- uniroot(function(beta)zeta(beta, eta, phi, gamma, a,b,alpha), lower = -100, upper = 100)$root
   
-  s <- c(mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ),
-         mean(eta^2),
-         apply(phi^2, 2, mean), apply(phi  , 2, mean),
-         mean(gamma^2),
-         a, a^2,
-         b, b^2,
-         alpha^2, alpha,
-         beta )
+  s <- c(mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ), #1
+         mean(eta^2),                                               #2
+         apply(phi^2, 2, mean), apply(phi  , 2, mean),              #3 et 4
+         mean(gamma^2),                                             #5
+         a, a^2,                                                    #6 et 7
+         b, b^2,                                                    #8 et 9
+         alpha^2, alpha,                                            #10 et 11
+         beta )                                                     #12
 
   attr(s, '1') <- 1
   attr(s, '2') <- 2
@@ -122,94 +128,97 @@ loglik.phi <- function(x, eta, Phi)
 }
 loglik.eta <- function(x, phi, Phi) 
 { 
-  Phi[1] * sum((Y - get_obs(m, dt_NLME, eta = x, phi = phi) )^2) +
+  Phi[1] * sum((Y - get_obs(m, dt_NLME, eta = x, phi = phi) )^2) + 
     Phi[2] * sum(x^2)
 }
 
-loglik.gamma <- function(x, Phi) Phi[5]  * mean(x)
-loglik.a     <- function(x, Phi) Phi[5]  * x + Phi[7] * x^2
-loglik.b     <- function(x, Phi) Phi[8]  * x + Phi[9] * x^2
+loglik.gamma <- function(x, Phi) Phi[5]  * sum(x^2) + ng*sum(x) #Correction fait à la va vite
+loglik.a     <- function(x, b, Phi) Phi[6]  * x + Phi[7] * x^2  + G*ng*log(b*x^-b)
+loglik.b     <- function(x, Phi) Phi[8]  * x + Phi[9] * x^2  + (x-1)*sum(log(t))
 loglik.alpha <- function(x, Phi) Phi[10] * x + Phi[11] * x^2
 ```
 
 # SAEM
 ### initialisation
 ```{r SAEM init}
-# --- Nombre iteration --- #
-M <- 1
+M <- 1 #nombre de simulation
 u <- function(k) ifelse(k<200, 1, 1/(k-199) )
+
 # ---  Initialisation des paramètres --- #
-para <- param %>% sapply(function(x) x + runif(1))
+para <- param %>% lapply(function(x) x + 2*runif(1) )
 
-# --- Initialisation des chaines MC : Z_0 --- #
-etagivenY   <- 1:M %>% lapply(function(i) rnorm(G*ng, 0,0.1)  %>% matrix(ncol = 1) )
-phigivenY   <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, c(5,90,5), 0.1), nrow = F.) %>% t  )
-
-gammagivenY <- 1:M %>% lapply(function(i) matrix(rnorm(G, 0, 0.1), ncol = 1) )
-agivenY <- list(matrix(90))
-bgivenY <- list(matrix(50))
-alphagivenY <- list(matrix(7))
-
-#Fonction de transition du MH
-transi.phi   <- function(x) rnorm(length(x), x, c(.03, .02, .01))
-transi.eta   <- function(x) rnorm(length(x), x, .02)
-
-transi.gamma <- function(x) rnorm(length(x), x, .02)
-transi.a     <- function(x) rnorm(length(x), x, .02)
-transi.b     <- function(x) rnorm(length(x), x, .02)
-transi.alpha <- function(x) rnorm(length(x), x, .02)
+# --- Initialisation des chaines MC : Z_0 --- #list(attr(dt_NLME,'eta')),#
+Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
+          phi = 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ),
+          #list(attr(dt_NLME,'phi')),#
+          gamma = 1:M %>% lapply(function(i) matrix(rnorm(G, 0, para$nu2), ncol = 1) ),
+          
+          a = list(matrix(para$a)), #list(matrix(param$a)), #
+          b = list(matrix(para$b)), #list(matrix(param$b)), #
+          alpha = list(matrix(para$alpha)) )#list(matrix(param$alpha)) )#
 ```
 
 ## Boucle
 
-```{r SAEM}
+```{r SAEM fct}
 sim <- function(niter, Phih, eta, phi, gamma, a, b, alpha)
 {
   M <- length(phi)
 
-  eta <- 1:M %>% lapply( function(i) MH_High_Dim(niter, eta[[i]],     transi.eta,   loglik.eta, phi[[i]], Phih ))
-  phi <- 1:M %>% lapply( function(i) MH_High_Dim(niter, phi[[i]],     transi.phi,   loglik.phi, eta[[i]], Phih ))
+  eta <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para(niter, eta[[i]],   sd = .02,              loglik.eta, phi[[i]], Phih, cores = ncores-1 ))
+  #                  |                                         |                     |
+  phi <- 1:M %>% lapply( function(i) #                         |                     |
+    MH_High_Dim_para(niter, phi[[i]],   sd = c(.03, .02, .02), loglik.phi, eta[[i]], Phih, cores = ncores-1 ))
+  #                  |                                         |                     |
+  gamma <- 1:M %>% lapply( function(i)#                        |                     |
+    MH_High_Dim_para(niter, gamma[[i]], sd = .03,              loglik.gamma,         Phih, cores = ncores-1 ))
 
-  gamma <- 1:M %>% lapply( function(i) MH_High_Dim(niter, gamma[[i]], transi.gamma, loglik.gamma, Phih ))
-  
-  a     <- 1:M %>% lapply( function(i) MH_High_Dim(niter, a[[i]],     transi.a,     loglik.a,     Phih ))
-  b     <- 1:M %>% lapply( function(i) MH_High_Dim(niter, b[[i]],     transi.b,     loglik.b,     Phih ))
-  alpha <- 1:M %>% lapply( function(i) MH_High_Dim(niter, alpha[[i]], transi.alpha, loglik.alpha, Phih ))
+  a <- 1:M %>% lapply( function(i) MH_High_Dim_para(niter, a[[i]],     sd = .02, loglik.a,b[[i]],  Phih, cores = 1 ))
+  b <- 1:M %>% lapply( function(i) MH_High_Dim_para(niter, b[[i]],     sd = .02, loglik.b,         Phih, cores = 1 ))
+  alpha <- 1:M %>% lapply( function(i) MH_High_Dim_para(niter, alpha[[i]], sd = .02, loglik.alpha, Phih, cores = 1 ))
 
   list(eta = eta, phi = phi, gamma = gamma, a = a, b = b, alpha = alpha)
 }
 
 maxi <- function(S)
 {
-  list(rho2 =   S[attr(S,'2')],
-       sigma2 = S[attr(S,'1')],
+  list(sigma2 = S[attr(S,'1')],
+       rho2 =   S[attr(S,'2')],
        mu =     S[attr(S,'4')],
        omega2 = S[attr(S,'3')] - S[attr(S,'4')]^2,
        nu2 =    S[attr(S,'5')],
        a =      S[attr(S,'6')],  b =      S[attr(S,'8')],
        alpha =  S[attr(S,'11')], beta =   S[attr(S,'12')] )
 }
+```
 
-maxi(S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi'), attr(dt_SF, 'gamma'), param$a, param$b, param$alpha  ))
-# do.call(Phi, param)
-# do.call(sim, c(list(1, do.call(Phi, param)), Z))
+```{r oracle, echo = F, results='asis'}
+maxi(S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi'), attr(dt_SF, 'gamma'), param$a, param$b, param$alpha  )) %>% 
+  unlist %>% t %>% knitr::kable(caption = "Estimation oracle", format = 'html') %>%
+      kable_styling(full_width = F)
+```
 
-
-niter <- 40
-MH.iter <- 20
-Z <- list(eta = etagivenY, phi = phigivenY, gamma = gammagivenY, a = agivenY, b = bgivenY, alpha = alphagivenY)
+```{r SAEM loop}
+niter <- 300
+MH.iter <- 10
 res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-1, verbatim = T)
+saveRDS(res, 'saem.rds')
+gg <- plot(res)
+```
 
-plot(res)
-plot(res$Z$phi[[1]], dim = G*MH.iter)
-plot(res$Z$eta[[1]], dim = G*MH.iter)
-plot(res$Z$gamma[[1]], dim = G*MH.iter)
-plot(res$Z$a[[1]], dim = MH.iter)
-plot(res$Z$b[[1]], dim = MH.iter)
-plot(res$Z$alpha[[1]], dim = MH.iter)
+```{r seam table, results='asis', echo = F}
+gg$table_estimation
+```
 
-saveRDS(list(param, res), "saem_res.rds")
+```{r saem plot, echo = F}
+gg$plot_paramater
+gg$plot_MCMC
 
+gg.MH <- names(res$Z) %>% keep(function(var) 'MH_res' %in% class(res$Z[[var]][[1]]) ) %>%
+  lapply(function(var)plot(res$Z[[var]][[1]], name = var)$plot_acceptation)
+
+grid.arrange(grobs  = gg.MH)
 ```
 
 

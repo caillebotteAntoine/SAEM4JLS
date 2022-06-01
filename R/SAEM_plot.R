@@ -13,6 +13,11 @@ plot.SAEM <- function(res, MCMC = T)
 {
   gg <- list()
 
+  diff_time <- format(as.POSIXct(as.numeric(res$times_elasped),
+                                 origin = '1970-01-01', tz = 'UTC'), "%Mmin %Ssec")
+
+  print(paste0('SAEM execution time = ', diff_time))
+
   dt <- res$parameter %>% as.data.frame %>% na.omit
 
   #Resultat de l'estimations
@@ -25,8 +30,8 @@ plot.SAEM <- function(res, MCMC = T)
     mutate( Rrmse = abs(`Valeur réelle` -`Valeur estimée`)/abs(`Valeur réelle`))
 
   gg$table_estimation <-
-    est %>% t %>%
-      knitr::kable(caption = "résultat de l'algo SAEM-MCMC", format = 'pipe') %>%
+    est %>% t %>% round(digits = 4) %>%
+      knitr::kable(caption = "Résultat de l'algo SAEM-MCMC", format = 'html') %>%
       kable_styling(full_width = F)
 
   # MCMC des paramètres
@@ -54,7 +59,7 @@ plot.SAEM <- function(res, MCMC = T)
     {
       dt <- rbind(dt,
                   1:length(v[[var]]) %>%
-                    lapply(function(i) cbind(i, v[[var]][[i]], row = 1:nrow(v[[var]][[i]])) ) %>%
+                    lapply(function(i) cbind( v[[var]][[i]],i, row = 1:nrow(v[[var]][[i]])) ) %>%
                     {do.call(rbind, .) } %>% as.data.frame %>%
                     melt(id = c('i','row')) %>% mutate(col = variable, variable = factor(var)) )
     }
@@ -62,8 +67,9 @@ plot.SAEM <- function(res, MCMC = T)
     gg$plot_MCMC <-
       dt %>% ggplot(aes(i, value, group = interaction(row, col, variable), color = col)) +
         geom_line() +
-        labs(title = "représentation des variables latentes de l'algorithme SAEM ",
-             x = 'iteration') + facet_grid( vars(variable), scales = 'free')
+        labs(title = "Représentation des variables latentes de l'algorithme SAEM ",
+             x = 'iteration') +
+      facet_grid( vars(variable, col), scales = 'free')
   }
 
   gg

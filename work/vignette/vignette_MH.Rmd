@@ -24,7 +24,8 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.asp = 0.8,
                out.weightedidth = "100%")
 
-require(SAEM4JLS)
+folder <- '../../R/'
+source('../../R/include.R')
 require(tictoc)
 ```
 
@@ -42,8 +43,6 @@ Cet exemple sert à montrer l'utilisation des fonctions MH.
 Pour la version parallélisé il est demandé de fournir un écart type sd (possiblement un vecteur d'écart type) mais plus une fonction de transition.
 
 ```{r init}
-
-
 n <- 10000# nombre d'observation
 x <- c(3,6) #moyenne et variance
 obs <- rnorm(n, x[1], sqrt(x[2])) #tirage dans une loi normale
@@ -138,21 +137,22 @@ loglik <- function(phi)
 }
 
 phi0 <-  matrix(rnorm(F.*G, c(6,3,1), 0.1), ncol = G) %>% t
+n.iter <- 1000
 
 tic()
-phi.MH <- MH(1000, phi0, transi.noopti, loglik, verbatim = T)
+phi.MH <- MH(n.iter, phi0, transi.noopti, loglik, verbatim = T)
 toc()
 
 tic()
-phi.MH2 <- MH_High_Dim(1000, phi0 , transi, loglik, verbatim = T)
+phi.MH2 <- MH_High_Dim(n.iter, phi0 , transi, loglik, verbatim = T)
 toc()
 
 tic()
-phi.MH3 <- MH_High_Dim_para(1000, phi0, sd, loglik, verbatim = T, cores = 1)
+phi.MH3 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = 1)
 toc()
 
 tic()
-phi.MH4 <- MH_High_Dim_para(1000, phi0, sd, loglik, verbatim = T, cores = future::availableCores() -2)
+phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = future::availableCores() -2)
 toc()
 ```
 
@@ -168,7 +168,7 @@ v %>% mutate(i = 1:nrow(.)) %>% melt(id = 'i')  %>% mutate(phi = rep(factor(c(1:
   ggplot(aes(i, value, col = phi, group = variable)) +
   geom_line()
 
-plot(phi.MH2, acceptation = F)
+plot(phi.MH2, acceptation = T)
 plot(phi.MH3, acceptation = F)
 plot(phi.MH4, acceptation = F)
 ```
