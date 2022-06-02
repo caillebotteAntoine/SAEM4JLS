@@ -24,7 +24,8 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.asp = 0.8,
                out.weightedidth = "100%")
 
-require(SAEM4JLS)
+folder <- '../../R/'
+source('../../R/include.R')
 ```
 
 ## Initialisation
@@ -44,7 +45,7 @@ F. <- length(param$omega2) #dimension de phi
 t <- seq(2,6, length.out = 10) #valeur des temps
 
 G <- 40
-ng = 4
+ng = 1
 n <- G*ng*length(t) #nombre total de data
 N <- G*ng #nombre total d'individu
 
@@ -97,19 +98,6 @@ loglik.eta <- function(x, phi, Phi)
 }
 ```
 
-```{r MH phi, eval=FALSE}
-phi.MH <- matrix(rnorm(F.*G, c(6,3,1), 0.1), nrow = F.) %>% t
-phi.MH <- MH_High_Dim_para(100, phi.MH, sd = c(.03, .02, .01), loglik.phi, attr(dt, 'eta'), do.call(Phi, param),
-                           verbatim = T, cores = future::availableCores()-2)
-plot(phi.MH, dim = G)
-```
-
-```{r MH eta, eval=FALSE}
-eta.MH <- MH_High_Dim_para(100, matrix(rnorm(N, 0, 0.5), nrow = 1), sd = .02, loglik.eta,  attr(dt, 'phi'), do.call(Phi, param),
-                           verbatim = T, cores = future::availableCores()-2)
-plot(eta.MH)
-```
-
 # SAEM
 ### initialisation
 ```{r SAEM init}
@@ -136,11 +124,11 @@ sim <- function(niter, Phih, etagivenY, phigivenY)
   M <- length(phigivenY)
   etagivenY <- 1:M %>% lapply( function(i)
     MH_High_Dim_para(niter, etagivenY[[i]], sd = .02,loglik.eta, phigivenY[[i]], Phih,
-                     cores = future::availableCores()-2) )
+                     cores = future::availableCores()-1) )
 
   phigivenY <- 1:M %>% lapply( function(i)
     MH_High_Dim_para(niter, phigivenY[[i]], sd = c(.03, .02, .02), loglik.phi, etagivenY[[i]], Phih,
-                     cores = future::availableCores()-2) )
+                     cores = future::availableCores()-1) )
 
   list(eta = etagivenY, phi = phigivenY)
 }
@@ -155,10 +143,10 @@ maxi <- function(S)
 
 maxi(S(attr(dt, 'eta'), attr(dt, 'phi')))
 
-niter <- 300
+niter <- 30
 MH.iter <- 10
 Z <- list(eta = etagivenY, phi = phigivenY)
-res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)
+res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = 2)
 
 plot(res)
 plot(res$Z$phi[[1]], dim = G)

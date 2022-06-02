@@ -28,12 +28,19 @@ MH_High_Dim_para <- function(niter, x, sd, loglik, ..., verbatim = F, cores = 1)
 
   stopifnot(length(sd) == 1 || length(sd) == ncol(x) ) #Varification qu'il y a bien assez de variance
 
+
+  #switch to multisession mode if there are available cores
+  if(cores != 1)
+  {
+    cl <- parallel::makeCluster(cores)
+    doParallel::registerDoParallel(cl)
+  }
   #start of the algorithm of metropolis hastings
   #On considere chaque composante une part une
   #On cree une fct pour que furrr puis parallelisé sur la dimension
   x_new <- x #initialisation de la nouvelle proposition
 
-  f <- function(k)
+  res <- foreach(k = 1:dim, .export = ls(globalenv())) %dopar%
   {
     #Initialisation des variables de retour
     if(verbatim)
@@ -66,10 +73,9 @@ MH_High_Dim_para <- function(niter, x, sd, loglik, ..., verbatim = F, cores = 1)
     return(res)
   }
 
-  #switch to multisession mode if there are available cores
-  if(cores != 1) plan(multisession, workers = cores)
-  res <- future_map(1:dim, f, .options = furrr_options(seed = T))
-  plan(sequential)
+  #switch to sequential
+  if(cores != 1) stopCluster(cl)
+
 
   #unlist of the paralized result ... a little boring
 

@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-plot.MH_res <- function(x, name, value = T, acceptation = T)
+plot.MH_res <- function(x, name, nrow,ncol, value = T, acceptation = T)
 {
   gg <- list()
   if(value && 'value' %in% names( attributes(x) ) )
@@ -29,14 +29,21 @@ plot.MH_res <- function(x, name, value = T, acceptation = T)
   {
     gg$plot_acceptation <-
       attr(x, 'acceptation') %>%
-      mutate(iteration = iter/nrow(x)) %>% filter(iter != 0) %>%
+      mutate(iteration = iter/base::nrow(x)) %>% filter(iter != 0) %>%
       ggplot(aes(iteration, naccept/iter)) + geom_line() +
       labs(title = "Taux d'acceptation au cours du temps")
 
     if(!missing(name))
       gg$plot_acceptation <- gg$plot_acceptation + labs(subtitle = paste0('Variable ', name))
   }
-  gg
+
+  if(!missing(nrow))
+    return( grid.arrange(grobs =  gg, nrow = nrow))
+
+  if(!missing(ncol))
+    return( grid.arrange(grobs =  gg, ncol = ncol))
+
+  return(gg)
 }
 
 

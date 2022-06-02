@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maximisation, eps = 1e-3,verbatim = F)
+SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maximisation, eps = 1e-3, verbatim = F)
 {
   #Initialisation des listes des parametres
   parameter <- function(i) { para %>% lapply(function(x) x[i,])}
@@ -31,7 +31,7 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
   Sh[1:length(Sh)] <- 0
 
   M <- length(Z[[1]])
-  if(verbatim)
+  if(verbatim == 2)
     value <- Z %>% lapply(function(z) list(z[[1]]))
 
 
@@ -44,17 +44,21 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
 
   while(h <= niter+1 && cmp < 20 ) #  for(h in 1:niter+1)
   {
-    elasped <- difftime(Sys.time(), start , units = "secs") %>% round(2)
-    message(paste0('SAEM step = ', h-1,
-                   ', times elasped = ', elasped,
-                   's, estimated time remaining = ', elasped/(h-1) * (niter+1-h+1), 's' ))
-
+    if(verbatim >= 1)
+    {
+      elasped <- difftime(Sys.time(), start , units = "secs") %>% round(2)
+      step.estimation <- elasped/(h-2)
+      message(paste0('SAEM step = ', h-1, ', remaining = ', niter+1-h,
+                     ', times elasped = ', round(elasped,1),
+                     's, estimated time for one step = ', round(step.estimation,1),
+                     's, estimated time remaining = ', round(step.estimation * (niter+2-h),1), 's' ))
+    }
     # --- Step S : simulation --- #
     Phih <-  do.call(Phi, parameter(h-1) )
 
     # --- Metropolis Hastings --- #
     Z <- do.call(simulation, c(list(niter.MH, Phih), Z ))
-    if(verbatim)
+    if(verbatim == 2)
     {
       for(i in 1:length(Z))
       {
@@ -77,7 +81,7 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
 
   message('--- SAEM ended ! ---')
 
-  if(verbatim)
+  if(verbatim==2)
     attr(Z, 'value') <- value
 
   if(cmp >= 20)

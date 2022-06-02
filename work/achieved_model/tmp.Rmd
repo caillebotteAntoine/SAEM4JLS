@@ -1,0 +1,202 @@
+---
+title: "Longitudinal and non-linear mixed effect model"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.width = 12, fig.asp = 0.8,
+               fig.align = "center",
+               out.weightedidth = "100%")
+
+folder <- '../../R/'
+source('../../R/include.R')
+```
+
+## Initialisation
+
+```{r number of cores, echo = F}
+ncores <- 2#future::availableCores()
+message(paste('number of cores available =', ncores))
+print(paste('number of cores available =', ncores))
+```
+
+```{r init}
+#Phi[1] ; eta = valeur de fin
+#Phi[2] = valeur du noeud
+#Phi[3] = echelle
+m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
+#=======================================#
+param <- list(sigma2 = 0.05,
+              rho2 = 0.1,
+              mu = c(5,90,5),
+              omega2 = c(0.5,0.1,0.01) )
+
+F. <- length(param$omega2) #dimension de phi
+#=======================================#
+t <- seq(60,120, length.out = 10) #value of times
+
+# --- longitudinal data --- #
+G = 40 ; ng = 4 #nombre de groupe et d'individu par groupe
+n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
+
+dt_NLME <- NLME_obs(G, ng, t, param, m)
+Y <- dt_NLME$obs
+```
+
+```{r data ploting, echo = F}
+dt_NLME %>% ggplot(aes(t, obs, col = gen, group = id)) + 
+  geom_point() + geom_line() + theme(legend.position = 'null')
+```
+
+## SAEM avec simulation par MCMC
+$$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
+
+```{r  stat exhaustive}
+#Petite fonction pour retourner rapidement l'appel Phi[attr(Phi, i)] où i est '1', '2', ...,
+`%a%` <- function(x,var) x[ attr(x,as.character(var)) ]
+
+Phi <- function(sigma2, rho2, mu, omega2, nu2)
+{
+  p <-c(- n/(2*sigma2), -N/(2*rho2),
+        - G/(2*omega2), G*mu/omega2 )
+ 
+  return(p)
+}
+
+S <- function(eta, phi, gamma, a, b, alpha)
+{
+  s <- c(mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ), #1
+         mean(eta^2),                                               #2
+         apply(phi^2, 2, mean), apply(phi  , 2, mean) )             #3 et 4
+
+  attr(s, '1') <- 1
+  attr(s, '2') <- 2
+  attr(s, '3') <- 2 + 1:ncol(phi)
+  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
+  return(s)
+}
+```
+
+## Metropolis Hastings
+
+```{r MH}
+loglik.phi <- function(x, eta, Phi)
+{
+  s <- S(eta,x)
+  
+  id <- c(attr(s,'1'), attr(s,'3'), attr(s,'4')) #indice de S_1 et S_{3,.} puis S_{4,.}
+  sum(Phi[id]*s[id])
+}
+loglik.eta <- function(x, phi, Phi) 
+{ 
+  s <- S(x, phi)
+  id <- c(attr(s,'1'), attr(s,'2'))
+  sum(Phi[id]*s[id])
+}
+```
+
+```{r try MH}
+phi <- matrix(rnorm(F.*G, param$mu + runif(3), param$omega2 + runif(3)), nrow = F.) %>% t
+Phih <- do.call(Phi, param)
+require(tictoc)
+
+tic()
+res <- MH_High_Dim_para_future(100, phi,   sd = .02, loglik.phi, attr(dt_NLME, 'eta'), Phih, cores = 8-1 )
+toc()
+plot(res, nrow = 2)
+```
+
+
+
+## SAEM
+### Initialisation
+```{r SAEM init}
+M <- 1 #nombre de simulation
+u <- function(k) ifelse(k<40, 1, 1/(k-39) )
+
+# ---  Initialisation des paramètres --- #
+para <- param %>% lapply(function(x) x + runif(1) )
+
+# --- Initialisation des chaines MC : Z_0 ---
+Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
+          phi = 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ) )
+```
+
+## Boucle
+
+```{r SAEM fct}
+sim <- function(niter, Phih, eta, phi)
+{
+  M <- length(phi)
+
+  eta <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para_future(niter, eta[[i]],   sd = .02,              loglik.eta, phi[[i]], Phih, cores = ncores-1 ))
+  
+  phi <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para_future(niter, phi[[i]],   sd = c(.03, .02, .02), loglik.phi, eta[[i]], Phih, cores = ncores-1 ))
+  
+  list(eta = eta, phi = phi)
+}
+
+maxi <- function(S)
+{
+  list(sigma2 = S%a%1,
+       rho2 =   S%a%2,
+       mu =     S%a%4,
+       omega2 = S%a%3 - (S%a%4)^2 )
+}
+```
+
+```{r oracle, echo = F, results='asis'}
+data.frame( Oracle = maxi(S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi') )) %>% unlist ,
+            Initialisation = para%>% unlist)%>% t %>% 
+  knitr::kable(format = 'html') %>% kable_styling(full_width = F)
+```
+
+```{r SAEM loop}
+niter <- 50
+MH.iter <- 10
+res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-2, verbatim = 2)
+saveRDS(res, 'saem.rds')
+gg <- plot(res)
+```
+
+```{r seam table, results='asis', echo = F}
+gg$table_estimation
+```
+
+```{r saem plot, echo = F}
+gg$plot_paramater
+gg$plot_MCMC
+
+gg.MH <- names(res$Z) %>% keep(function(var) 'MH_res' %in% class(res$Z[[var]][[1]]) ) %>%
+  lapply(function(var)plot(res$Z[[var]][[1]], name = var)$plot_acceptation)
+
+grid.arrange(grobs  = gg.MH)
+```
+
+
+
+
+
+
+
+
+
+

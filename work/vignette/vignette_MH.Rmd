@@ -27,6 +27,14 @@ opts_chunk$set(echo = T, message = F, warning = F,
 folder <- '../../R/'
 source('../../R/include.R')
 require(tictoc)
+
+
+require(furrr)# calcule en parallel
+require(future)
+
+require(parallel)
+require(foreach)
+require(doParallel)
 ```
 
 # Utilisation des fonctions MH
@@ -54,10 +62,10 @@ loglik <- function(x, obs) sum( -1/2*log(2*pi*x[2]) -1/(2*x[2])* (obs-x[1])^2 ) 
 #Metropolis hasting
 x0 <- matrix(c(1,1), nrow = 1)
 res <- MH_High_Dim(500, x0, transi, loglik, obs, verbatim = T)
-plot(res)
+plot(res, nrow = 2)
 
 res_para <- MH_High_Dim_para(500, x0, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
-plot(res_para)
+plot(res_para, nrow = 2)
 
 res %>% as.numeric()
 res_para %>% as.numeric()
@@ -69,7 +77,7 @@ On peut relancer l'algorithme tout en gardant les informations déjà compiler
 
 ```{r}
 res_para2 <- MH_High_Dim_para(100, res_para, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
-plot(res_para2)
+plot(res_para2, nrow = 2)
 ```
 
 
@@ -100,7 +108,7 @@ F. <- length(param$omega2) #dimension de phi
 
 t <- seq(2,6, length.out = 10) #valeur des temps
 
-G <- 4 ; ng = 40
+G <- 40 ; ng = 4
 dt <- NLME_obs(G, ng, t, param, m)
 Y <- dt$obs
 
@@ -122,7 +130,6 @@ S <- function(phi)
   c(sum((Y - get_obs(m, dt, phi = phi) )^2 ),
     apply(phi^2, 2, sum),
     apply(phi  , 2, sum) )
-
 
 #=============================================================================#
 sd <- 0.02
@@ -152,7 +159,15 @@ phi.MH3 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = 1)
 toc()
 
 tic()
-phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = future::availableCores() -2)
+phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = parallel::detectCores() -1)
+toc()
+
+tic()
+phi.MH5 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, verbatim = T, cores = 1)
+toc()
+
+tic()
+phi.MH6 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, verbatim = T, cores = future::availableCores() -1)
 toc()
 ```
 
@@ -168,9 +183,11 @@ v %>% mutate(i = 1:nrow(.)) %>% melt(id = 'i')  %>% mutate(phi = rep(factor(c(1:
   ggplot(aes(i, value, col = phi, group = variable)) +
   geom_line()
 
-plot(phi.MH2, acceptation = T)
-plot(phi.MH3, acceptation = F)
-plot(phi.MH4, acceptation = F)
+plot(phi.MH2, nrow = 2)
+plot(phi.MH3, nrow = 2)
+plot(phi.MH4, nrow = 2)
+plot(phi.MH5, nrow = 2)
+plot(phi.MH6, nrow = 2)
 ```
 
 
@@ -186,15 +203,63 @@ m3 <- MH_burnin(phi.MH3, n) %>% attr('value') %>% melt(id = c('id','iter')) %>% 
 m4 <- MH_burnin(phi.MH4, n) %>% attr('value') %>% melt(id = c('id','iter')) %>% group_by(interaction(variable,id)) %>%
   summarise(mean = mean(value), sd = sd(value))
 
+m5 <- MH_burnin(phi.MH5, n) %>% attr('value') %>% melt(id = c('id','iter')) %>% group_by(interaction(variable,id)) %>%
+  summarise(mean = mean(value), sd = sd(value))
+
+m6 <- MH_burnin(phi.MH6, n) %>% attr('value') %>% melt(id = c('id','iter')) %>% group_by(interaction(variable,id)) %>%
+  summarise(mean = mean(value), sd = sd(value))
+
 mean(abs(m2$mean - m3$mean))
 mean(abs(m3$mean - m4$mean))
-mean(abs(m4$mean - m2$mean))
+mean(abs(m4$mean - m5$mean))
+mean(abs(m5$mean - m6$mean))
+mean(abs(m6$mean - m2$mean))
 
 mean(abs(m2$sd - m3$sd))
 mean(abs(m3$sd - m4$sd))
-mean(abs(m4$sd - m2$sd))
-
+mean(abs(m4$sd - m5$sd))
+mean(abs(m5$sd - m6$sd))
+mean(abs(m6$sd - m2$sd))
 ```
+
+## Calcule de l'efficacité 
+
+$$speedup = \frac{t_{seq}}{t_{par}} \text{ et } efficency = \frac{speedup}N $$
+
+avec $N$ le nombre de cores
+
+
+
+
+```{r efficency}
+n.iter <- 100
+
+tic()
+MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = 1)
+t_seq <- toc() %>% {.$toc - .$tic }
+
+ntotcores <- future::availableCores() -1
+t_seq <- rep(NA, ntotcores)
+for(cores in 1:ntotcores)
+{
+  tic()
+  MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = cores)
+  t_seq[cores] <- toc() %>% {.$toc - .$tic }
+}
+  
+  
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
