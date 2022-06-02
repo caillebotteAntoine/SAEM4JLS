@@ -52,7 +52,7 @@ F. <- length(param$omega2) #dimension de phi
 t <- seq(60,120, length.out = 10) #value of times
 
 # --- longitudinal data --- #
-G = 40 ; ng = 4 #nombre de groupe et d'individu par groupe
+G = 8 ; ng = 20 #nombre de groupe et d'individu par groupe
 n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
 
 dt_NLME <- NLME_obs(G, ng, t, param, m)
@@ -111,16 +111,6 @@ loglik.eta <- function(x, phi, Phi)
 }
 ```
 
-```{r try MH}
-phi <- matrix(rnorm(F.*G, param$mu + runif(3), param$omega2 + runif(3)), nrow = F.) %>% t
-Phih <- do.call(Phi, param)
-require(tictoc)
-
-tic()
-res <- MH_High_Dim_para_future(100, phi,   sd = .02, loglik.phi, attr(dt_NLME, 'eta'), Phih, cores = 8-1 )
-toc()
-plot(res, nrow = 2)
-```
 
 
 
@@ -161,6 +151,47 @@ maxi <- function(S)
        mu =     S%a%4,
        omega2 = S%a%3 - (S%a%4)^2 )
 }
+```
+
+
+```{r try MH}
+eta <- attr(dt_NLME, 'eta')
+phi <- matrix(rnorm(F.*G, param$mu + runif(3), param$omega2 + runif(3)), nrow = F.) %>% t
+Phih <- do.call(Phi, param)
+
+sd <- c(.01, .01, .01)
+nstep <- 5
+
+f <- function(a,b,c)
+{
+  #Simulation par MetropolisHasting avec la transition N(0, sd = c(a,b,c))
+  Z <- MH_High_Dim_para_future(250, phi,   sd = c(a,b,c), loglik.phi, eta, Phih, cores = 10)
+  #Estimation des paramètres avec la variable latente Z simulé
+  est <- maxi(S(eta, Z))
+  #calcule de l'erreur
+  est <- abs(est$mu - param$mu) %>% sum
+}
+#optimisation selon la variance a
+
+require(tictoc)
+tic()
+res <- optimize(f, c(.01,.04), tol = 1e-2,  a = 0.021, b = 0.025)#, c = 0.025)
+toc()
+
+res
+
+Z <- MH_High_Dim_para_future(250, phi,   sd = c( .021, .025, .025), loglik.phi, eta, Phih, cores = 10, verbatim = T)
+
+
+Zbis <- MH_High_Dim_para_future(250, phi,   sd = c( .03, .02, .02), loglik.phi, eta, Phih, cores = 10, verbatim = T)
+
+plot(Z, acceptation = F)$plot_value + facet_grid(vars(variable), scale = "free")
+plot(Zbis, acceptation = F)$plot_value + facet_grid(vars(variable), scale = "free")
+
+
+
+abs(maxi(S(eta, Z))$mu - param$mu) %>% sum ; abs(maxi(S(eta, Zbis))$mu - param$mu) %>% sum
+
 ```
 
 ```{r oracle, echo = F, results='asis'}
