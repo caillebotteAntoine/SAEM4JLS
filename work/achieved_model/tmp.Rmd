@@ -31,7 +31,7 @@ source('../../R/include.R')
 ## Initialisation
 
 ```{r number of cores, echo = F}
-ncores <- pmin(10, future::availableCores() )
+ncores <- 1#pmin(10, future::availableCores() )
 message(paste('number of cores available =', ncores))
 print(paste('number of cores available =', ncores))
 ```

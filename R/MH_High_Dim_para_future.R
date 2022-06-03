@@ -67,10 +67,14 @@ MH_High_Dim_para_future <- function(niter, x, sd, loglik, ..., verbatim = F, cor
   }
 
   #switch to multisession mode if there are available cores
-  if(cores != 1) plan(multisession, workers = cores)
-  res <- future_map(1:dim, f, .options = furrr_options(seed = T))
-  plan(sequential)
-
+  if(cores >= 2)
+  {
+    plan(multisession, workers = cores)
+    res <- future_map(1:dim, f, .options = furrr_options(seed = T))
+    plan(sequential)
+  }else{
+    res <- purrr::map(1:dim, f)
+  }
   #unlist of the paralized result ... a little boring
 
   # === Acceptation rate === #

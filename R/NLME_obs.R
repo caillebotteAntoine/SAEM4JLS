@@ -36,9 +36,9 @@ NLME_obs  <- function(G, ng, t, param, NLME_fct)
   attr(phi, 'G') <- G ; attr(phi, 'F.') <- F.
 
   # Définition des trois premières colonnes : id de l'individu, son group genetic et les temps d'observation
-  data <- data.frame(id = rep(1:N, each = ni) %>% factor,
-                     gen = rep(1:G, each = ni*ng) %>% factor,
-                     t = rep(t, N)) %>%
+  data <- data.frame(id = rep(1:N, ni) %>% factor,
+                     gen = rep(rep(1:G, ng), ni) %>% factor,
+                     t = rep(t, each = N)) %>%
     #Rajout des observations
     mutate(obs = get_obs(NLME_fct, ., eta = eta, phi = phi)) %>%
     #bruitage des observation
@@ -65,7 +65,12 @@ get_obs <- function(NLME_fct, data, ...)
   else
     phi <- matrix(rep(1,length(levels(data$gen))), ncol = 1)
 
-  sapply(1:nrow(data), function(i) NLME_fct(data$t[i], eta[data$gen[i]] , phi[data$gen[i],] ) )
+  nrep.phi <- nrow(data) %/% nrow(phi)
+  nrep.eta <- nrow(data) %/% length(eta)
+
+  m(data$t, rep(eta, each = nrep.eta), apply(phi, 2, function(c)rep(c,nrep.phi)))
+
+  #sapply(1:nrow(data), function(i) NLME_fct(data$t[i], eta[data$gen[i]] , phi[data$gen[i],] ) )
 }
 
 

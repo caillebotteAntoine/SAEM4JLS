@@ -95,6 +95,7 @@ plot(res_para2, nrow = 2)
 ```{r ex 2}
 # Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
 m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
+m <- function(t, eta, phi) (phi[,1] + eta)/(1+exp((phi[,2]-t)/phi[,3]))
 
 #=======================================#
 param <- list(rho2 = 0.1,
@@ -104,9 +105,9 @@ param <- list(rho2 = 0.1,
 F. <- length(param$omega2) #dimension de phi
 #=======================================#
 
-t <- seq(2,6, length.out = 10) #valeur des temps
+t <- seq(2,6, length.out = 5) #valeur des temps
 
-G <- 8 ; ng = 4
+G <- 40 ; ng = 4
 dt <- NLME_obs(G, ng, t, param, m)
 Y <- dt$obs
 
@@ -245,7 +246,7 @@ Y <- dt$obs
 
 phi0 <-  matrix(rnorm(F.*G, c(6,3,1), 0.1), ncol = G) %>% t
 
-n.iter <- 50
+n.iter <- 100
 
 tic()
 res <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = 1)
