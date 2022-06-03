@@ -100,15 +100,13 @@ m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
 param <- list(rho2 = 0.1,
               sigma2 = 0.05,
               mu = c(5,4,0.5),
-              omega2 = c(0.5,0.1,0.01))
-              # mu = 5,
-              # omega2 = 0.5)
+              omega2 = c(0.5,0.1,0.01)) 
 F. <- length(param$omega2) #dimension de phi
 #=======================================#
 
 t <- seq(2,6, length.out = 10) #valeur des temps
 
-G <- 40 ; ng = 4
+G <- 8 ; ng = 4
 dt <- NLME_obs(G, ng, t, param, m)
 Y <- dt$obs
 
@@ -145,34 +143,43 @@ loglik <- function(phi)
 
 phi0 <-  matrix(rnorm(F.*G, c(6,3,1), 0.1), ncol = G) %>% t
 n.iter <- 1000
+```
 
+```{r phi1}
 tic()
 phi.MH <- MH(n.iter, phi0, transi.noopti, loglik, verbatim = T)
 toc()
+```
 
+```{r phi2}
 tic()
 phi.MH2 <- MH_High_Dim(n.iter, phi0 , transi, loglik, verbatim = T)
 toc()
+```
 
+```{r phi3}
 tic()
 phi.MH3 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = 1)
 toc()
+```
 
+```{r phi4}
 tic()
 phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = parallel::detectCores() -1)
 toc()
+```
 
+```{r phi5}
 tic()
 phi.MH5 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, verbatim = T, cores = 1)
 toc()
+```
 
+```{r phi6}
 tic()
 phi.MH6 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, verbatim = T, cores = future::availableCores() -1)
 toc()
 ```
-
-
-
 
 ```{r aff}
 #=============================================================================#
@@ -224,30 +231,40 @@ mean(abs(m6$sd - m2$sd))
 
 ## Calcule de l'efficacité 
 
-$$speedup = \frac{t_{seq}}{t_{par}} \text{ et } efficency = \frac{speedup}N $$
+$$speedup = \frac{t_{seq}}{t_{par}} \text{ et } efficiency = \frac{speedup}N $$
 
 avec $N$ le nombre de cores
 
 
 
 
-```{r efficency}
-n.iter <- 100
+```{r efficiency, message=FALSE}
+G <- 40 ; ng = 4
+dt <- NLME_obs(G, ng, t, param, m)
+Y <- dt$obs
+
+phi0 <-  matrix(rnorm(F.*G, c(6,3,1), 0.1), ncol = G) %>% t
+
+n.iter <- 50
 
 tic()
-MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = 1)
+res <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = 1)
 t_seq <- toc() %>% {.$toc - .$tic }
 
 ntotcores <- future::availableCores() -1
-t_seq <- rep(NA, ntotcores)
+t_par <- rep(NA, ntotcores)
 for(cores in 1:ntotcores)
 {
   tic()
   MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = cores)
-  t_seq[cores] <- toc() %>% {.$toc - .$tic }
+  t_par[cores] <- toc() %>% {.$toc - .$tic }
+  message(t_par)
 }
-  
-  
+
+data.frame(speedup = t_seq/t_par) %>% mutate(N = 1:nrow(.)) %>%
+  mutate(efficiency = speedup/N) %>% melt(id = 'N') %>%
+  ggplot(aes(N, value, col = variable)) + geom_point() + geom_line()
+
 ```
 
 
