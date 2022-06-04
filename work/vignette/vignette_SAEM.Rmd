@@ -37,26 +37,24 @@ message(paste('number of cores available =', ncores))
 print(paste('number of cores available =', ncores))
 ```
 
-```{r init data}
+```{r init}
 m <- function(t, eta, phi) phi[,1] * t + eta
-
-ng <- 12 #nombre d'individu par groupe
-G <- 4 # nombre groupe
-#===============================#
+#=======================================#
 param <- list( sigma2 = 0.5,  #variance de l'erreur
                rho2 = 0.05,
                mu = 3,  #moyenne de phi
                omega2 = 0.1 )  #variance de phi
 
 F. <- length(param$omega2) #dimension de phi
-#===============================#
-t <- seq(-5,5, length.out = 10) #value of times
+#=======================================#
+t <- seq(2,6, length.out = 10) #value of times
 
-dt <- NLME_obs(G, ng, t, param, m)
-Y <- dt$obs
+# --- longitudinal data --- #
+G = 40 ; ng = 8 #nombre de groupe et d'individu par groupe
+n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
 
-n <- nrow(dt) #nombre total de data
-N <- G*ng #nombre total d'individu
+dt_NLME <- NLME_obs(G, ng, t, param, m)
+Y <- dt_NLME$obs
 ```
 
 ```{r data ploting, echo = F}
@@ -85,10 +83,10 @@ Phi <- function(sigma2,rho2, mu, omega2)
   return(p)
 }
 
-S <- get_stat(function(eta, phi) mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ),
+S <- get_stat(function(eta, phi) mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ),
               function(eta, phi) mean(eta^2),
               function(eta, phi) apply(phi^2, 2, mean),
-              function(eta, phi) apply(phi  , 2, mean) )
+              function(eta, phi) apply(phi  , 2, mean), dim = c(1,1,F., F.) )
 ```
 # Metropolis Hastings
 
@@ -97,13 +95,13 @@ S <- get_stat(function(eta, phi) mean((Y - get_obs(m, dt, eta = eta, phi = phi) 
 ```{r MH}
 loglik.phi <- function(x, eta, Phi)
 {
-  s <- S(eta,x)
-  sum( (Phi*s)%a%c(1,3,4) ) #indice de S_1 et S_{3,.} puis S_{4,.}
+  id <- c(1,3,4) #indice de S_1 et S_{3,.} puis S_{4,.}
+  sum( Phi%a%id * unlist(S(eta, x, i = id)) )
 }
 loglik.eta <- function(x, phi, Phi) 
 { 
-  s <- S(x, phi)
-  sum( (Phi*s)%a%c(1,2) )
+  id <- c(1,2)
+  sum( Phi%a%id * unlist(S(x, phi, i = id)) )
 }
 ```
 
@@ -151,7 +149,7 @@ maxi <- function(S)
 # Resultats
 
 ```{r oracle, echo = F, results='asis'}
-data.frame( Oracle = maxi(S(attr(dt, 'eta'), attr(dt, 'phi') )) %>% unlist ,
+data.frame( Oracle = attr(S,'evaluate')(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi')) %>% maxi %>% unlist ,
             Initialisation = para%>% unlist)%>% t %>% 
   knitr::kable(format = 'html') %>% kable_styling(full_width = F)
 ```
@@ -159,7 +157,15 @@ data.frame( Oracle = maxi(S(attr(dt, 'eta'), attr(dt, 'phi') )) %>% unlist ,
 ```{r SAEM loop }
 niter <- 300
 MH.iter <- 10
-res <- SAEM(niter, MH.iter, para, Phi, S, Z, sim, maxi, burnin = 150, coef.burnin = 3/4, eps = 1e-3, verbatim = 2)
+f <- function(eta, phi) { s <- S(eta, phi) %>% unlist #attr(S, 'evaluate')
+  
+  attr(s, '1') <- 1
+  attr(s, '2') <- 2
+  attr(s, '3') <- 2 + 1:ncol(phi)
+  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
+  return(s)
+}
+res <- SAEM(niter, MH.iter, para, Phi, f, Z, sim, maxi, burnin = 150, coef.burnin = 3/4, eps = 1e-3, verbatim = 2)
 saveRDS(res, 'saem.rds')
 gg <- plot(res)
 ```

@@ -43,10 +43,10 @@ param <- list(sigma2 = 0.05,
 
 F. <- length(param$omega2) #dimension de phi
 #=======================================#
-t <- seq(2,6, length.out = 100) #value of times
+t <- seq(2,6, length.out = 10) #value of times
 
 # --- longitudinal data --- #
-G = 40 ; ng = 80 #nombre de groupe et d'individu par groupe
+G = 40 ; ng = 12 #nombre de groupe et d'individu par groupe
 n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
 
 dt <- NLME_obs(G, ng, t, param, m)
@@ -116,7 +116,7 @@ for(i in 1:100)
 {
   p <- do.call(Phi2, param)
   id <- c(1,3,4)
-  sum( p%a%id * S2$evaluate(id, eta, phi) )
+  sum( p%a%id * unlist(S2(eta, phi, i = id)) )
 }
 toc()
 
