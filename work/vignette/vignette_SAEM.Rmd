@@ -24,16 +24,23 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.asp = 0.8,
                out.weightedidth = "100%")
 
-folder <- '../R/'
-source('../R/include.R')
+folder <- '../../R/'
+source('../../R/include.R')
 ```
 
 ## Initialisation et génération des données
 
-```{r init data}
-m <- function(t, eta, phi) phi[1] * t + eta
+```{r number of cores, echo = F}
+ncores <- pmin(1, future::availableCores()-1 )
 
-ng <- 8 #nombre d'individu par groupe
+message(paste('number of cores available =', ncores))
+print(paste('number of cores available =', ncores))
+```
+
+```{r init data}
+m <- function(t, eta, phi) phi[,1] * t + eta
+
+ng <- 12 #nombre d'individu par groupe
 G <- 4 # nombre groupe
 #===============================#
 param <- list( sigma2 = 0.5,  #variance de l'erreur
@@ -50,59 +57,60 @@ Y <- dt$obs
 
 n <- nrow(dt) #nombre total de data
 N <- G*ng #nombre total d'individu
+```
 
-#================================= Affichage ================================#
-dt %>% ggplot(aes(t, obs, col = gen, group = id)) + 
+```{r data ploting, echo = F}
+dt_NLME %>% ggplot(aes(t, obs, col = gen, group = id)) + 
   geom_point() + geom_line() + theme(legend.position = 'null')
 ```
 
 # Statistique exhaustive
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
-```{r setup stat exhaustive}
-Phi <- function(sigma2,rho2, mu, omega2)
-  c(- n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2)
-
-S <- function(eta, phi)
-{
-  s <- c(mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #id = 1
-         mean(eta^2),                    #id = 2
-         apply(phi^2, 2, mean),          #id = 3
-         apply(phi  , 2, mean) )         #id = 4
-
-  attr(s, '1') <- 1
-  attr(s, '2') <- 2
-  attr(s, '3') <- 2 + 1:ncol(phi)
-  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
-  return(s)
+```{r stat exhaustive}
+#Petite fonction pour retourner rapidement l'appel Phi[attr(Phi, i)] où i est '1', '2', ...,
+`%a%` <- function(x,var){
+  if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
+  lapply(var, function(v) x%a%v) %>% unlist
 }
+
+Phi <- function(sigma2,rho2, mu, omega2)
+{
+  p <- c(- n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2)
+  
+  attr(p, '1') <- 1
+  attr(p, '2') <- 2
+  attr(p, '3') <- 2 + 1:length(mu)
+  attr(p, '4') <- 2 +   length(mu) + 1:length(mu)
+  return(p)
+}
+
+S <- get_stat(function(eta, phi) mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ),
+              function(eta, phi) mean(eta^2),
+              function(eta, phi) apply(phi^2, 2, mean),
+              function(eta, phi) apply(phi  , 2, mean) )
 ```
 # Metropolis Hastings
 
-### Vraisemblance
+## Vraisemblance
 
 ```{r MH}
-#=============================================================================#
 loglik.phi <- function(x, eta, Phi)
 {
   s <- S(eta,x)
-  
-  id <- c(attr(s,'1'), attr(s,'3'), attr(s,'4')) #indice de S_1 et S_{3,.} puis S_{4,.}
-  sum(Phi[id]*s[id])
+  sum( (Phi*s)%a%c(1,3,4) ) #indice de S_1 et S_{3,.} puis S_{4,.}
 }
 loglik.eta <- function(x, phi, Phi) 
 { 
   s <- S(x, phi)
-  id <- c(attr(s,'1'), attr(s,'2'))
-  sum(Phi[id]*s[id])
+  sum( (Phi*s)%a%c(1,2) )
 }
 ```
 
 # SAEM
-### initialisation
+## initialisation
 ```{r SAEM init}
 M <- 1 #nombre de simulation
-u <- function(k) ifelse(k<200, 1, 1/(k-199) )
 
 # ---  Initialisation des paramètres --- #
 para <- list( sigma2 = 0.1,
@@ -110,46 +118,62 @@ para <- list( sigma2 = 0.1,
               mu = 4,
               omega2 = 0.3 )
 
-# --- Initialisation des chaines MC : Z_0 --- #
-etagivenY <- 1:M %>% lapply(function(i) rnorm(N, 0, para$rho2)  %>% matrix(ncol = 1) )
-phigivenY <- 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t  )
+# --- Initialisation des chaines MC : Z_0 ---
+Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
+          phi = 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ) )
 ```
 
-## Boucle
-
-```{r SAEM, message=FALSE}
-sim <- function(niter, Phih, etagivenY, phigivenY)
+## Etape simulation et maximisation du SEAM
+```{r SAEM fct}
+sim <- function(niter, Phih, eta, phi)
 {
-  M <- length(phigivenY)
-  etagivenY <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para(niter, etagivenY[[i]], sd = .03,loglik.eta, phigivenY[[i]], Phih,
-                     cores = future::availableCores()-2) )
+  M <- length(phi)
 
-  phigivenY <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para(niter, phigivenY[[i]], sd = .02, loglik.phi, etagivenY[[i]], Phih,
-                     cores = future::availableCores()-2) )
-
-  list(eta = etagivenY, phi = phigivenY)
+  eta <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para_future(niter, eta[[i]], sd = .03, loglik.eta, phi[[i]], Phih, cores = ncores ))
+  
+  phi <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para_future(niter, phi[[i]], sd = .02, loglik.phi, eta[[i]], Phih, cores = 1 ))
+  
+  list(eta = eta, phi = phi)
 }
 
 maxi <- function(S)
 {
-  list(sigma2 = S[attr(S,'1')],
-       rho2 =   S[attr(S,'2')],
-       mu =     S[attr(S,'4')],
-       omega2 = S[attr(S,'3')] - S[attr(S,'4')]^2 )
+  list(sigma2 = S%a%1,
+       rho2 =   S%a%2,
+       mu =     S%a%4,
+       omega2 = S%a%3 - (S%a%4)^2 )
 }
+```
 
-maxi(S(attr(dt, 'eta'), attr(dt, 'phi')))
 
-niter <- 4
+# Resultats
+
+```{r oracle, echo = F, results='asis'}
+data.frame( Oracle = maxi(S(attr(dt, 'eta'), attr(dt, 'phi') )) %>% unlist ,
+            Initialisation = para%>% unlist)%>% t %>% 
+  knitr::kable(format = 'html') %>% kable_styling(full_width = F)
+```
+
+```{r SAEM loop }
+niter <- 300
 MH.iter <- 10
-Z <- list(eta = etagivenY, phi = phigivenY)
-res <- SAEM(niter, MH.iter, u, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = T)
+res <- SAEM(niter, MH.iter, para, Phi, S, Z, sim, maxi, burnin = 150, coef.burnin = 3/4, eps = 1e-3, verbatim = 2)
+saveRDS(res, 'saem.rds')
+gg <- plot(res)
+```
 
-print(paste0('SAEM execution time = ', res$times_elasped, 's'))
+```{r seam table, results='asis', echo = F }
+gg$table_estimation
+```
 
-plot(res)
-plot(res$Z$phi[[1]], dim = G)
-plot(res$Z$eta[[1]], dim = N)
+```{r saem plot, echo = F }
+gg$plot_paramater
+gg$plot_MCMC
+
+gg.MH <- names(res$Z) %>% keep(function(var) 'MH_res' %in% class(res$Z[[var]][[1]]) ) %>%
+  lapply(function(var)plot(res$Z[[var]][[1]], name = var)$plot_acceptation)
+
+grid.arrange(grobs  = gg.MH)
 ```

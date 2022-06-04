@@ -3,7 +3,6 @@
 #'
 #' @param niter number of iterations for SAEM loop
 #' @param niter.MH number of iterations for metropolis hastings algorithm
-#' @param u
 #' @param param
 #' @param exhaustive
 #' @param simulation function for simulation step
@@ -12,12 +11,14 @@
 #' @param Z list of latent variables (with var names)
 #' @param eps Stop criterion
 #' @param verbatim 1 message during the main loop and estimation of the remaining execution time; 2 same as 1 with in return values of the simulations of the latent variables
+#' @param burnin step at which burn-in period ends
+#' @param coef.burnin 1/(step+1-burnin)^coef.burnin
 #'
 #' @return
 #' @export
 #'
 #' @examples
-SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maximisation, eps = 1e-3, verbatim = F)
+SAEM <- function(niter, niter.MH, param, Phi, exhaustive, Z, simulation, maximisation, burnin = NULL, coef.burnin = 1, eps = 1e-3, verbatim = F)
 {
   #Initialisation des listes des parametres
   parameter <- function(i) { para %>% lapply(function(x) x[i,])}
@@ -34,6 +35,9 @@ SAEM <- function(niter, niter.MH, u, param, Phi, exhaustive, Z, simulation, maxi
   if(verbatim == 2)
     value <- Z %>% lapply(function(z) list(z[[1]]))
 
+  #Burn-in
+  if(is.null(burnin)) burnin <- niter
+  u <- function(k) ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin ))
 
   h <- 2
   stopCondi <- function(h) para %>% lapply(function(p) abs(p[h-1] - p[h]) < eps) %>% as.logical %>% prod

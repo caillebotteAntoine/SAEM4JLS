@@ -1,129 +1,49 @@
-processing file: tmp.Rmd
-number of cores available = 10
-Quitting from lines 71-100 (tmp.Rmd) 
-Erreur dans S(attr(dt_NLME, "eta"), attr(dt_NLME, "phi")) : 
-  impossible de trouver la fonction "S"
-Appels : <Anonymous> ... withVisible -> eval_with_user_handlers -> eval -> eval
-Exécution arrêtée
-processing file: tmp.Rmd
+processing file: Longitudinal_nonlinear_mixed_model_SAEM.Rmd
 number of cores available = 10
 --- SAEM started ! ---
 SAEM step = 1, remaining = 49, times elasped = 0s, estimated time for one step = NaNs, estimated time remaining = NaNs
-SAEM step = 2, remaining = 48, times elasped = 17.5s, estimated time for one step = 17.5s, estimated time remaining = 857s
-SAEM step = 3, remaining = 47, times elasped = 35.5s, estimated time for one step = 17.8s, estimated time remaining = 852.5s
-SAEM step = 4, remaining = 46, times elasped = 51.9s, estimated time for one step = 17.3s, estimated time remaining = 812.9s
-SAEM step = 5, remaining = 45, times elasped = 68.7s, estimated time for one step = 17.2s, estimated time remaining = 789.5s
-SAEM step = 6, remaining = 44, times elasped = 85.1s, estimated time for one step = 17s, estimated time remaining = 766.3s
-SAEM step = 7, remaining = 43, times elasped = 102s, estimated time for one step = 17s, estimated time remaining = 748.3s
-SAEM step = 8, remaining = 42, times elasped = 119.5s, estimated time for one step = 17.1s, estimated time remaining = 734.3s
-SAEM step = 9, remaining = 41, times elasped = 137s, estimated time for one step = 17.1s, estimated time remaining = 719.4s
-SAEM step = 10, remaining = 40, times elasped = 153.7s, estimated time for one step = 17.1s, estimated time remaining = 700s
-SAEM step = 11, remaining = 39, times elasped = 171.2s, estimated time for one step = 17.1s, estimated time remaining = 684.7s
-SAEM step = 12, remaining = 38, times elasped = 188.1s, estimated time for one step = 17.1s, estimated time remaining = 666.9s
-SAEM step = 13, remaining = 37, times elasped = 205.1s, estimated time for one step = 17.1s, estimated time remaining = 649.5s
-SAEM step = 14, remaining = 36, times elasped = 222.2s, estimated time for one step = 17.1s, estimated time remaining = 632.3s
-SAEM step = 15, remaining = 35, times elasped = 239.6s, estimated time for one step = 17.1s, estimated time remaining = 616.2s
-SAEM step = 16, remaining = 34, times elasped = 257.1s, estimated time for one step = 17.1s, estimated time remaining = 599.8s
-SAEM step = 17, remaining = 33, times elasped = 274.2s, estimated time for one step = 17.1s, estimated time remaining = 582.6s
-SAEM step = 18, remaining = 32, times elasped = 291.4s, estimated time for one step = 17.1s, estimated time remaining = 565.7s
-SAEM step = 19, remaining = 31, times elasped = 308.3s, estimated time for one step = 17.1s, estimated time remaining = 548.1s
-SAEM step = 20, remaining = 30, times elasped = 325.1s, estimated time for one step = 17.1s, estimated time remaining = 530.4s
-SAEM step = 21, remaining = 29, times elasped = 342.2s, estimated time for one step = 17.1s, estimated time remaining = 513.4s
---- SAEM ended ! ---
-output file: tmp.knit.md
-Output created: tmp.html
-processing file: tmp.Rmd
-number of cores available = 10
---- SAEM started ! ---
-SAEM step = 1, remaining = 49, times elasped = 0s, estimated time for one step = NaNs, estimated time remaining = NaNs
-SAEM step = 2, remaining = 48, times elasped = 18s, estimated time for one step = 18s, estimated time remaining = 883.5s
-SAEM step = 3, remaining = 47, times elasped = 36.8s, estimated time for one step = 18.4s, estimated time remaining = 882s
-SAEM step = 4, remaining = 46, times elasped = 56s, estimated time for one step = 18.7s, estimated time remaining = 878s
-SAEM step = 5, remaining = 45, times elasped = 73.9s, estimated time for one step = 18.5s, estimated time remaining = 849.5s
-SAEM step = 6, remaining = 44, times elasped = 92.4s, estimated time for one step = 18.5s, estimated time remaining = 831.6s
-SAEM step = 7, remaining = 43, times elasped = 111s, estimated time for one step = 18.5s, estimated time remaining = 813.9s
-SAEM step = 8, remaining = 42, times elasped = 129.6s, estimated time for one step = 18.5s, estimated time remaining = 796.1s
-SAEM step = 9, remaining = 41, times elasped = 149.4s, estimated time for one step = 18.7s, estimated time remaining = 784.4s
-SAEM step = 10, remaining = 40, times elasped = 167.5s, estimated time for one step = 18.6s, estimated time remaining = 763s
-SAEM step = 11, remaining = 39, times elasped = 187.5s, estimated time for one step = 18.7s, estimated time remaining = 749.9s
-SAEM step = 12, remaining = 38, times elasped = 206.2s, estimated time for one step = 18.7s, estimated time remaining = 731.2s
-SAEM step = 13, remaining = 37, times elasped = 226.2s, estimated time for one step = 18.8s, estimated time remaining = 716.2s
-SAEM step = 14, remaining = 36, times elasped = 245.8s, estimated time for one step = 18.9s, estimated time remaining = 699.7s
-SAEM step = 15, remaining = 35, times elasped = 264.8s, estimated time for one step = 18.9s, estimated time remaining = 681s
-SAEM step = 16, remaining = 34, times elasped = 283.5s, estimated time for one step = 18.9s, estimated time remaining = 661.4s
-SAEM step = 17, remaining = 33, times elasped = 302s, estimated time for one step = 18.9s, estimated time remaining = 641.7s
-SAEM step = 18, remaining = 32, times elasped = 321.6s, estimated time for one step = 18.9s, estimated time remaining = 624.3s
-SAEM step = 19, remaining = 31, times elasped = 341.2s, estimated time for one step = 19s, estimated time remaining = 606.6s
-SAEM step = 20, remaining = 30, times elasped = 359.7s, estimated time for one step = 18.9s, estimated time remaining = 586.9s
-SAEM step = 21, remaining = 29, times elasped = 378.6s, estimated time for one step = 18.9s, estimated time remaining = 567.9s
---- SAEM ended ! ---
-output file: tmp.knit.md
-Output created: tmp.html
-processing file: tmp.Rmd
-number of cores available = 10
---- SAEM started ! ---
-SAEM step = 1, remaining = 49, times elasped = 0s, estimated time for one step = NaNs, estimated time remaining = NaNs
-SAEM step = 2, remaining = 48, times elasped = 17.9s, estimated time for one step = 17.9s, estimated time remaining = 878.1s
-SAEM step = 3, remaining = 47, times elasped = 35.7s, estimated time for one step = 17.8s, estimated time remaining = 856.1s
-SAEM step = 4, remaining = 46, times elasped = 54s, estimated time for one step = 18s, estimated time remaining = 846.8s
-SAEM step = 5, remaining = 45, times elasped = 72.1s, estimated time for one step = 18s, estimated time remaining = 829s
-SAEM step = 6, remaining = 44, times elasped = 90.3s, estimated time for one step = 18.1s, estimated time remaining = 813.1s
-SAEM step = 7, remaining = 43, times elasped = 109.6s, estimated time for one step = 18.3s, estimated time remaining = 803.4s
-SAEM step = 8, remaining = 42, times elasped = 127.9s, estimated time for one step = 18.3s, estimated time remaining = 785.7s
-SAEM step = 9, remaining = 41, times elasped = 147.9s, estimated time for one step = 18.5s, estimated time remaining = 776.7s
-SAEM step = 10, remaining = 40, times elasped = 166.9s, estimated time for one step = 18.5s, estimated time remaining = 760.2s
-SAEM step = 11, remaining = 39, times elasped = 186.2s, estimated time for one step = 18.6s, estimated time remaining = 744.8s
-SAEM step = 12, remaining = 38, times elasped = 204.6s, estimated time for one step = 18.6s, estimated time remaining = 725.5s
-SAEM step = 13, remaining = 37, times elasped = 223.5s, estimated time for one step = 18.6s, estimated time remaining = 707.8s
-SAEM step = 14, remaining = 36, times elasped = 243s, estimated time for one step = 18.7s, estimated time remaining = 691.7s
-SAEM step = 15, remaining = 35, times elasped = 261.7s, estimated time for one step = 18.7s, estimated time remaining = 672.9s
-SAEM step = 16, remaining = 34, times elasped = 280.4s, estimated time for one step = 18.7s, estimated time remaining = 654.4s
-SAEM step = 17, remaining = 33, times elasped = 299.4s, estimated time for one step = 18.7s, estimated time remaining = 636.2s
-SAEM step = 18, remaining = 32, times elasped = 317.8s, estimated time for one step = 18.7s, estimated time remaining = 616.9s
-SAEM step = 19, remaining = 31, times elasped = 336.4s, estimated time for one step = 18.7s, estimated time remaining = 598.1s
-SAEM step = 20, remaining = 30, times elasped = 355.3s, estimated time for one step = 18.7s, estimated time remaining = 579.8s
-SAEM step = 21, remaining = 29, times elasped = 375.3s, estimated time for one step = 18.8s, estimated time remaining = 562.9s
-SAEM step = 22, remaining = 28, times elasped = 394s, estimated time for one step = 18.8s, estimated time remaining = 544.1s
-SAEM step = 23, remaining = 27, times elasped = 412.6s, estimated time for one step = 18.8s, estimated time remaining = 525.1s
-SAEM step = 24, remaining = 26, times elasped = 431.4s, estimated time for one step = 18.8s, estimated time remaining = 506.4s
-SAEM step = 25, remaining = 25, times elasped = 451.4s, estimated time for one step = 18.8s, estimated time remaining = 489.1s
-SAEM step = 26, remaining = 24, times elasped = 470s, estimated time for one step = 18.8s, estimated time remaining = 470s
-SAEM step = 27, remaining = 23, times elasped = 489.1s, estimated time for one step = 18.8s, estimated time remaining = 451.5s
-SAEM step = 28, remaining = 22, times elasped = 508.7s, estimated time for one step = 18.8s, estimated time remaining = 433.3s
-SAEM step = 29, remaining = 21, times elasped = 527.6s, estimated time for one step = 18.8s, estimated time remaining = 414.5s
-SAEM step = 30, remaining = 20, times elasped = 546.2s, estimated time for one step = 18.8s, estimated time remaining = 395.5s
-SAEM step = 31, remaining = 19, times elasped = 565.3s, estimated time for one step = 18.8s, estimated time remaining = 376.9s
-SAEM step = 32, remaining = 18, times elasped = 585.4s, estimated time for one step = 18.9s, estimated time remaining = 358.8s
-SAEM step = 33, remaining = 17, times elasped = 604.1s, estimated time for one step = 18.9s, estimated time remaining = 339.8s
-SAEM step = 34, remaining = 16, times elasped = 623.5s, estimated time for one step = 18.9s, estimated time remaining = 321.2s
-SAEM step = 35, remaining = 15, times elasped = 642.1s, estimated time for one step = 18.9s, estimated time remaining = 302.2s
-SAEM step = 36, remaining = 14, times elasped = 660.6s, estimated time for one step = 18.9s, estimated time remaining = 283.1s
-SAEM step = 37, remaining = 13, times elasped = 679s, estimated time for one step = 18.9s, estimated time remaining = 264.1s
-SAEM step = 38, remaining = 12, times elasped = 697.7s, estimated time for one step = 18.9s, estimated time remaining = 245.1s
-SAEM step = 39, remaining = 11, times elasped = 715.2s, estimated time for one step = 18.8s, estimated time remaining = 225.8s
-SAEM step = 40, remaining = 10, times elasped = 733.5s, estimated time for one step = 18.8s, estimated time remaining = 206.9s
-SAEM step = 41, remaining = 9, times elasped = 752.7s, estimated time for one step = 18.8s, estimated time remaining = 188.2s
-SAEM step = 42, remaining = 8, times elasped = 771.3s, estimated time for one step = 18.8s, estimated time remaining = 169.3s
-SAEM step = 43, remaining = 7, times elasped = 789.8s, estimated time for one step = 18.8s, estimated time remaining = 150.4s
-SAEM step = 44, remaining = 6, times elasped = 807.7s, estimated time for one step = 18.8s, estimated time remaining = 131.5s
-SAEM step = 45, remaining = 5, times elasped = 826.7s, estimated time for one step = 18.8s, estimated time remaining = 112.7s
-SAEM step = 46, remaining = 4, times elasped = 845.1s, estimated time for one step = 18.8s, estimated time remaining = 93.9s
-SAEM step = 47, remaining = 3, times elasped = 864.4s, estimated time for one step = 18.8s, estimated time remaining = 75.2s
-SAEM step = 48, remaining = 2, times elasped = 883.9s, estimated time for one step = 18.8s, estimated time remaining = 56.4s
-SAEM step = 49, remaining = 1, times elasped = 902.2s, estimated time for one step = 18.8s, estimated time remaining = 37.6s
-SAEM step = 50, remaining = 0, times elasped = 921.5s, estimated time for one step = 18.8s, estimated time remaining = 18.8s
---- SAEM ended ! ---
-output file: tmp.knit.md
-Output created: tmp.html
-processing file: tmp.Rmd
-number of cores available = 10
---- SAEM started ! ---
-SAEM step = 1, remaining = 49, times elasped = 0s, estimated time for one step = NaNs, estimated time remaining = NaNs
-SAEM step = 2, remaining = 48, times elasped = 17.9s, estimated time for one step = 17.9s, estimated time remaining = 879.1s
-SAEM step = 3, remaining = 47, times elasped = 35.4s, estimated time for one step = 17.7s, estimated time remaining = 848.6s
-SAEM step = 4, remaining = 46, times elasped = 53.8s, estimated time for one step = 17.9s, estimated time remaining = 843s
-SAEM step = 5, remaining = 45, times elasped = 71.2s, estimated time for one step = 17.8s, estimated time remaining = 819s
-SAEM step = 6, remaining = 44, times elasped = 89.9s, estimated time for one step = 18s, estimated time remaining = 809.1s
-SAEM step = 7, remaining = 43, times elasped = 107.9s, estimated time for one step = 18s, estimated time remaining = 791s
-SAEM step = 8, remaining = 42, times elasped = 126s, estimated time for one step = 18s, estimated time remaining = 773.8s
-SAEM step = 9, remaining = 41, times elasped = 145.3s, estimated time for one step = 18.2s, estimated time remaining = 762.9s
+SAEM step = 2, remaining = 48, times elasped = 7.2s, estimated time for one step = 7.2s, estimated time remaining = 350.8s
+SAEM step = 3, remaining = 47, times elasped = 13.9s, estimated time for one step = 7s, estimated time remaining = 333.6s
+SAEM step = 4, remaining = 46, times elasped = 20.4s, estimated time for one step = 6.8s, estimated time remaining = 319s
+SAEM step = 5, remaining = 45, times elasped = 26.8s, estimated time for one step = 6.7s, estimated time remaining = 308.7s
+SAEM step = 6, remaining = 44, times elasped = 33.7s, estimated time for one step = 6.7s, estimated time remaining = 303.1s
+SAEM step = 7, remaining = 43, times elasped = 40.3s, estimated time for one step = 6.7s, estimated time remaining = 295.5s
+SAEM step = 8, remaining = 42, times elasped = 46.7s, estimated time for one step = 6.7s, estimated time remaining = 286.7s
+SAEM step = 9, remaining = 41, times elasped = 53.4s, estimated time for one step = 6.7s, estimated time remaining = 280.2s
+SAEM step = 10, remaining = 40, times elasped = 60s, estimated time for one step = 6.7s, estimated time remaining = 273.5s
+SAEM step = 11, remaining = 39, times elasped = 67.4s, estimated time for one step = 6.7s, estimated time remaining = 269.5s
+SAEM step = 12, remaining = 38, times elasped = 73.7s, estimated time for one step = 6.7s, estimated time remaining = 261.4s
+SAEM step = 13, remaining = 37, times elasped = 80s, estimated time for one step = 6.7s, estimated time remaining = 253.5s
+SAEM step = 14, remaining = 36, times elasped = 86.5s, estimated time for one step = 6.7s, estimated time remaining = 246.3s
+SAEM step = 15, remaining = 35, times elasped = 93s, estimated time for one step = 6.6s, estimated time remaining = 239s
+SAEM step = 16, remaining = 34, times elasped = 99.7s, estimated time for one step = 6.6s, estimated time remaining = 232.5s
+SAEM step = 17, remaining = 33, times elasped = 106.3s, estimated time for one step = 6.6s, estimated time remaining = 225.9s
+SAEM step = 18, remaining = 32, times elasped = 113.1s, estimated time for one step = 6.7s, estimated time remaining = 219.6s
+SAEM step = 19, remaining = 31, times elasped = 119.7s, estimated time for one step = 6.7s, estimated time remaining = 212.8s
+SAEM step = 20, remaining = 30, times elasped = 126.1s, estimated time for one step = 6.6s, estimated time remaining = 205.7s
+SAEM step = 21, remaining = 29, times elasped = 132.9s, estimated time for one step = 6.6s, estimated time remaining = 199.3s
+SAEM step = 22, remaining = 28, times elasped = 139.4s, estimated time for one step = 6.6s, estimated time remaining = 192.5s
+SAEM step = 23, remaining = 27, times elasped = 145.9s, estimated time for one step = 6.6s, estimated time remaining = 185.7s
+SAEM step = 24, remaining = 26, times elasped = 152.2s, estimated time for one step = 6.6s, estimated time remaining = 178.7s
+SAEM step = 25, remaining = 25, times elasped = 158.8s, estimated time for one step = 6.6s, estimated time remaining = 172s
+SAEM step = 26, remaining = 24, times elasped = 165.1s, estimated time for one step = 6.6s, estimated time remaining = 165.1s
+SAEM step = 27, remaining = 23, times elasped = 171.8s, estimated time for one step = 6.6s, estimated time remaining = 158.6s
+SAEM step = 28, remaining = 22, times elasped = 178.3s, estimated time for one step = 6.6s, estimated time remaining = 151.9s
+SAEM step = 29, remaining = 21, times elasped = 185s, estimated time for one step = 6.6s, estimated time remaining = 145.4s
+SAEM step = 30, remaining = 20, times elasped = 191.7s, estimated time for one step = 6.6s, estimated time remaining = 138.8s
+SAEM step = 31, remaining = 19, times elasped = 198.2s, estimated time for one step = 6.6s, estimated time remaining = 132.1s
+SAEM step = 32, remaining = 18, times elasped = 204.4s, estimated time for one step = 6.6s, estimated time remaining = 125.3s
+SAEM step = 33, remaining = 17, times elasped = 211s, estimated time for one step = 6.6s, estimated time remaining = 118.7s
+SAEM step = 34, remaining = 16, times elasped = 217.5s, estimated time for one step = 6.6s, estimated time remaining = 112s
+SAEM step = 35, remaining = 15, times elasped = 223.8s, estimated time for one step = 6.6s, estimated time remaining = 105.3s
+SAEM step = 36, remaining = 14, times elasped = 230.8s, estimated time for one step = 6.6s, estimated time remaining = 98.9s
+SAEM step = 37, remaining = 13, times elasped = 237s, estimated time for one step = 6.6s, estimated time remaining = 92.2s
+SAEM step = 38, remaining = 12, times elasped = 243.2s, estimated time for one step = 6.6s, estimated time remaining = 85.5s
+SAEM step = 39, remaining = 11, times elasped = 249.8s, estimated time for one step = 6.6s, estimated time remaining = 78.9s
+SAEM step = 40, remaining = 10, times elasped = 255.9s, estimated time for one step = 6.6s, estimated time remaining = 72.2s
+SAEM step = 41, remaining = 9, times elasped = 262.4s, estimated time for one step = 6.6s, estimated time remaining = 65.6s
+SAEM step = 42, remaining = 8, times elasped = 269.2s, estimated time for one step = 6.6s, estimated time remaining = 59.1s
+SAEM step = 43, remaining = 7, times elasped = 275.3s, estimated time for one step = 6.6s, estimated time remaining = 52.4s
+SAEM step = 44, remaining = 6, times elasped = 281.8s, estimated time for one step = 6.6s, estimated time remaining = 45.9s
+SAEM step = 45, remaining = 5, times elasped = 287.9s, estimated time for one step = 6.5s, estimated time remaining = 39.3s
+SAEM step = 46, remaining = 4, times elasped = 294.4s, estimated time for one step = 6.5s, estimated time remaining = 32.7s

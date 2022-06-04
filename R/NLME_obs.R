@@ -106,7 +106,7 @@ get_obs_sf <- function(NLME_fct, dt_NLME, dt_SF, param, gamma)
   {
     g <- dt_SF$gen[i]
     eta <- attr(dt_NLME,'eta')[g]
-    phi <- attr(dt_NLME,'phi')[g,]
+    phi <- matrix(attr(dt_NLME,'phi')[g,], nrow = 1)
     u <- dt_SF$U[i]
 
 

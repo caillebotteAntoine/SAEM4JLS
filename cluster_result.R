@@ -2,10 +2,8 @@
 require(purrr)
 require(dplyr)
 
-min <- 116
-
-readLines('saem.err') %>%
+d <- readLines('saem.err') %>%
   discard(function(x) grepl('INFO : Large data should', x)) %>%
   discard(function(x) x == "" || x == " ") %>%
-  {sapply(min:length(.),function(i) .[i])} %>%
+  {sapply( last(which(grepl('processing file', d)) ):length(.),function(i) .[i])} %>%
   writeLines('cl.err')

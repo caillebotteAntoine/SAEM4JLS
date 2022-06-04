@@ -1,0 +1,134 @@
+---
+title: "SAEM function tutorial"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+  
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.weightedidth = 12,
+               fig.asp = 0.8,
+               out.weightedidth = "100%")
+
+folder <- '../../R/'
+source('../../R/include.R')
+```
+
+
+
+```{r init}
+#Phi[1] ; eta = valeur de fin
+#Phi[2] = valeur du noeud
+#Phi[3] = echelle
+m <- function(t, eta, phi) (phi[,1] + eta)/(1+exp((phi[,2]-t)/phi[,3]))
+#=======================================#
+param <- list(sigma2 = 0.05,
+              rho2 = 0.1,
+              mu = c(5,4,0.5),
+              omega2 = c(0.5,0.1,0.01))
+
+F. <- length(param$omega2) #dimension de phi
+#=======================================#
+t <- seq(2,6, length.out = 100) #value of times
+
+# --- longitudinal data --- #
+G = 40 ; ng = 80 #nombre de groupe et d'individu par groupe
+n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
+
+dt <- NLME_obs(G, ng, t, param, m)
+Y <- dt$obs
+```
+
+
+```{r  stat exhaustive}
+#Petite fonction pour retourner rapidement l'appel Phi[attr(Phi, i)] où i est '1', '2', ...,
+`%a%` <- function(x,var){
+  if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
+  lapply(var, function(v) x%a%v) %>% unlist
+}
+
+Phi <- function(sigma2,rho2, mu, omega2)
+  c(- n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2)
+
+S <- function(eta, phi)
+{
+  s <- c(mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #1
+         mean(eta^2),                                               #2
+         apply(phi^2, 2, mean), apply(phi  , 2, mean) )             #3 et 4
+
+  attr(s, '1') <- 1
+  attr(s, '2') <- 2
+  attr(s, '3') <- 2 + 1:ncol(phi)
+  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
+  return(s)
+}
+```
+
+
+```{r  stat exhaustive2}
+Phi2 <- function(sigma2,rho2, mu, omega2)
+{
+  p <- c(- n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2)
+  
+  attr(p, '1') <- 1
+  attr(p, '2') <- 2
+  attr(p, '3') <- 2 + 1:length(mu)
+  attr(p, '4') <- 2 +   length(mu) + 1:length(mu)
+  return(p)
+}
+S2 <- get_stat(function(eta, phi) mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ),
+              function(eta, phi) mean(eta^2),
+              function(eta, phi) apply(phi^2, 2, mean),
+              function(eta, phi) apply(phi  , 2, mean) )
+```
+
+```{r}
+require(tictoc)
+eta <- attr(dt,'eta')
+phi <- attr(dt,'phi')
+
+
+tic()
+for(i in 1:100)
+{
+  p <- do.call(Phi, param)
+  s <- S(eta,phi)
+  sum( (p*s)%a%c(1,3,4) )
+}
+toc()
+
+tic()
+for(i in 1:100)
+{
+  p <- do.call(Phi2, param)
+  id <- c(1,3,4)
+  sum( p%a%id * S2$evaluate(id, eta, phi) )
+}
+toc()
+
+
+
+```
+
+
+
+
+
+
+
+
+

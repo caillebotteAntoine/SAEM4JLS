@@ -64,7 +64,7 @@ x0 <- matrix(c(1,1), nrow = 1)
 res <- MH_High_Dim(500, x0, transi, loglik, obs, verbatim = T)
 plot(res, nrow = 2)
 
-res_para <- MH_High_Dim_para(500, x0, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
+res_para <- MH_High_Dim_para_future(500, x0, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
 plot(res_para, nrow = 2)
 
 res %>% as.numeric()
@@ -76,18 +76,9 @@ res_para %>% as.numeric()
 On peut relancer l'algorithme tout en gardant les informations déjà compiler
 
 ```{r}
-res_para2 <- MH_High_Dim_para(100, res_para, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
+res_para2 <- MH_High_Dim_para_future(100, res_para, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
 plot(res_para2, nrow = 2)
 ```
-
-
-
-
-
-
-
-
-
 
 
 
@@ -107,8 +98,9 @@ F. <- length(param$omega2) #dimension de phi
 
 t <- seq(2,6, length.out = 5) #valeur des temps
 
-G <- 40 ; ng = 4
+G <- 8 ; ng = 16
 dt <- NLME_obs(G, ng, t, param, m)
+N <- G*ng ; n <- nrow(dt)
 Y <- dt$obs
 
 dt %>% ggplot(aes(t, obs, col = gen, group = id)) +
@@ -123,12 +115,36 @@ Le but ici est de montre la différence de temps de calcul, a noté que certe MH
 De plus on montre
 
 ```{r time}
-Phi <-  c(- 1/(2*param$sigma2), -1/(2*param$omega2), param$mu/param$omega2)
+`%a%` <- function(x,var){
+  if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
+  lapply(var, function(v) x%a%v) %>% unlist
+}
 
-S <- function(phi)
-  c(sum((Y - get_obs(m, dt, phi = phi) )^2 ),
-    apply(phi^2, 2, sum),
-    apply(phi  , 2, sum) )
+S <- function(eta, phi)
+{
+  s <- c(mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #1
+         mean(eta^2),                                               #2
+         apply(phi^2, 2, mean), apply(phi  , 2, mean) )             #3 et 4
+
+  attr(s, '1') <- 1
+  attr(s, '2') <- 2
+  attr(s, '3') <- 2 + 1:ncol(phi)
+  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
+  return(s)
+}
+
+Phi <-  c(- n/(2*param$sigma2), -N/(2*param$rho2), - G/(2*param$omega2), G*param$mu/param$omega2 )
+
+loglik.phi <- function(x, eta)
+{
+  s <- S(eta,x)
+  sum( (Phi*s)%a%c(1,3,4) ) #indice de S_1 et S_{3,.} puis S_{4,.}
+}
+loglik.eta <- function(x, phi) 
+{ 
+  s <- S(x, phi)
+  sum( (Phi*s)%a%c(1,2) )
+}
 
 #=============================================================================#
 sd <- 0.02
@@ -136,49 +152,48 @@ sd <- 0.02
 transi <- function(x) rnorm(length(x), x, sd) #Fonction de transition pour MH_high_dim
 transi.noopti <- function(x) rnorm(length(x), x, sd) %>% matrix(nrow = G) #Fonction de transition pour MH
 
-loglik <- function(phi)
-{
-  stat <- S(phi)
-  sum(Phi*stat)
-}
-
 phi0 <-  matrix(rnorm(F.*G, c(6,3,1), 0.1), ncol = G) %>% t
 n.iter <- 1000
+
+eta <- attr(dt, 'eta')
+phi <- attr(dt, 'phi')
 ```
+
+---
 
 ```{r phi1}
 tic()
-phi.MH <- MH(n.iter, phi0, transi.noopti, loglik, verbatim = T)
+phi.MH <- MH(n.iter, phi0, transi.noopti, loglik.phi, eta, verbatim = T)
 toc()
 ```
 
 ```{r phi2}
 tic()
-phi.MH2 <- MH_High_Dim(n.iter, phi0 , transi, loglik, verbatim = T)
+phi.MH2 <- MH_High_Dim(n.iter, phi0 , transi, loglik.phi, eta, verbatim = T)
 toc()
 ```
 
 ```{r phi3}
 tic()
-phi.MH3 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = 1)
+phi.MH3 <- MH_High_Dim_para(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = 1)
 toc()
 ```
 
 ```{r phi4}
 tic()
-phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik, verbatim = T, cores = parallel::detectCores() -1)
+phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = parallel::detectCores() -1)
 toc()
 ```
 
 ```{r phi5}
 tic()
-phi.MH5 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, verbatim = T, cores = 1)
+phi.MH5 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = 1)
 toc()
 ```
 
 ```{r phi6}
 tic()
-phi.MH6 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, verbatim = T, cores = future::availableCores() -1)
+phi.MH6 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = future::availableCores() -1)
 toc()
 ```
 
@@ -239,7 +254,8 @@ avec $N$ le nombre de cores
 
 
 
-```{r efficiency, message=FALSE}
+```{r efficiency phi, eval=FALSE, message=FALSE, include=FALSE}
+
 G <- 40 ; ng = 4
 dt <- NLME_obs(G, ng, t, param, m)
 Y <- dt$obs
@@ -249,15 +265,15 @@ phi0 <-  matrix(rnorm(F.*G, c(6,3,1), 0.1), ncol = G) %>% t
 n.iter <- 100
 
 tic()
-res <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = 1)
+res <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik.phi, etacores = 1)
 t_seq <- toc() %>% {.$toc - .$tic }
 
-ntotcores <- future::availableCores() -1
+ntotcores <- pmin(8,future::availableCores() -1)
 t_par <- rep(NA, ntotcores)
 for(cores in 1:ntotcores)
 {
   tic()
-  MH_High_Dim_para_future(n.iter, phi0, sd, loglik, cores = cores)
+  MH_High_Dim_para(n.iter, phi0, sd, loglik.phi, etacores = cores)
   t_par[cores] <- toc() %>% {.$toc - .$tic }
   message(t_par)
 }
@@ -272,6 +288,30 @@ data.frame(speedup = t_seq/t_par) %>% mutate(N = 1:nrow(.)) %>%
 
 
 
+```{r efficiency eta, message=FALSE}
+eta0 <-  rnorm(G*ng, 0, 0.3)  %>% matrix(ncol = 1)
+
+n.iter <- 100
+
+tic()
+res <- MH_High_Dim_para_future(n.iter, eta0, sd, loglik.eta, phi, cores = 1)
+t_seq <- toc() %>% {.$toc - .$tic }
+
+ntotcores <- pmin(8,future::availableCores() -1)
+t_par <- rep(NA, ntotcores)
+for(cores in 2:ntotcores)
+{
+  tic()
+  MH_High_Dim_para_future(n.iter, eta0, sd, loglik.eta, phi, cores = cores)
+  t_par[cores] <- toc() %>% {.$toc - .$tic}
+  message(t_par)
+}
+
+data.frame(speedup = t_seq/t_par) %>% mutate(N = 1:nrow(.)) %>%
+  mutate(efficiency = speedup/N) %>% melt(id = 'N') %>%
+  ggplot(aes(N, value, col = variable)) + geom_point() + geom_line()
+
+```
 
 
 
