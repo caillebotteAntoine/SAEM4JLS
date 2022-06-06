@@ -85,7 +85,7 @@ SF_obs <- function(dt_NLME, param, NLME_fct)
   G <- unique(dt_NLME$gen) %>% as.numeric %>% max
   ng <- unique(dt_NLME$id) %>% as.numeric %>% max %>% {./G}
 
-  gamma <- rnorm(G, 0, sqrt(param$nu))
+  gamma <- rnorm(G, 0, sqrt(param$nu))  %>% matrix(ncol = 1)
 
   data <- data.frame(id = 1:(G*ng), gen = rep(1:G, each = ng) ) %>%
     mutate(U = gen %% 2)

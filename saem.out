@@ -1,180 +1,79 @@
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
+  |                                                                              |                                                                      |   0%  |                                                                              |...                                                                   |   4%
    inline R code fragments
 
-  |                                                                              |.....                                                                 |   7%
+  |                                                                              |......                                                                |   8%
 label: setup (with options) 
 List of 1
  $ include: logi FALSE
 
-  |                                                                              |.......                                                               |  10%
+  |                                                                              |........                                                              |  12%
   ordinary text without R code
 
-  |                                                                              |..........                                                            |  14%
+  |                                                                              |...........                                                           |  16%
 label: number of cores (with options) 
 List of 1
  $ echo: logi FALSE
 
-  |                                                                              |............                                                          |  17%
+  |                                                                              |..............                                                        |  20%
   ordinary text without R code
 
-  |                                                                              |..............                                                        |  21%
-label: init
   |                                                                              |.................                                                     |  24%
+label: init
+  |                                                                              |....................                                                  |  28%
   ordinary text without R code
 
-  |                                                                              |...................                                                   |  28%
+  |                                                                              |......................                                                |  32%
 label: data ploting (with options) 
 List of 1
  $ echo: logi FALSE
 
-  |                                                                              |......................                                                |  31%
+  |                                                                              |.........................                                             |  36%
   ordinary text without R code
 
-  |                                                                              |........................                                              |  34%
+  |                                                                              |............................                                          |  40%
 label: stat exhaustive
-  |                                                                              |...........................                                           |  38%
-  ordinary text without R code
-
-  |                                                                              |.............................                                         |  41%
-label: MH
-  |                                                                              |...............................                                       |  45%
+  |                                                                              |...............................                                       |  44%
   ordinary text without R code
 
   |                                                                              |..................................                                    |  48%
-label: SAEM init
+label: MH
   |                                                                              |....................................                                  |  52%
   ordinary text without R code
 
-  |                                                                              |.......................................                               |  55%
+  |                                                                              |.......................................                               |  56%
+label: SAEM init
+  |                                                                              |..........................................                            |  60%
+  ordinary text without R code
+
+  |                                                                              |.............................................                         |  64%
 label: SAEM fct
-  |                                                                              |.........................................                             |  59%
+  |                                                                              |................................................                      |  68%
   ordinary text without R code
 
-  |                                                                              |...........................................                           |  62%
-label: try MH (with options) 
-List of 3
- $ eval   : logi FALSE
- $ message: logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................                        |  66%
-  ordinary text without R code
-
-  |                                                                              |................................................                      |  69%
-label: unnamed-chunk-1 (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |...................................................                   |  72%
-  ordinary text without R code
-
-  |                                                                              |.....................................................                 |  76%
+  |                                                                              |..................................................                    |  72%
 label: oracle (with options) 
 List of 2
  $ echo   : logi FALSE
  $ results: chr "asis"
 
-  |                                                                              |........................................................              |  79%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  83%
-label: SAEM loop
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |.....                                                                 |   7%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |.......                                                               |  10%
-  ordinary text without R code
-
-  |                                                                              |..........                                                            |  14%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |............                                                          |  17%
-  ordinary text without R code
-
-  |                                                                              |..............                                                        |  21%
-label: init
-  |                                                                              |.................                                                     |  24%
-  ordinary text without R code
-
-  |                                                                              |...................                                                   |  28%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |......................                                                |  31%
-  ordinary text without R code
-
-  |                                                                              |........................                                              |  34%
-label: stat exhaustive
-  |                                                                              |...........................                                           |  38%
-  ordinary text without R code
-
-  |                                                                              |.............................                                         |  41%
-label: MH
-  |                                                                              |...............................                                       |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM init
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |.......................................                               |  55%
-label: SAEM fct
-  |                                                                              |.........................................                             |  59%
-  ordinary text without R code
-
-  |                                                                              |...........................................                           |  62%
-label: try MH (with options) 
-List of 3
- $ eval   : logi FALSE
- $ message: logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................                        |  66%
-  ordinary text without R code
-
-  |                                                                              |................................................                      |  69%
-label: unnamed-chunk-1 (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |...................................................                   |  72%
-  ordinary text without R code
-
   |                                                                              |.....................................................                 |  76%
-label: oracle (with options) 
-List of 2
- $ echo   : logi FALSE
- $ results: chr "asis"
-
-  |                                                                              |........................................................              |  79%
   ordinary text without R code
 
-  |                                                                              |..........................................................            |  83%
+  |                                                                              |........................................................              |  80%
 label: SAEM loop
-  |                                                                              |............................................................          |  86%
+  |                                                                              |...........................................................           |  84%
   ordinary text without R code
 
-  |                                                                              |...............................................................       |  90%
+  |                                                                              |..............................................................        |  88%
 label: seam table (with options) 
 List of 2
  $ results: chr "asis"
  $ echo   : logi FALSE
 
-  |                                                                              |.................................................................     |  93%
+  |                                                                              |................................................................      |  92%
   ordinary text without R code
 
-  |                                                                              |....................................................................  |  97%
+  |                                                                              |...................................................................   |  96%
 label: saem plot (with options) 
 List of 1
  $ echo: logi FALSE
@@ -183,108 +82,4 @@ List of 1
   ordinary text without R code
 
 
-/bin/pandoc +RTS -K512m -RTS Longitudinal_nonlinear_mixed_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_nonlinear_mixed_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/614838.1.short.q/RtmpskVri5/rmarkdown-str11a92240cfc69b.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |.....                                                                 |   7%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |.......                                                               |  10%
-  ordinary text without R code
-
-  |                                                                              |..........                                                            |  14%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |............                                                          |  17%
-  ordinary text without R code
-
-  |                                                                              |..............                                                        |  21%
-label: init
-  |                                                                              |.................                                                     |  24%
-  ordinary text without R code
-
-  |                                                                              |...................                                                   |  28%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |......................                                                |  31%
-  ordinary text without R code
-
-  |                                                                              |........................                                              |  34%
-label: stat exhaustive
-  |                                                                              |...........................                                           |  38%
-  ordinary text without R code
-
-  |                                                                              |.............................                                         |  41%
-label: MH
-  |                                                                              |...............................                                       |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM init
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |.......................................                               |  55%
-label: SAEM fct
-  |                                                                              |.........................................                             |  59%
-  ordinary text without R code
-
-  |                                                                              |...........................................                           |  62%
-label: try MH (with options) 
-List of 3
- $ eval   : logi FALSE
- $ message: logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................                        |  66%
-  ordinary text without R code
-
-  |                                                                              |................................................                      |  69%
-label: unnamed-chunk-1 (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |...................................................                   |  72%
-  ordinary text without R code
-
-  |                                                                              |.....................................................                 |  76%
-label: oracle (with options) 
-List of 2
- $ echo   : logi FALSE
- $ results: chr "asis"
-
-  |                                                                              |........................................................              |  79%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  83%
-label: SAEM loop
-  |                                                                              |............................................................          |  86%
-  ordinary text without R code
-
-  |                                                                              |...............................................................       |  90%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |.................................................................     |  93%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_nonlinear_mixed_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_nonlinear_mixed_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/625890.1.short.q/RtmpgLYIz6/rmarkdown-str29639179a8c0a7.html 
+/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/628293.1.short.q/RtmpUlRKXO/rmarkdown-str2856b85bc97a78.html 

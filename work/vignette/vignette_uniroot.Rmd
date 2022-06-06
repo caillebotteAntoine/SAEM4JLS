@@ -1,0 +1,122 @@
+---
+title: "Test optimisation res <- uniroot"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.width = 12, fig.asp = 0.8,
+               fig.align = "center",
+               out.weightedidth = "100%")
+
+folder <- '../../R/'
+source('../../R/include.R')
+```
+
+## Initialisation et génération des données
+
+```{r init}
+m <- function(t, eta, phi) (phi[,1] + eta)/(1+exp((phi[,2]-t)/phi[,3]))
+#=======================================#
+param <- list(sigma2 = 0.05,
+              rho2 = 0.1,
+              mu = c(5,90,5),
+              omega2 = c(0.5,0.1,0.01),
+              #Survival data,
+              nu2 = 0.5,
+              a = 90,
+              b = 50,
+              alpha = 7,
+              beta = 10)
+
+F. <- length(param$omega2) #dimension de phi
+#=======================================#
+t <- seq(60,120, length.out = 10) #value of times
+
+# --- longitudinal data --- #
+G = 40 ; ng = 8 #nombre de groupe et d'individu par groupe
+n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
+
+dt_NLME <- NLME_obs(G, ng, t, param, m)
+Y <- dt_NLME$obs
+dt_SF <- SF_obs(dt_NLME, param, m)
+```
+
+```{r  stat exhaustive}
+zeta.der <- function(beta, eta, phi, gamma, a, b, alpha)
+{
+  lbd <- function(t,g) t^{b-1} * exp(alpha*m(t, eta[g], matrix(phi[g,], nrow = 1)))
+  P1 <- 1:nrow(dt_SF) %>% sapply(function(i) integrate(function(t) lbd(t,dt_SF$gen[i]) , 0, dt_SF$obs[i])$value )
+  
+  P2 <- 1:nrow(dt_SF) %>% sapply(function(i) dt_SF$U[i]*exp(beta*dt_SF$U[i] + gamma[dt_SF$gen[i]] )  )
+  
+  sum(dt_SF$U) -  b*a^-b * sum(P2*P1)
+}
+
+for( v in c('eta', 'phi')) assign(v, attr(dt_NLME, v))
+for( v in c('gamma')) assign(v, attr(dt_SF, v))
+for( v in c('a', 'b', 'alpha')) assign(v, param[[v]])
+
+require(tictoc)
+```
+
+```{r res <- uniroot 1}
+tic()
+res <- uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha),
+               lower = -100, upper = 100)
+res
+toc()
+```
+
+```{r res <- uniroot 2}
+tic()
+res <- uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha),
+               lower = -100, upper = 100, tol = 1e-3)
+res
+toc()
+```
+
+```{r res <- uniroot 4}
+tic()
+res <- uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha),
+               lower = -100, upper = 100, tol = 1e-1)
+res
+toc()
+```
+
+```{r res <- uniroot 5}
+tic()
+res <- uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha),
+               lower = -100, upper = 100, tol = 1e-1, maxiter = 10)
+res
+toc()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
