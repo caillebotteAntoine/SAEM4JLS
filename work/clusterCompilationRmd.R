@@ -2,9 +2,9 @@
 
 # print(future::availableCores())
 
-#rmarkdown::render('work/vignette_SAEM.Rmd')
-#rmarkdown::render('work/Longitudinal_Surival_model_SAEM.Rmd')
-rmarkdown::render('work/achieved_model/Longitudinal_nonlinear_mixed_model_SAEM.Rmd')
+# rmarkdown::render('work/vignette/vignette_SAEM.Rmd')
+rmarkdown::render('work/Longitudinal_Surival_model_SAEM.Rmd')
+# rmarkdown::render('work/achieved_model/Longitudinal_nonlinear_mixed_model_SAEM.Rmd')
 # rmarkdown::render('work/vignette/vignette_MH.Rmd')
 
 

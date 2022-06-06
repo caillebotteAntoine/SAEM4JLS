@@ -58,7 +58,7 @@ F. <- length(param$omega2) #dimension de phi
 t <- seq(60,120, length.out = 10) #value of times
 
 # --- longitudinal data --- #
-G = 40 ; ng = 40 #nombre de groupe et d'individu par groupe
+G = 40 ; ng = 8 #nombre de groupe et d'individu par groupe
 n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
 
 dt_NLME <- NLME_obs(G, ng, t, param, m)
@@ -86,25 +86,15 @@ sigma2_a <- sigma2_b <- sigma2_alpha <- 0.1
 }
 
 
-Phi <- function(sigma2, rho2, mu, omega2, nu2, a, b, alpha, beta)
-{
-  p <-c(- n/(2*sigma2), -N/(2*rho2),               #1, 2
+Phi <- fct_vector(function(sigma2, rho2, mu, omega2, nu2, a, b, alpha, beta) {
+  c(- n/(2*sigma2), -N/(2*rho2),               #1, 2
         - G/(2*omega2), G*mu/omega2,               #3, 4
         - G/(2*nu2),                               #5
           a/sigma2_a,         -1/(2*sigma2_a),     #6, 7
           b/sigma2_b        , -1/(2*sigma2_b),     #8, 9
           alpha/sigma2_alpha, -1/(2*sigma2_alpha), #10, 11
-          beta )                                   #12
-  
-  attr(p, '1') <- 1
-  attr(p, '2') <- 2
-  attr(p, '3') <- 2 + 1:length(mu)
-  attr(p, '4') <- 2 +   length(mu) + 1:length(mu)
-  attr(p, '5') <- 2 + 2*length(mu) + 1
-  
-  for(i in 6:12) attr(p, as.character(i)) <- attr(p, as.character(i-1)) + 1 
-  return(p)
-}
+          beta ) },#12
+  dim = c(1,1,F., F., rep(1,8)) )
 
 zeta <- function(beta, eta, phi, gamma, a,b, alpha)
 {
@@ -125,53 +115,42 @@ zeta.der <- function(beta, eta, phi, gamma, a, b, alpha)
   sum(dt_SF$U) -  b*a^-b * sum(P2*P1)
 }
 
-S <- function(eta, phi, gamma, a, b, alpha)
-{
-  beta <- uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha), lower = -100, upper = 100)$root
-  
-  s <- c(mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ), #1
-         mean(eta^2),                                               #2
-         apply(phi^2, 2, mean), apply(phi  , 2, mean),              #3 et 4
-         mean(gamma^2),                                             #5
-         a, a^2,                                                    #6 et 7
-         b, b^2,                                                    #8 et 9
-         alpha^2, alpha,                                            #10 et 11
-         beta )                                                     #12
-
-  attr(s, '1') <- 1
-  attr(s, '2') <- 2
-  attr(s, '3') <- 2 + 1:ncol(phi)
-  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
-  attr(s, '5') <- 2 + 2*ncol(phi) + 1
-  
-  for(i in 6:12) attr(s, as.character(i)) <- attr(s, as.character(i-1)) + 1 
-  return(s)
-}
+S <- fct_vector(function(eta, phi, gamma, a, b, alpha) mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ),
+                function(eta, phi, gamma, a, b, alpha) mean(eta^2),           #2
+                function(eta, phi, gamma, a, b, alpha) apply(phi^2, 2, mean), #3
+                function(eta, phi, gamma, a, b, alpha) apply(phi, 2, mean),   #4
+                function(eta, phi, gamma, a, b, alpha) mean(gamma^2),         #5
+                function(eta, phi, gamma, a, b, alpha) a,                     #6
+                function(eta, phi, gamma, a, b, alpha) a^2,                   #7
+                function(eta, phi, gamma, a, b, alpha) b,                     #8
+                function(eta, phi, gamma, a, b, alpha) b^2,                   #9
+                function(eta, phi, gamma, a, b, alpha) alpha,                 #10
+                function(eta, phi, gamma, a, b, alpha) alpha^2,               #11
+                function(eta, phi, gamma, a, b, alpha)                        #12
+                  uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha), lower = -100, upper = 100, tol = 1e-3)$root,
+                dim = c(1,1,F., F., rep(1,8)) ) 
 ```
 
 # Metropolis Hastings
 ## Vraisemblance
 ```{r MH}
-loglik.phi <- function(x, eta, Phi)
-{
-  Phi%a%1 * sum((Y - get_obs(m, dt_NLME, eta = eta, phi = x) )^2) +
-    Phi%a%3 * apply(x^2, 2, sum) + Phi[4] * apply(x  , 2, sum)
+loglik.phi <- function(x, eta, Phi){
+  id <- c(1,3,4)
+  sum( Phi%a%id * S(eta = eta, phi = x, i = id) )
 }
-loglik.eta <- function(x, phi, Phi) 
-{ 
-  Phi%a%1 * sum((Y - get_obs(m, dt_NLME, eta = x, phi = phi) )^2) + 
-    Phi%a%2 * sum(x^2)
+loglik.eta <- function(x, phi, Phi){ 
+  id <- c(1,2)
+  sum( Phi%a%id * S(eta = x, phi = phi, i = id) )
 }
 
-loglik.gamma <- function(x, eta, phi, a, b, alpha, Phi)
-{
+loglik.gamma <- function(x, eta, phi, a, b, alpha, Phi){
   Phi%a%5  * sum(x^2) + ng*sum(x) +
     zeta(Phi%a%12, eta, phi, x, a, b, alpha) #Correction fait à la va vite
 }
 
-loglik.a     <- function(x, b, Phi) Phi%a%6  * x + Phi%a%7 * x^2  + G*ng*log(b*x^-b)
-loglik.b     <- function(x, Phi) Phi%a%8  * x + Phi%a%9 * x^2  + (x-1)*sum(log(t))
-loglik.alpha <- function(x, Phi) Phi%a%10 * x + Phi%a%11 * x^2
+loglik.a <- function(x, b, Phi) sum( Phi%a%6:7 * S(a = x, b = b, i = 6:7) ) + G*ng*log(b*x^-b)
+loglik.b <- function(x, Phi)    sum( Phi%a%8:9 * S(b = x, i = 8:9) ) + (x-1)*sum(log(t))
+loglik.alpha <- function(x, Phi)sum( Phi%a%10:11 * S(alpha = x, i = 10:11) )
 ```
 
 # SAEM
@@ -183,15 +162,16 @@ M <- 1 #nombre de simulation
 para <- param %>% sapply(function(x) x + runif(1))
 para$rho2 = 0.2 ; para$mu <- c(6,3,1) ; para$omega2 <- rep(.1,3)
 
-# --- Initialisation des chaines MC : Z_0 --- #list(attr(dt_NLME,'eta')),#
-Z <- list(eta = list(attr(dt_NLME,'eta')),#1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
-          phi = list(attr(dt_NLME,'phi')),#1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ),
+# --- Initialisation des chaines MC : Z_0 --- #list(attr(dt_NLME,'eta')),#list(attr(dt_NLME,'phi')),#
+Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
+          phi = 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ),
           
-          gamma = 1:M %>% lapply(function(i) matrix(rnorm(G, 0, para$nu2), ncol = 1) ),
+          gamma = list(attr(dt_SF,'gamma')),#1:M %>% lapply(function(i) matrix(rnorm(G, 0, para$nu2), ncol = 1) ),
           
           a = list(matrix(param$a)),
           b = list(matrix(param$b)),
-          alpha = list(matrix(param$alpha)) )
+          alpha = list(matrix(param$alpha))
+          )
 
 ```
 
@@ -201,16 +181,16 @@ sim <- function(niter, Phih, eta, phi, gamma, a, b, alpha)
 {
   M <- length(phi)
 
-  # eta <- 1:M %>% lapply( function(i)
-  #   MH_High_Dim_para_future(niter, eta[[i]], sd = .036,                 loglik.eta, phi[[i]], Phih, cores = ncores ))
+  eta <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para_future(niter, eta[[i]], sd = .036,                 loglik.eta, phi[[i]], Phih, cores = ncores ))
 
-  # phi <- 1:M %>% lapply( function(i)
-  #   MH_High_Dim_para_future(niter, phi[[i]], sd = c(.028, .036, .021), loglik.phi, eta[[i]], Phih, cores = ncores ))
+  phi <- 1:M %>% lapply( function(i)
+    MH_High_Dim_para_future(niter, phi[[i]], sd = c(.028, .036, .021), loglik.phi, eta[[i]], Phih, cores = ncores ))
   
-  gamma <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para_future(niter, gamma[[i]], sd = .03, loglik.gamma, 
-                     eta[[i]], phi[[i]], a[[i]], b[[i]], alpha[[i]], 
-                     Phih, cores = 1 ))
+  # gamma <- 1:M %>% lapply( function(i)
+  #   MH_High_Dim_para_future(niter, gamma[[i]], sd = .03, loglik.gamma, 
+  #                    eta[[i]], phi[[i]], a[[i]], b[[i]], alpha[[i]], 
+  #                    Phih, cores = 1 ))
 
   # a <- 1:M %>% lapply( function(i) MH_High_Dim_para_future(niter, a[[i]],     sd = .02, loglik.a,b[[i]],  Phih, cores = 1 ))
   # b <- 1:M %>% lapply( function(i) MH_High_Dim_para_future(niter, b[[i]],     sd = .02, loglik.b,         Phih, cores = 1 ))
@@ -237,14 +217,14 @@ maxi <- function(S)
 ```{r oracle, echo = F, results='asis'}
 data.frame( Oracle = maxi(S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi'), 
                             attr(dt_SF, 'gamma'), param$a, param$b, param$alpha  )) %>% unlist ,
-            Initialisation = para%>% unlist)%>% t %>% 
+            Initialisation = para%>% unlist)%>% t %>% round(digits = 4) %>% 
   knitr::kable(format = 'html') %>% kable_styling(full_width = F)
 ```
 
 ```{r SAEM loop }
-niter <- 10
+niter <- 100
 MH.iter <- 10
-res <- SAEM(niter, MH.iter, para, Phi, S, Z, sim, maxi, burnin = 200, eps = 1e-3, verbatim = 2)
+res <- SAEM(niter, MH.iter, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = 2)
 saveRDS(res, 'saem.rds')
 gg <- plot(res)
 ```

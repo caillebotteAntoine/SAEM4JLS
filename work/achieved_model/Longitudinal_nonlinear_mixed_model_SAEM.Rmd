@@ -31,7 +31,7 @@ source('../../R/include.R')
 ## Initialisation
 
 ```{r number of cores, echo = F}
-ncores <- pmin(2, future::availableCores() )
+ncores <- pmin(1, future::availableCores() )
 message(paste('number of cores available =', ncores))
 print(paste('number of cores available =', ncores))
 ```
@@ -52,7 +52,7 @@ F. <- length(param$omega2) #dimension de phi
 t <- seq(2,6, length.out = 10) #value of times
 
 # --- longitudinal data --- #
-G = 40 ; ng = 8 #nombre de groupe et d'individu par groupe
+G = 4 ; ng = 8 #nombre de groupe et d'individu par groupe
 n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
 
 dt_NLME <- NLME_obs(G, ng, t, param, m)
@@ -74,26 +74,14 @@ $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
   lapply(var, function(v) x%a%v) %>% unlist
 }
 
-Phi <- function(sigma2, rho2, mu, omega2, nu2)
-{
-  p <-c(- n/(2*sigma2), -N/(2*rho2),
-        - G/(2*omega2), G*mu/omega2 )
- 
-  return(p)
-}
 
-S <- function(eta, phi)
-{
-  s <- c(mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ), #1
-         mean(eta^2),                                               #2
-         apply(phi^2, 2, mean), apply(phi  , 2, mean) )             #3 et 4
+Phi <- fct_vector(function(sigma2, rho2, mu, omega2) 
+  c(-n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2), dim = c(1,1,F., F.) )
 
-  attr(s, '1') <- 1
-  attr(s, '2') <- 2
-  attr(s, '3') <- 2 + 1:ncol(phi)
-  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
-  return(s)
-}
+S <- fct_vector(function(eta, phi) mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ),
+              function(eta, phi) mean(eta^2),
+              function(eta, phi) apply(phi^2, 2, mean),
+              function(eta, phi) apply(phi  , 2, mean), dim = c(1,1,F., F.) )
 ```
 
 ## Metropolis Hastings
@@ -101,18 +89,15 @@ S <- function(eta, phi)
 ```{r MH}
 loglik.phi <- function(x, eta, Phi)
 {
-  s <- S(eta,x)
-  sum( (Phi*s)%a%c(1,3,4) ) #indice de S_1 et S_{3,.} puis S_{4,.}
+  id <- c(1,3,4) #indice de S_1 et S_{3,.} puis S_{4,.}
+  sum( Phi%a%id * S(eta, x, i = id) )
 }
 loglik.eta <- function(x, phi, Phi) 
 { 
-  s <- S(x, phi)
-  sum( (Phi*s)%a%c(1,2) )
+  id <- c(1,2)
+  sum( Phi%a%id * S(x, phi, i = id) )
 }
 ```
-
-
-
 
 ## SAEM
 ## Initialisation
@@ -120,8 +105,8 @@ loglik.eta <- function(x, phi, Phi)
 M <- 1 #nombre de simulation
 
 # ---  Initialisation des paramètres --- #
-para <- param %>% sapply(function(x) x + runif(1))
-para$rho2 = 0.2 ; para$mu <- c(6,3,1) ; para$omega2 <- rep(.1,3)
+para <- param %>% lapply(function(x) x + runif(1))
+#para$rho2 = 0.2 ; para$mu <- c(6,3,1) ; para$omega2 <- rep(.1,3)
 
 # --- Initialisation des chaines MC : Z_0 ---
 Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),

@@ -4,13 +4,15 @@ include = function(folder = 'R/', files, env.name )
   {
     env <- .GlobalEnv
   }else{
-    if(exists(env.name, envir = .GlobalEnv))
+    #if(exists(env.name, envir = .GlobalEnv)) rm(list = env.name, envir = .GlobalEnv)
+    if(env.name %in% search())
     {
-      detach(get(env.name, envir = .GlobalEnv))
-      rm(list = c(env.name))
+      detach(env.name, character.only = T)
+      print(paste(env.name, 'environment has been updated'))
     }
-
-    env = new.env()
+    assign(env.name, new.env(), envir = .GlobalEnv)
+    env <- get(env.name, envir = .GlobalEnv)
+    print(paste('new environment create named', env.name))
   }
 
   if(missing(files))
@@ -29,9 +31,12 @@ include = function(folder = 'R/', files, env.name )
   #On charge tout
   sapply(files, load)
 
-
-  #print(paste('new environment create named', env.name))
-  #rm(list = c(env.name))
+  if(!missing(env.name))
+  {
+    attach(env, name = env.name)
+    rm(list = env.name, envir = .GlobalEnv)
+  }
+  rm(include, envir = .GlobalEnv)
 }
 
 
@@ -47,11 +52,10 @@ require(furrr)# calcule en parallel
 require(future)
 
 if(exists('folder')){
-  include(folder)
+  include(folder, env.name = 'SAEM4JLS')
   rm(folder)
 }else
-  include()
+  include(env.name = 'SAEM4JLS')
 
-rm(include)
 
 

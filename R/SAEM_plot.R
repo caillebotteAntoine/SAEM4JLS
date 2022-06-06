@@ -57,6 +57,7 @@ plot.SAEM <- function(res, MCMC = T)
     dt <- data.frame()
     for(var in names(v))
     {
+      print(var)
       dt <- rbind(dt,
                   1:length(v[[var]]) %>%
                     lapply(function(i) cbind( v[[var]][[i]],i, row = 1:nrow(v[[var]][[i]])) ) %>%
@@ -74,5 +75,4 @@ plot.SAEM <- function(res, MCMC = T)
 
   gg
 }
-
 
