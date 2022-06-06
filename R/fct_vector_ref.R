@@ -1,10 +1,21 @@
+get_dimension_index <- function(dim)
+{
+  if(length(dim) == 0)return(list())
+  dimention <- list()
+  d.last <- 0
+  for(i in 1:length(dim))
+  {
+    dimention[[as.character(i)]] <- d.last + 1:dim[i]
+    d.last <- d.last + dim[i]
+  }
+  return(dimention)
+}
 
-rm(list = ls())
 
 fct_vector <- setRefClass(
   Class = "fct_vector",
   fields = list(fct = 'list',
-                dimention = 'list'),
+                dimention = 'list'), where = SAEM4JLS,
 
   methods = list(
     initialize = function(..., dim = NULL)
@@ -50,22 +61,9 @@ fct_vector <- setRefClass(
 )
 
 
+setMethod('[', signature = c('fct_vector', 'numeric'), definition = function(x, i) x$subset(i)$eval)
+# `[.fct_vector` <- function(vec, i) vec$subset(i)$eval
 
-`[.fct_vector` <- function(vec, i) vec$subset(i)$eval
-
-
-get_dimension_index <- function(dim)
-{
-  if(length(dim) == 0)return(list())
-  dimention <- list()
-  d.last <- 0
-  for(i in 1:length(dim))
-  {
-    dimention[[as.character(i)]] <- d.last + 1:dim[i]
-    d.last <- d.last + dim[i]
-  }
-  return(dimention)
-}
 
 
 G <- fct_vector(function(x,y) x*y,

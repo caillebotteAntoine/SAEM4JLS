@@ -11,21 +11,13 @@
 #'h <- function(x,y) c(2*x, 2*y)
 #'S <- fct_vector(f,g,h)
 #'S(1, 2, i = c(1,2))
-<<<<<<< HEAD
 fct_vector_old <- function(..., dim = NULL)
-=======
-fct_vector <- function(..., dim = NULL)
->>>>>>> 5c98043ac2b49b431b8f6fa633dee9ca1179a246
 {
   S <- function(..., i= NULL){
     args <- list(...)
     if(length(i) == 1) return( do.call(attr(S, 'fct')[[i]], args) )
     if(is.null(i))
     {
-<<<<<<< HEAD
-      #print(attr(S,'fct'))
-=======
->>>>>>> 5c98043ac2b49b431b8f6fa633dee9ca1179a246
       s <- S(..., i = 1:length(attr(S,'fct')) )
       attributes(s) <- attr(S, 'dimention')
       return(s)
@@ -41,66 +33,3 @@ fct_vector <- function(..., dim = NULL)
   class(S) <- c('fct_vector', class(S))
   return(S)
 }
-
-get_dimension_index <- function(dim)
-{
-  dimention <- list()
-  d.last <- 0
-  for(i in 1:length(dim))
-  {
-    dimention[[as.character(i)]] <- d.last + 1:dim[i]
-    d.last <- d.last + dim[i]
-  }
-  return(dimention)
-}
-
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-#methods('[')
-
-`[.fct_vector` <- function(vec, i)
-{
-  attr(vec, 'fct') <- lapply(i, function(j)attr(vec, 'fct')[[j]])
-  vec
-}
-
-f <- function(x,y) x*y
-g <- function(x,y) x+y
-h <- function(x,y) c(2*x, 2*y)
-G <- fct_vector(f,g,h)
-G(1, 2, i = c(1,2))
-
-H <- G[1:2]
-
-H(1,2)
->>>>>>> 5c98043ac2b49b431b8f6fa633dee9ca1179a246
-
-
-
-
-
