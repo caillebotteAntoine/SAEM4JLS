@@ -1,4 +1,5 @@
 exportPattern("^[[:alpha:]]+")
+export("%a%")
 
 S3method(plot, MH_res)
-S3method(plot, SAEM)
+S3method(plot, SAEM_res)

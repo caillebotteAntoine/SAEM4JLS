@@ -83,25 +83,22 @@ loglik.z <- function(x, Phi)
 }
 
 Z.MH <- matrix(rnorm(n), ncol = 1) #valeur initial
-Z.MH <- MH_High_Dim_para(500, Z.MH, sd = 0.1, loglik.z, do.call(Phi, param), 
-                           verbatim = T, cores = future::availableCores()-2)
+Z.MH <- MH_High_Dim_para_future(500, Z.MH, 0.1, loglik.z, do.call(Phi, param), verbatim = T, cores = 1)
 
 plot(Z.MH)
 
-# burn in des premières valeurs
-z <- MH_burnin(Z.MH, 250)
-#Moyennes et variance sachant Y de Z
-est <- attr(z, 'value') %>% group_by(id) %>% summarise(mu = mean(V1), sd = sd(V1))
+#Moyennes et variance sachant Y de Z : burn in des premières valeurs
+est <- getchain(Z.MH) %>% filter(iteration > 250) %>%
+  group_by(id) %>% summarise(mu = mean(V1), sd = sd(V1))
 
 sd.true <- sqrt((sum(tj^2)/param$sigma2 + 1/param$gamma2)^-1)
-#mu.true <- 1:n %>% sapply( function(i) o2.true/param$sigma2 * sum( (Y[i,] -param$a - param$b*tj)*tj) )
 
-mu.true <- dt %>% group_by(id) %>% summarise(mu = sd.true^2/param$sigma2* sum((obs - param$a -param$b*t)*t)) %>% { .$mu }
+mu.true <- dt %>% group_by(id) %>%
+  summarise(mu = sd.true^2/param$sigma2* sum((obs - param$a -param$b*t)*t)) %>% { .$mu }
 
 #Calcule de l'erreur moyenne des estimations des moyennes et variances
 mean( abs(est$mu-mu.true)/abs(mu.true) )
 mean( abs(est$sd-sd.true)/abs(sd.true) )
-
 ```
 
 
@@ -109,31 +106,20 @@ mean( abs(est$sd-sd.true)/abs(sd.true) )
 
 ### initialisation
 ```{r SAEM init}
-# --- Nombre iteration --- #
-M <- 1
-u <- function(k) ifelse(k < 100, 1, 1/(k-99) )
-#---
-Sh <- 0
-
 para <- list( sigma2 = 0.5,
                gamma2 = 2,
                a = 2,
                b = 5 )
 
-ZgivenY <- 1:M %>% lapply(function(i) rnorm(n, 0,1) %>% matrix(ncol = 1))
+ZgivenY = list(rnorm(n, 0,1) %>% matrix(ncol = 1))
 ```
 
 ## Boucle
 
 ```{r SAEM, message=FALSE}
 #Fonction qui renvoie les simultations de Z sachant Y à chaque iteration
-sim <- function(niter, Phih, ZgivenY)
-{
-  M <- length(ZgivenY)
-  ZgivenY <- 1:M %>% lapply( function(i) 
-    MH_High_Dim_para(niter, ZgivenY[[i]], sd = 0.1, loglik.z, Phih, 
-                           cores = future::availableCores()-2) )
-  list(Z = ZgivenY)
+sim <- function(niter, h, Phih, Z){
+  list(Z = list( MH_High_Dim_para_future(niter, Z[[1]], sd = 0.1, loglik.z, Phih, cores = 1) ) )
 }
 
 maxi <- function(S)
@@ -149,19 +135,36 @@ maxi <- function(S)
   
   return(list(sigma2 = sigma2, gamma2 = S[1]/n, a = a, b = b))
 }
-# Valeur empirique
-maxi(S(Z))
-
-niter <- 25 #nombre d'itération du SEAM
-n.MH <- 10 #nombre d'itération lors de la simulation
-tic()
-res <- SAEM(niter, n.MH, u, para, Phi, S, list(Z = ZgivenY), sim, maxi, eps = 1e-1, verbatim = T)
-toc()
-
-plot(res)
-plot(res$Z$Z[[1]], dim = n)
 ```
 
 
 
+```{r oracle, echo = F, results='asis'}
+data.frame( Oracle = maxi(S(Z)) %>% unlist ,
+            Initialisation = para%>% unlist)%>% t %>% 
+  knitr::kable(format = 'html') %>% kable_styling(full_width = F)
+```
+
+```{r SAEM loop }
+niter <- 250 #nombre d'itération du SEAM
+MH.iter <- 10 #nombre d'itération lors de la simulation
+
+res <- SAEM(niter, MH.iter, para, Phi, S, list(Z = ZgivenY), sim, maxi, #burnin = 150, coef.burnin = 3/4, 
+            eps = 1e-2, verbatim = 2)
+
+gg <- plot(res, true.value = param)
+```
+
+```{r seam table, results='asis', echo = F }
+gg$table_estimation
+```
+
+```{r saem plot, echo = F }
+gg$plot_parameter
+gg$plot_MCMC
+
+gg <- lapply(names(res@Z), function(var)plot(res@Z[[var]][[1]], name = var, var = 'acceptation'))
+
+grid.arrange(grobs  = gg)
+```
 

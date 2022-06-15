@@ -17,6 +17,23 @@ output: html_document
 library(knitr)
 library(kableExtra)
 
+knitr::knit_hooks$set(time = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      # record the current time before each chunk
+      now <<- Sys.time()
+    } else {
+      # calculate the time difference after a chunk
+      res <- difftime(Sys.time(), now, units = 's')
+      # return a character string to show the time
+      diff_time <- format(as.POSIXct(as.numeric(res), 
+                                     origin = '1970-01-01', tz = 'UTC'), "%Mmin %Ssec")
+      paste("Chunk execution time = ", diff_time)
+    }
+  }
+}))
+
 rm(list = ls())
 
 opts_chunk$set(echo = T, message = F, warning = F,
@@ -24,10 +41,8 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.asp = 0.8,
                out.weightedidth = "100%")
 
-folder <- '../../R/'
-source('../../R/include.R')
+require(SAEM4JLS)
 require(tictoc)
-
 
 require(furrr)# calcule en parallel
 require(future)
@@ -35,6 +50,9 @@ require(future)
 require(parallel)
 require(foreach)
 require(doParallel)
+
+folder <- '../../R old/'
+source('../../R old/include.R')
 ```
 
 # Utilisation des fonctions MH
@@ -65,10 +83,11 @@ res <- MH_High_Dim(500, x0, transi, loglik, obs, verbatim = T)
 plot(res, nrow = 2)
 
 res_para <- MH_High_Dim_para_future(500, x0, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
+
 plot(res_para, nrow = 2)
 
-res %>% as.numeric()
-res_para %>% as.numeric()
+# res %>% as.numeric()
+# res_para %>% as.numeric()
 ```
 
 ### Note
@@ -115,11 +134,6 @@ Le but ici est de montre la différence de temps de calcul, a noté que certe MH
 De plus on montre
 
 ```{r time}
-`%a%` <- function(x,var){
-  if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
-  lapply(var, function(v) x%a%v) %>% unlist
-}
-
 S <- function(eta, phi)
 {
   s <- c(mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #1
@@ -161,34 +175,25 @@ phi <- attr(dt, 'phi')
 
 ---
 
-```{r phi1}
-tic()
+```{r phi1, time = T}
 phi.MH <- MH(n.iter, phi0, transi.noopti, loglik.phi, eta, verbatim = T)
-toc()
 ```
 
-```{r phi2}
-tic()
+```{r phi2, time = T}
 phi.MH2 <- MH_High_Dim(n.iter, phi0 , transi, loglik.phi, eta, verbatim = T)
-toc()
 ```
 
-```{r phi3}
-tic()
+```{r phi3, time = T}
 phi.MH3 <- MH_High_Dim_para(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = 1)
-toc()
+
 ```
 
-```{r phi4}
-tic()
+```{r phi4, time = T}
 phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = parallel::detectCores() -1)
-toc()
 ```
 
-```{r phi5}
-tic()
+```{r phi5, time = T}
 phi.MH5 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = 1)
-toc()
 ```
 
 ```{r phi6}

@@ -8,34 +8,35 @@
 #' @export
 #'
 #' @examples
-plot.MH_res <- function(x, name, nrow,ncol, value = T, acceptation = T)
+
+plot.MH_res <- function(x, name, nrow,ncol, var = c('chain', 'acceptation') )
 {
   gg <- list()
-  if(value && 'value' %in% names( attributes(x) ) )
+  dim <- base::nrow(x$value)
+
+  if('chain' %in% var && length(x@chain) != 0 )
   {
-    gg$plot_value <-
-      attr(x, "value") %>% melt(id = c('iter', 'id')) %>%
-        ggplot(aes(iter, value, group = interaction(variable, id), col = variable)) +
-        geom_line() +# theme(legend.position = 'null') +
-        labs(title = 'Resultat de Metropolis Hastings', x = 'iteration', y = 'valeur de Z')
+    gg$plot_value <- getchain(x) %>%
+      melt(id = c('id', 'iteration')) %>%
+      ggplot(aes(iteration, value, group = interaction(variable, id), col = variable)) +
+      geom_line() + labs(title = 'Metropolis Hastings', x = 'iteration')
 
     if(!missing(name))
       gg$plot_value <- gg$plot_value + labs(subtitle = paste0('Variable ', name))
-
-
   }
 
-  if(acceptation && 'acceptation' %in% names( attributes(x) ) )
+  if('acceptation' %in% var && length(x@acceptation) != 0 )
   {
-    gg$plot_acceptation <-
-      attr(x, 'acceptation') %>%
-      mutate(iteration = iter/base::nrow(x)) %>% filter(iter != 0) %>%
-      ggplot(aes(iteration, naccept/iter)) + geom_line() +
-      labs(title = "Taux d'acceptation au cours du temps")
+    gg$plot_acceptation <- getacceptation(x) %>%
+      ggplot(aes(iteration, rate)) + geom_line() +
+      labs(title = "Acceptance rate over time")
 
     if(!missing(name))
       gg$plot_acceptation <- gg$plot_acceptation + labs(subtitle = paste0('Variable ', name))
   }
+
+  if(length(gg) == 1)
+    return(gg[[1]])
 
   if(!missing(nrow))
     return( grid.arrange(grobs =  gg, nrow = nrow))

@@ -24,8 +24,7 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.align = "center",
                out.weightedidth = "100%")
 
-folder <- '../../R/'
-source('../../R/include.R')
+library(SAEM4JLS)
 ```
 
 ## Initialisation
@@ -37,30 +36,25 @@ print(paste('number of cores available =', ncores))
 ```
 
 ```{r init}
-#Phi[1] ; eta = valeur de fin
-#Phi[2] = valeur du noeud
-#Phi[3] = echelle
+#Phi[1] ; eta = valeur de fin  Phi[2] = valeur du noeud  Phi[3] = echelle
 m <- function(t, eta, phi) (phi[,1] + eta)/(1+exp((phi[,2]-t)/phi[,3]))
 #=======================================#
 param <- list(sigma2 = 0.05,
               rho2 = 0.1,
               mu = c(5,4,0.5),
               omega2 = c(0.5,0.1,0.01))
-
-F. <- length(param$omega2) #dimension de phi
 #=======================================#
 t <- seq(2,6, length.out = 10) #value of times
 
 # --- longitudinal data --- #
-G = 4 ; ng = 8 #nombre de groupe et d'individu par groupe
-n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
+dt_NLME <- NLME_data(G = 40, ng = 12, time = t, fct = m, param = param)
 
-dt_NLME <- NLME_obs(G, ng, t, param, m)
+getDim(dt_NLME)
 Y <- dt_NLME$obs
 ```
 
 ```{r data ploting, echo = F}
-dt_NLME %>% ggplot(aes(t, obs, col = gen, group = id)) + 
+dt_NLME %>% ggplot(aes(time, obs, col = gen, group = id)) + 
   geom_point() + geom_line() + theme(legend.position = 'null')
 ```
 
@@ -68,20 +62,13 @@ dt_NLME %>% ggplot(aes(t, obs, col = gen, group = id)) +
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
 ```{r  stat exhaustive}
-#Petite fonction pour retourner rapidement l'appel Phi[attr(Phi, i)] où i est '1', '2', ...,
-`%a%` <- function(x,var){
-  if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
-  lapply(var, function(v) x%a%v) %>% unlist
-}
-
-
 Phi <- fct_vector(function(sigma2, rho2, mu, omega2) 
-  c(-n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2), dim = c(1,1,F., F.) )
+  c(-n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2), dim = c(1,1,F.,F.) )$eval
 
 S <- fct_vector(function(eta, phi) mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ),
               function(eta, phi) mean(eta^2),
               function(eta, phi) apply(phi^2, 2, mean),
-              function(eta, phi) apply(phi  , 2, mean), dim = c(1,1,F., F.) )
+              function(eta, phi) apply(phi  , 2, mean), dim = c(1,1,F.,F.) )
 ```
 
 ## Metropolis Hastings
@@ -90,38 +77,36 @@ S <- fct_vector(function(eta, phi) mean((Y - get_obs(m, dt_NLME, eta = eta, phi 
 loglik.phi <- function(x, eta, Phi)
 {
   id <- c(1,3,4) #indice de S_1 et S_{3,.} puis S_{4,.}
-  sum( Phi%a%id * S(eta, x, i = id) )
+  sum( Phi%a%id * S$eval(eta, x, i = id) )
 }
 loglik.eta <- function(x, phi, Phi) 
 { 
   id <- c(1,2)
-  sum( Phi%a%id * S(x, phi, i = id) )
+  sum( Phi%a%id * S$eval(x, phi, i = id) )
 }
 ```
 
 ## SAEM
 ## Initialisation
 ```{r SAEM init}
-M <- 1 #nombre de simulation
-
 # ---  Initialisation des paramètres --- #
-para <- param %>% lapply(function(x) x + runif(1))
-#para$rho2 = 0.2 ; para$mu <- c(6,3,1) ; para$omega2 <- rep(.1,3)
+para <- param %>% lapply(function(x) x* runif(1, 1,1.2))
+para$rho2 = 0.1 ; para$mu <- c(4,5,2) ; para$omega2 <- rep(.1,3)
 
 # --- Initialisation des chaines MC : Z_0 ---
-Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
-          phi = 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ) )
+Z <- list(eta = list( rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
+          phi = list( matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ) )
 ```
 
 ## Etape simulation et maximisation du SEAM
 
 ```{r SAEM fct}
-sim <- function(niter, Phih, eta, phi)
+sim <- function(niter, h, Phih, eta, phi)
 {
   M <- length(phi)
 
   eta <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para_future(niter, eta[[i]], sd = .036,                 loglik.eta, phi[[i]], Phih, cores = ncores-1 ))
+    MH_High_Dim_para_future(niter, eta[[i]], sd = .036, loglik.eta, phi[[i]], Phih, cores = 1))
   
   phi <- 1:M %>% lapply( function(i)
     MH_High_Dim_para_future(niter, phi[[i]], sd = c(.028, .036, .021), loglik.phi, eta[[i]], Phih, cores = 1 ))
@@ -138,87 +123,19 @@ maxi <- function(S)
 }
 ```
 
-
-```{r try MH, eval=FALSE, message=FALSE, include=FALSE}
-phi <- attr(dt_NLME, 'phi')
-eta <- Z$eta[[1]]
-Phih <- do.call(Phi, param)
-
-f <- function(sd)
-{
-  #Simulation par MetropolisHasting avec la transition N(0, sd = c(a,b,c))
-  Z <- MH_High_Dim_para_future(250, eta,   sd = sd, loglik.eta, phi, Phih, cores = 40)
-  #Estimation des paramètres avec la variable latente Z simulé
-  est <- maxi(S(Z, phi))
-  #calcule de l'erreur
-  est <- abs(est$mu - param$mu) %>% sum
-}
-res <- optimize(f, c(.01,.04), tol = 1e-2)
-
-
-
-
-
-
-eta <- attr(dt_NLME, 'eta')
-phi <- matrix(rnorm(F.*G, param$mu + runif(3), param$omega2 + runif(3)), nrow = F.) %>% t
-Phih <- do.call(Phi, param)
-
-f <- function(a,b,c)
-{
-  #Simulation par MetropolisHasting avec la transition N(0, sd = c(a,b,c))
-  Z <- MH_High_Dim_para_future(250, phi,   sd = c(a,b,c), loglik.phi, eta, Phih, cores = 10)
-  #Estimation des paramètres avec la variable latente Z simulé
-  est <- maxi(S(eta, Z))
-  #calcule de l'erreur
-  est <- abs(est$mu - param$mu) %>% sum
-}
-sd.bis <- rep(0,3)
-sd <- c(0.021, 0.025, 0.025)
-eps <- 1e-3
-while( abs(sd.bis - sd) > eps)
-{
-  sd.bis <- sd
-  res <- optimize(f, c(.01,.04), tol = 1e-2,  b = sd[2], c = sd[3])
-  sd[1] <- res$minimum
-  print(sd)
-  
-  res <- optimize(f, c(.01,.04), tol = 1e-2,  a = sd[1], c = sd[3])
-  sd[2] <- res$minimum
-  print(sd)
-  
-  res <- optimize(f, c(.01,.04), tol = 1e-2,  a = sd[1], b = sd[2])
-  sd[3] <- res$minimum
-  print(sd)
-}
-
-```
-
-```{r eval=FALSE, include=FALSE, include = F}
-Z <- MH_High_Dim_para_future(250, phi,   sd = c(.028, .036, .021), loglik.phi, eta, Phih, cores = 10, verbatim = T)
-
-
-Zbis <- MH_High_Dim_para_future(250, phi,   sd = c( .03, .02, .02), loglik.phi, eta, Phih, cores = 10, verbatim = T)
-
-plot(Z, acceptation = F)$plot_value + facet_grid(vars(variable), scale = "free")
-plot(Zbis, acceptation = F)$plot_value + facet_grid(vars(variable), scale = "free")
-
-abs(maxi(S(eta, Z))$mu - param$mu) %>% sum ; abs(maxi(S(eta, Zbis))$mu - param$mu) %>% sum
-
-```
-
 ```{r oracle, echo = F, results='asis'}
-data.frame( Oracle = maxi(S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi') )) %>% unlist ,
+data.frame( Oracle = maxi(S$eval(dt_NLME@eta, dt_NLME@phi) ) %>% unlist ,
             Initialisation = para%>% unlist)%>% t %>% 
   knitr::kable(format = 'html') %>% kable_styling(full_width = F)
 ```
 
 ```{r SAEM loop }
-niter <- 300
-MH.iter <- 10
-res <- SAEM(niter, MH.iter, para, Phi, S, Z, sim, maxi, burnin = 150, coef.burnin = 3/4, eps = 1e-3, verbatim = 2)
+niter <- 100
+MH.iter <- function(k) ifelse(k<50, 20, 10)
+
+res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi, burnin = 150, coef.burnin = 3/4, eps = 1e-3, verbatim = 2)
 saveRDS(res, 'saem.rds')
-gg <- plot(res)
+gg <- plot(res, true.value = param)
 ```
 
 ```{r seam table, results='asis', echo = F }
@@ -226,13 +143,12 @@ gg$table_estimation
 ```
 
 ```{r saem plot, echo = F }
-gg$plot_paramater
+gg$plot_parameter
 gg$plot_MCMC
 
-gg.MH <- names(res$Z) %>% keep(function(var) 'MH_res' %in% class(res$Z[[var]][[1]]) ) %>%
-  lapply(function(var)plot(res$Z[[var]][[1]], name = var)$plot_acceptation)
+gg <- lapply(names(res@Z), function(var)plot(res@Z[[var]][[1]], name = var, var = 'acceptation'))
 
-grid.arrange(grobs  = gg.MH)
+grid.arrange(grobs  = gg)
 ```
 
 

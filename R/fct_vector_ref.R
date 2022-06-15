@@ -1,3 +1,6 @@
+#' Return the good index for each component of a fct_vector
+#'
+#' @param dim
 get_dimension_index <- function(dim)
 {
   if(length(dim) == 0)return(list())
@@ -11,11 +14,34 @@ get_dimension_index <- function(dim)
   return(dimention)
 }
 
-
+#' @title Vector of function
+#' @name fct_vector
+#'
+#' @description The purpose of this object is to provide a new type of numeric array whose components are calculated if and only their access was requested.
+#'So for example if one of the components is costly and rarely called this will not impact the rest of the calculations.
+#'
+#'
+#' @field fct list. Several name or unnamed functions that compose the vector.  Warning they must have all the same argument. They must return a numeric object, no length limited
+#' @field dimention list. The length of the numeric return of each function. Default value assume that of function return a one dimension numeric.
+#'
+#' @examples
+#'require(SAEM4JLS)
+#'vec <- fct_vector(function(x,y) x*y,
+#'                  function(x,y) x+y,
+#'                  function(x,y) c(2*x, 2*y), dim = c(1,1, 2))
+#'vec$eval(1, 2, i = c(1,2))
+#'vec[1,2](1,2)
+#'#Warning: the vector’s extract operators [ do not return a fct_vector but the eval function of the extracted vector
+#'#If you want the extracted vector use the list’s extract operator [[
+#'G <- vec[1,2] # is a function
+#'G(1,2)
+#'
+#'H <- vec[[1,2]] # is a fct_vector
+#'H$eval(1,2)
 fct_vector <- setRefClass(
   Class = "fct_vector",
   fields = list(fct = 'list',
-                dimention = 'list'), where = SAEM4JLS,
+                dimention = 'list'),
 
   methods = list(
     initialize = function(..., dim = NULL)
@@ -62,29 +88,14 @@ fct_vector <- setRefClass(
 
 
 setMethod('[', signature = c('fct_vector', 'numeric'), definition = function(x, i) x$subset(i)$eval)
+
+setMethod('[[', signature = c('fct_vector', 'numeric'), definition = function(x, i) x$subset(i))
+
 # `[.fct_vector` <- function(vec, i) vec$subset(i)$eval
 
-
-
-G <- fct_vector(function(x,y) x*y,
-                function(x,y) x+y,
-                function(x,y) c(2*x, 2*y),
-                function(x,y) x^y, dim = c(1,1,2,1) )
-
-G$eval(2,3, i = c(1,2))
-
-G$eval(2,3)
-G$dimention
-
-
-G$copy()
-
-H <- G$subset(c(1,3))
-H$dimention
-
-H$eval(2,3)
-
-G[c(1,3)](2,3)
-
-
+#Petite fonction pour retourner rapidement l'appel Phi[attr(Phi, i)] où i est '1', '2', ...,
+`%a%` <- function(x,var){
+  if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
+  lapply(var, function(v) x%a%v) %>% unlist
+}
 

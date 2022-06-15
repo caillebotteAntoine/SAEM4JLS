@@ -1,6 +1,6 @@
 Package: SAEM4JLS
 Type: Package
-Title: SAEM4 Joint Longitudinal Survival
+Title: SAEM for Joint Longitudinal Survival Model
 Version: 0.1.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
@@ -10,11 +10,13 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Depends: 
+    ggplot2,
+    gridExtra,
     reshape2,
     dplyr,
     tidyr,
-    ggplot2,
+    purrr,
     furrr,
     future,
     R (>= 2.10)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0

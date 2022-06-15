@@ -23,9 +23,10 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.width = 12, fig.asp = 0.8,
                fig.align = "center",
                out.weightedidth = "100%")
-
-folder <- '../R/'
-source('../R/include.R')
+# 
+# folder <- '../R/'
+# source('../R/include.R')
+library(SAEM4JLS)
 ```
 
 ## Initialisation et génération des données
@@ -58,7 +59,7 @@ F. <- length(param$omega2) #dimension de phi
 t <- seq(60,120, length.out = 10) #value of times
 
 # --- longitudinal data --- #
-G = 40 ; ng = 8 #nombre de groupe et d'individu par groupe
+G = 8 ; ng = 12 #nombre de groupe et d'individu par groupe
 n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
 
 dt_NLME <- NLME_obs(G, ng, t, param, m)
@@ -94,7 +95,7 @@ Phi <- fct_vector(function(sigma2, rho2, mu, omega2, nu2, a, b, alpha, beta) {
           b/sigma2_b        , -1/(2*sigma2_b),     #8, 9
           alpha/sigma2_alpha, -1/(2*sigma2_alpha), #10, 11
           beta ) },#12
-  dim = c(1,1,F., F., rep(1,8)) )
+  dim = c(1,1,F., F., rep(1,8)) )$eval
 
 zeta <- function(beta, eta, phi, gamma, a,b, alpha)
 {
@@ -127,7 +128,8 @@ S <- fct_vector(function(eta, phi, gamma, a, b, alpha) mean((Y - get_obs(m, dt_N
                 function(eta, phi, gamma, a, b, alpha) alpha,                 #10
                 function(eta, phi, gamma, a, b, alpha) alpha^2,               #11
                 function(eta, phi, gamma, a, b, alpha)                        #12
-                  uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha), lower = -100, upper = 100, tol = 1e-3)$root,
+                  param$beta,
+                  #uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha), lower = -100, upper = 100, tol = 1e-3)$root,
                 dim = c(1,1,F., F., rep(1,8)) ) 
 ```
 
@@ -136,11 +138,11 @@ S <- fct_vector(function(eta, phi, gamma, a, b, alpha) mean((Y - get_obs(m, dt_N
 ```{r MH}
 loglik.phi <- function(x, eta, Phi){
   id <- c(1,3,4)
-  sum( Phi%a%id * S(eta = eta, phi = x, i = id) )
+  sum( Phi%a%id * S$eval(eta = eta, phi = x, i = id) )
 }
 loglik.eta <- function(x, phi, Phi){ 
   id <- c(1,2)
-  sum( Phi%a%id * S(eta = x, phi = phi, i = id) )
+  sum( Phi%a%id * S$eval(eta = x, phi = phi, i = id) )
 }
 
 loglik.gamma <- function(x, eta, phi, a, b, alpha, Phi){
@@ -159,11 +161,11 @@ loglik.alpha <- function(x, Phi)sum( Phi%a%10:11 * S(alpha = x, i = 10:11) )
 M <- 1 #nombre de simulation
 
 # ---  Initialisation des paramètres --- #
-para <- param %>% sapply(function(x) x + runif(1))
-para$rho2 = 0.2 ; para$mu <- c(6,3,1) ; para$omega2 <- rep(.1,3)
+para <- param %>% sapply(function(x) x* runif(1, 1.1,1.4))
+para$rho2 = 0.2 ; para$omega2 <- rep(.1,3)
 
 # --- Initialisation des chaines MC : Z_0 --- #list(attr(dt_NLME,'eta')),#list(attr(dt_NLME,'phi')),#
-Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
+Z <- list(eta = list(attr(dt_NLME,'eta')),#1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix(ncol = 1) ),
           phi = 1:M %>% lapply(function(i) matrix(rnorm(F.*G, para$mu, para$omega2), nrow = F.) %>% t ),
           
           gamma = list(attr(dt_SF,'gamma')),#1:M %>% lapply(function(i) matrix(rnorm(G, 0, para$nu2), ncol = 1) ),
@@ -177,15 +179,15 @@ Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix
 
 ## Etape simulation et maximisation du SEAM
 ```{r SAEM fct}
-sim <- function(niter, Phih, eta, phi, gamma, a, b, alpha)
+sim <- function(niter, k, Phih, eta, phi, gamma, a, b, alpha)
 {
   M <- length(phi)
 
-  eta <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para_future(niter, eta[[i]], sd = .036,                 loglik.eta, phi[[i]], Phih, cores = ncores ))
+  # eta <- 1:M %>% lapply( function(i) 
+  #   MH_High_Dim_para_future(niter, eta[[i]], sd = sd.eta(k), loglik.eta, phi[[i]], Phih, cores = ncores ))
 
   phi <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para_future(niter, phi[[i]], sd = c(.028, .036, .021), loglik.phi, eta[[i]], Phih, cores = ncores ))
+    MH_High_Dim_para_future(niter, phi[[i]], sd = sd.phi(k), loglik.phi, eta[[i]], Phih, cores = ncores ))
   
   # gamma <- 1:M %>% lapply( function(i)
   #   MH_High_Dim_para_future(niter, gamma[[i]], sd = .03, loglik.gamma, 
@@ -207,7 +209,7 @@ maxi <- function(S)
        omega2 = S%a%3 - (S%a%4)^2,
        nu2 =    S%a%5,
        a =      S%a%6,  b =    S%a%8,
-       alpha =  S%a%11, beta = S%a%12 )
+       alpha =  S%a%10, beta = S%a%12 )
 }
 
 ```
@@ -215,16 +217,21 @@ maxi <- function(S)
 # Resultats
 
 ```{r oracle, echo = F, results='asis'}
-data.frame( Oracle = maxi(S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi'), 
+data.frame( Oracle = maxi(S$eval(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi'), 
                             attr(dt_SF, 'gamma'), param$a, param$b, param$alpha  )) %>% unlist ,
             Initialisation = para%>% unlist)%>% t %>% round(digits = 4) %>% 
   knitr::kable(format = 'html') %>% kable_styling(full_width = F)
 ```
 
 ```{r SAEM loop }
-niter <- 100
-MH.iter <- 10
-res <- SAEM(niter, MH.iter, para, Phi, S, Z, sim, maxi, eps = 1e-3, verbatim = 2)
+niter <- 50
+correction.phase <- 20
+MH.iter <- function(k) ifelse(k<2*correction.phase, 20, 10)
+
+sd.eta <- function(k) 0.04
+sd.phi <- function(k) ifelse(k<correction.phase, 1, 0.05 )
+
+res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi, eps = 1e-3, verbatim = 2)
 saveRDS(res, 'saem.rds')
 gg <- plot(res)
 ```
@@ -234,8 +241,8 @@ gg$table_estimation
 ```
 
 ```{r saem plot, echo = F }
-gg$plot_paramater
-gg$plot_MCMC
+gg$plot_paramater# %>% vline(correction.phase, 'purple') %>% vline(2*correction.phase, 'orange') 
+gg$plot_MCMC# %>% vline(correction.phase, 'purple') %>% vline(2*correction.phase, 'orange') 
 
 gg.MH <- names(res$Z) %>% keep(function(var) 'MH_res' %in% class(res$Z[[var]][[1]]) ) %>%
   lapply(function(var)plot(res$Z[[var]][[1]], name = var)$plot_acceptation)
