@@ -112,17 +112,19 @@ data.frame( Oracle = maxi(S$eval( dt_NLME@eta, dt_NLME@phi,
 ```
 Légende des graphs : En pointillé les moyennes à priori, la ligne vertical orange symbolise la phase de correction
 ```{r SAEM loop, time = T }
-niter <- 10
+niter <- 10*3
 correction.phase <- 15
 MH.iter <- function(k) ifelse(k<=correction.phase, 100, 100)
 
 sd.eta <- function(k) 0.04
 sd.phi <- function(k) ifelse(k<=correction.phase, 0.5, 0.05 )
 
-sd <- seq(0.5, 1.5, length.out = 10)
-for(i in sd)
+sd <- seq(0.05, 1.5, length.out = 20)
+for(i in 1:length(sd))
 {
-  sd.phi <- function(k) ifelse(k<=correction.phase, i, 0.05 )
+  message(paste0('===============================================================================', i))
+  print(sd[i])
+  sd.phi <- function(k) ifelse(k<=correction.phase, sd[i], 0.05 )
   res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi, eps = 1e-3, verbatim = 2)
   affichage(res)
 }

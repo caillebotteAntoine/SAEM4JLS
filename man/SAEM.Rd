@@ -15,7 +15,7 @@ SAEM(
   maximisation,
   burnin = NULL,
   coef.burnin = 1,
-  eps = 0.001,
+  eps,
   verbatim = F
 )
 }

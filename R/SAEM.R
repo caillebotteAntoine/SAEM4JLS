@@ -56,7 +56,7 @@
 #'
 #' plot(res)
 SAEM <- function(niter, niter.MH, param, Phi, exhaustive, Z, simulation, maximisation,
-                 burnin = NULL, coef.burnin = 1, eps = 1e-3, verbatim = F)
+                 burnin = NULL, coef.burnin = 1, eps, verbatim = F)
 {
 
   Sh <- do.call(exhaustive, Z %>% lapply(function(z) z[[1]])) ;
@@ -77,22 +77,27 @@ SAEM <- function(niter, niter.MH, param, Phi, exhaustive, Z, simulation, maximis
   if(!is.function(niter.MH)) MH.iter <- function(k) niter.MH
 
   h <- 2
+  step.before.stop <- 20
+  if(missing(eps)){
+    eps = 1e-3
+    step.before.stop = 10000
+  }
   stopCondi <- function(h) para %>% lapply(function(p) abs(p[h-1] - p[h]) < eps) %>% as.logical %>% prod
   cmp <- 0
 
   start <- Sys.time() #execution time
   if(verbatim == 1 || verbatim == 2) message('--- SAEM started ! ---')
 
-  while(h <= niter+1 && cmp < 20 ) #  for(h in 1:niter+1)
+  while(h <= niter+1 && cmp < step.before.stop ) #  for(h in 1:niter+1)
   {
     if(verbatim == 1 || verbatim == 2)
     {
       elasped <- difftime(Sys.time(), start , units = "secs") %>% round(2)
       step.estimation <- elasped/(h-2)
-      message(paste0('SAEM step = ', h-1, ', remaining = ', niter+1-h,
+      message(paste0('step = ', h-1, ', remaining = ', niter+1-h,
                      ', times elasped = ', round(elasped,1),
-                     's, estimated time for one step = ', round(step.estimation,1),
-                     's, estimated time remaining = ', round(step.estimation * (niter+2-h),1), 's' ))
+                     's, estimated time : for one step = ', round(step.estimation,1),
+                     's, remaining = ', round(step.estimation * (niter+2-h),1), 's' ))
     }
     # --- Step S : simulation --- #
     Phih <-  do.call(Phi, para[h-1] )

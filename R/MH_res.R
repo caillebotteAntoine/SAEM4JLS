@@ -39,6 +39,19 @@ setGeneric('addchain', function(object, c) standardGeneric("addchain" ) )
 setMethod(addchain, signature = c('MH_res', 'matrix'),
           function(object, c) { object@chain <- rbind(c, object@chain) ; object})
 
+#--- setoffset ---#
+setGeneric('setoffset', function(object, offset) standardGeneric("setoffset" ) )
+setMethod(setoffset, signature = c('MH_res', 'numeric'),
+          function(object, offset){
+            if(ncol(object@chain)!=0)
+              object@chain[,1:ncol(object)] <- t(t(object@chain[,1:ncol(object)]) + offset)
+
+            return(t(t(object)+ offset))
+          } )
+setMethod(setoffset, signature = c('matrix', 'numeric'), function(object, offset) return(t(t(object)+ offset)) )
+
+
+
 #--- link ---#
 setGeneric('link', function(object1, object2) standardGeneric("link" ) )
 setMethod(link, c('matrix', 'MH_res'), function(object1, object2) object2 )
@@ -72,4 +85,9 @@ setMethod(getchain, 'MH_res',
               mutate(id = rep(1:dim, each = n%/%dim)) %>%
               mutate(iteration = rep(1:(n%/%dim), dim ))
           } )
+
+
+
+
+
 

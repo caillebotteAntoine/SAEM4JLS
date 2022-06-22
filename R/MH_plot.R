@@ -19,7 +19,8 @@ plot.MH_res <- function(x, name, nrow,ncol, var = c('chain', 'acceptation') )
     gg$plot_value <- getchain(x) %>%
       melt(id = c('id', 'iteration')) %>%
       ggplot(aes(iteration, value, group = interaction(variable, id), col = variable)) +
-      geom_line() + labs(title = 'Metropolis Hastings', x = 'iteration')
+      geom_line() + labs(title = 'Metropolis Hastings', x = 'iteration') +
+      facet_grid( vars(variable), scales = 'free')
 
     if(!missing(name))
       gg$plot_value <- gg$plot_value + labs(subtitle = paste0('Variable ', name))

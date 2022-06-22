@@ -4,9 +4,9 @@
 
 # rmarkdown::render('work/vignette/vignette_SAEM.Rmd')
 # rmarkdown::render('work/Longitudinal_Surival_model_SAEM.Rmd')
-# rmarkdown::render('work/achieved_model/Longitudinal_nonlinear_mixed_model_SAEM.Rmd')
+rmarkdown::render('work/achieved_model/Longitudinal_nonlinear_mixed_model_SAEM.Rmd')
 # rmarkdown::render('work/vignette/vignette_MH.Rmd')
-rmarkdown::render('work/test_variance.Rmd')
+# rmarkdown::render('work/test_variance.Rmd')
 
 #cd /work_home/acaillebotte
 #cd SAEM4JLS

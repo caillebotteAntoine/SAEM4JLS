@@ -20,7 +20,7 @@ setMethod('initialize', 'NLME_data', function(.Object, ..., G, ng, time, fct, pa
     n <- G*ng*length(time)
     .Object <- new('NLME_data', data.frame(id = factor(rep(0, n)),
                                            gen = factor(rep(0, n)),
-                                           t = rep(0, n),
+                                           time = rep(0, n),
                                            obs = rep(0, n)) )
 
     #--- Generation of data ---#
@@ -41,7 +41,7 @@ setMethod('initialize', 'NLME_data', function(.Object, ..., G, ng, time, fct, pa
     if('rho2' %in% names(param)) #Varification de la présence de rho2
       .Object@eta <- matrix(rnorm(.Object@N, 0, sqrt(param$rho2)), ncol = 1)
     else
-      .Object@eta <- rep(1,.Object@N)
+      .Object@eta <- matrix(rep(1,.Object@N), ncol = 1)
     #--- phi ---#
     .Object@phi <- t( sapply(1:G, function(i) rnorm(.Object@F., param$mu, sqrt(param$omega2))) )
     if(.Object@F. == 1)
@@ -56,13 +56,13 @@ setMethod('initialize', 'NLME_data', function(.Object, ..., G, ng, time, fct, pa
     #Rajout des observations
     .Object@fct <- fct
 
-    .Object$obs <- get_obs(fct, .Object, eta = .Object@eta, phi = .Object@phi) + .Object@eps
+    .Object$obs <- get_obs(.Object, eta = .Object@eta, phi = .Object@phi) + .Object@eps
   }
   return(.Object)
 })
 
 
-get_obs <- function(NLME_fct, data, ...)
+get_obs <- function(data, ...)
 {
   args <- list(...)
   if('eta' %in% names(args)) #Varification de la présence de eta
@@ -75,21 +75,26 @@ get_obs <- function(NLME_fct, data, ...)
   else
     phi <- matrix(rep(1,length(levels(data$gen))), ncol = 1)
 
-  nrep.phi <- nrow(data) %/% nrow(phi)
-  nrep.eta <- nrow(data) %/% length(eta)
-
-  NLME_fct(data$time, apply(eta, 2, rep, each = nrep.eta), apply(phi, 2, rep, times = nrep.phi))
+  nrep.phi <- data@ng * data@ni #nrow(data) %/% nrow(phi)
+  nrep.eta <- data@ni #nrow(data) %/% length(eta)
+  #data$eta <- apply(data@eta, 2, rep, times = nrep.eta) ;data$phi <- apply(data@phi, 2, rep, times = nrep.phi)
+  data@fct(data$time, apply(eta, 2, rep, times = nrep.eta), apply(phi, 2, rep, times = nrep.phi))
 }
 
-getDim = function(data, varname = c('G','ng','n','N','F.') ) {
+getDim = function(data, varname = c('G','ng','N','n','F.') ) {
   varname %>% sapply(function(var) assign(var, slot(data,var), envir = .GlobalEnv))
 }
 
+plot.NLME_data = function(data, legend.position = 'null')
+{
+  gg <- data %>% ggplot(aes(time, obs, col = gen, group = id)) +
+    geom_point() + geom_line()
 
+  if(legend.position == 'null')
+    gg <- gg + theme(legend.position = 'null')
 
-
-
-
+  return(gg)
+}
 
 
 

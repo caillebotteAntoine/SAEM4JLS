@@ -79,3 +79,34 @@ plot.SAEM_res <- function(res, var = c('parameter', 'MCMC', 'summary'), true.val
 }
 
 
+setGeneric('plot.fitted.value', function(res, data, ...) standardGeneric("plot.fitted.value" ) )
+setMethod(plot.fitted.value, c('SAEM_res', 'NLME_data'), function(res, data, selected.id = 1:12, burn.in = 20){
+
+  if(length(res@chain) != 0)
+  {
+    Z <- getchain(res) %>% filter(iteration >= max(iteration) - burn.in ) %>%
+      group_by(variable, component, id) %>% summarise(value = mean(value), .groups = 'drop')
+
+    eta <- Z[which(Z$variable == 'eta'),]$value %>% matrix(ncol = 1)
+    phi <- Z[which(Z$variable == 'phi'),]$value %>% matrix(ncol = data@F.)
+  }else{
+    eta <- res@Z$eta[[1]]
+    phi <- res@Z$phi[[1]]
+
+  }
+  data$fitted_value <- get_obs(data, eta = eta, phi = phi)
+
+
+  data[which(data$id %in% selected.id),] %>%
+    ggplot(aes(time, obs, col = gen, group = id)) +
+    geom_point() + geom_line(aes(y = fitted_value)) +
+
+    labs(title = 'Fitted value', y = '') +
+
+    theme(legend.position = 'null') + facet_wrap(vars(id))
+})
+
+
+
+
+

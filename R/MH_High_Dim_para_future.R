@@ -44,7 +44,7 @@ MH_High_Dim_para_future <- function(niter, x0, sd, loglik, ..., verbatim = F, co
   x_lik <- do.call(loglik, c(list(x), args)) #log-Likelihood of the initiale value x
   dim <- nrow(x) #dimension of the vector x
 
-  stopifnot(length(sd) == 1 || length(sd) == ncol(x)) #Varification qu'il y a bien assez de variance
+  stopifnot(length(sd) == 1 || length(sd) == ncol(x)) #Vérification qu'il y a bien assez de variance
 
   #start of the algorithm of metropolis hastings
   #On considere chaque composante une part une

@@ -24,13 +24,6 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.asp = 0.8,
                out.weightedidth = "100%")
 
-# require(ggplot2)
-# require(reshape2)
-# require(dplyr)
-# require(tidyr)
-# 
-# source('R/include.R')
-
 require(SAEM4JLS)
 require(tictoc)
 ```
@@ -149,7 +142,8 @@ data.frame( Oracle = maxi(S(Z)) %>% unlist ,
 niter <- 250 #nombre d'itération du SEAM
 MH.iter <- 10 #nombre d'itération lors de la simulation
 
-res <- SAEM(niter, MH.iter, para, Phi, S, list(Z = ZgivenY), sim, maxi, #burnin = 150, coef.burnin = 3/4, 
+res <- SAEM(niter, MH.iter, para, Phi, S, list(Z = ZgivenY), sim, maxi,
+            #burnin = 150, coef.burnin = 3/4, 
             eps = 1e-2, verbatim = 2)
 
 gg <- plot(res, true.value = param)

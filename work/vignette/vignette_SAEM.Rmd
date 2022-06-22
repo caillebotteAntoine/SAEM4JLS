@@ -24,8 +24,7 @@ opts_chunk$set(echo = T, message = F, warning = F,
                fig.asp = 0.8,
                out.weightedidth = "100%")
 
-folder <- '../../R/'
-source('../../R/include.R')
+library(SAEM4JLS)
 ```
 
 ## Initialisation et génération des données
@@ -40,38 +39,28 @@ print(paste('number of cores available =', ncores))
 ```{r init}
 m <- function(t, eta, phi) phi[,1] * t + eta
 #=======================================#
-param <- list( sigma2 = 0.5,  #variance de l'erreur
-               rho2 = 0.05,
+param <- list( sigma2 = .8,  #variance de l'erreur
+               rho2 = .05,
                mu = 3,  #moyenne de phi
-               omega2 = 0.1 )  #variance de phi
-
-F. <- length(param$omega2) #dimension de phi
+               omega2 = .1 )  #variance de phi
 #=======================================#
-t <- seq(2,6, length.out = 10) #value of times
+t <- seq(2,6, length.out = 15) #value of times
 
 # --- longitudinal data --- #
-G = 40 ; ng = 12 #nombre de groupe et d'individu par groupe
-n <- G*ng*length(t) ; N <- G*ng  #nombre total de data, et #nombre total d'individu
+data <- NLME_data(G = 40, ng = 12, time = t, fct = m, param = param)
 
-dt_NLME <- NLME_obs(G, ng, t, param, m)
-Y <- dt_NLME$obs
+getDim(data)
+Y <- data$obs
 ```
 
 ```{r data ploting, echo = F}
-dt_NLME %>% ggplot(aes(t, obs, col = gen, group = id)) + 
-  geom_point() + geom_line() + theme(legend.position = 'null')
+plot(data)
 ```
 
 # Statistique exhaustive
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
 ```{r stat exhaustive}
-#Petite fonction pour retourner rapidement l'appel Phi[attr(Phi, i)] où i est '1', '2', ...,
-`%a%` <- function(x,var){
-  if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
-  lapply(var, function(v) x%a%v) %>% unlist
-}
-
 Phi <- function(sigma2,rho2, mu, omega2)
 {
   p <- c(- n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), G*mu/omega2)
@@ -83,10 +72,10 @@ Phi <- function(sigma2,rho2, mu, omega2)
   return(p)
 }
 
-S <- get_stat(function(eta, phi) mean((Y - get_obs(m, dt_NLME, eta = eta, phi = phi) )^2 ),
-              function(eta, phi) mean(eta^2),
-              function(eta, phi) apply(phi^2, 2, mean),
-              function(eta, phi) apply(phi  , 2, mean), dim = c(1,1,F., F.) )
+S <- fct_vector(function(eta, phi) mean((Y - get_obs(data, eta = eta, phi = phi) )^2 ),
+                function(eta, ...) mean(eta^2),
+                function(phi, ...) apply(phi^2, 2, mean),
+                function(phi, ...) apply(phi  , 2, mean), dim = c(1,1,F., F.) )
 ```
 # Metropolis Hastings
 
@@ -96,12 +85,12 @@ S <- get_stat(function(eta, phi) mean((Y - get_obs(m, dt_NLME, eta = eta, phi = 
 loglik.phi <- function(x, eta, Phi)
 {
   id <- c(1,3,4) #indice de S_1 et S_{3,.} puis S_{4,.}
-  sum( Phi%a%id * S(eta, x, i = id) )
+  sum( Phi%a%id * S$eval(eta, x, i = id) )
 }
 loglik.eta <- function(x, phi, Phi) 
 { 
   id <- c(1,2)
-  sum( Phi%a%id * S(x, phi, i = id) )
+  sum( Phi%a%id * S$eval(x, phi, i = id) )
 }
 ```
 
@@ -123,7 +112,7 @@ Z <- list(eta = 1:M %>% lapply(function(i) rnorm(G*ng, 0, para$rho2)  %>% matrix
 
 ## Etape simulation et maximisation du SEAM
 ```{r SAEM fct}
-sim <- function(niter, Phih, eta, phi)
+sim <- function(niter, h, Phih, eta, phi)
 {
   M <- length(phi)
 
@@ -148,7 +137,7 @@ maxi <- function(S)
 # Resultats
 
 ```{r oracle, echo = F, results='asis'}
-data.frame( Oracle = S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi')) %>% maxi %>% unlist ,
+data.frame( Oracle = S$eval(data@eta, data@phi) %>% maxi %>% unlist ,
             Initialisation = para%>% unlist)%>% t %>% 
   knitr::kable(format = 'html') %>% kable_styling(full_width = F)
 ```
@@ -157,10 +146,10 @@ data.frame( Oracle = S(attr(dt_NLME, 'eta'), attr(dt_NLME, 'phi')) %>% maxi %>% 
 niter <- 300
 MH.iter <- 10
 
-res <- SAEM(niter, MH.iter, para, Phi, S, Z, sim, maxi, 
+res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi, 
             burnin = 150, coef.burnin = 3/4, eps = 1e-3, verbatim = 2)
 saveRDS(res, 'saem.rds')
-gg <- plot(res)
+gg <- plot(res, true.value = param)
 ```
 
 ```{r seam table, results='asis', echo = F }
@@ -168,11 +157,13 @@ gg$table_estimation
 ```
 
 ```{r saem plot, echo = F }
-gg$plot_paramater
+gg$plot_parameter
 gg$plot_MCMC
 
-gg.MH <- names(res$Z) %>% keep(function(var) 'MH_res' %in% class(res$Z[[var]][[1]]) ) %>%
-  lapply(function(var)plot(res$Z[[var]][[1]], name = var)$plot_acceptation)
+plot.fitted.value(res, data)
+
+gg.MH <- names(res@Z) %>% keep(function(var) 'MH_res' %in% class(res@Z[[var]][[1]]) ) %>%
+  lapply(function(var)plot(res@Z[[var]][[1]], name = var, var = 'acceptation'))
 
 grid.arrange(grobs  = gg.MH)
 ```

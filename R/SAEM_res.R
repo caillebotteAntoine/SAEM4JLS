@@ -70,7 +70,20 @@ setMethod(getchain, 'SAEM_res',
 
 
 
+simulation_test <- function(simulation, Phi, parameter, niter, Z, h = 0, verbatim = T)
+{
+  Phih <- do.call(Phi, parameter)
 
+  res <- do.call(simulation, c(list(niter = niter, h = h, Phih = Phih), Z, list(verbatim = verbatim)))
+
+  return(res)
+}
+
+oracle <- function(maximisation, exhaustive, data)
+{
+  S <- exhaustive$eval(eta = data@eta, phi = data@phi)
+  maximisation(S)
+}
 
 
 
