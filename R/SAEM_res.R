@@ -79,9 +79,9 @@ simulation_test <- function(simulation, Phi, parameter, niter, Z, h = 0, verbati
   return(res)
 }
 
-oracle <- function(maximisation, exhaustive, data)
+oracle <- function(maximisation, exhaustive, data, ...)
 {
-  S <- exhaustive$eval(eta = data@eta, phi = data@phi)
+  S <- do.call(exhaustive$eval, c(getLatente(data), list(...)))
   maximisation(S)
 }
 

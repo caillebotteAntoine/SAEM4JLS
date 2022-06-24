@@ -29,8 +29,10 @@ plot.MH_res <- function(x, name, nrow,ncol, var = c('chain', 'acceptation') )
   if('acceptation' %in% var && length(x@acceptation) != 0 )
   {
     gg$plot_acceptation <- getacceptation(x) %>%
-      ggplot(aes(iteration, rate)) + geom_line() +
-      labs(title = "Acceptance rate over time")
+      melt(id = 'iteration', value.name = 'rate') %>%
+      ggplot(aes(iteration, rate, col = variable)) + geom_line() +
+      labs(title = "Acceptance rate over time") +
+      theme(legend.position = 'null')
 
     if(!missing(name))
       gg$plot_acceptation <- gg$plot_acceptation + labs(subtitle = paste0('Variable ', name))

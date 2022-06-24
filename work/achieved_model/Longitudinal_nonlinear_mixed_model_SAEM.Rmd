@@ -50,7 +50,7 @@ t <- seq(60,120, length.out = 10) #value of times
 
 # --- longitudinal data --- #
 set.seed(18031997)
-data <- NLME_data(G = 40, ng = 12, time = t, fct = m, param = param)
+data <- NLME_data(G = 20, ng = 8, time = t, fct = m, param = param)
 
 getDim(data)
 Y <- data$obs
@@ -109,11 +109,11 @@ sim <- function(niter, h, Phih, eta, phi, verbatim = F)
 {
   M <- length(phi)
   eta <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para_future(niter, eta[[i]], sd.eta(h) , loglik.eta, phi[[i]], Phih, 
+    MH_High_Dim_para_future(niter, eta[[i]], sd.eta , loglik.eta, phi[[i]], Phih, 
                             cores = 1, verbatim = verbatim))
   
   phi <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para_future(niter, setoffset(phi[[i]],-Phih%a%4), sd.phi(h), loglik.phi, eta[[i]], Phih, 
+    MH_Gibbs_Sampler_future(niter, setoffset(phi[[i]],-Phih%a%4), sd.phi, loglik.phi, eta[[i]], Phih, 
                             cores = 1, verbatim = verbatim )) %>%
     lapply(setoffset, Phih%a%4)
   
@@ -123,10 +123,6 @@ sim <- function(niter, h, Phih, eta, phi, verbatim = F)
 
 maxi <- function(S)
 {
-  # res <- param
-  # res$sigma2 = S%a%1
-  # res$rho2 =   S%a%2
-  # return(res)
   list(sigma2 = S%a%1,
        rho2 =   S%a%2,
        mu =     S%a%4,
@@ -141,34 +137,25 @@ data.frame( Oracle = oracle(maxi, S, data) %>% unlist ,
 ```
 
 ```{r SAEM loop }
-niter <- 300
-correction.phase <- 50
-MH.iter <- 20#function(k) ifelse(k<correction.phase, 20, 10)
+niter <- 10
+MH.iter <- 10
 
-sd.eta <- function(k) .03
-sd.phi <- function(k) c(.05, .05, .01)
+sd.eta <- .3
+sd.phi <- c(.05, .3, .05)
 
-res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi, 
+res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi,
             burnin = 150, coef.burnin = 2/3, verbatim = 2)
 
 saveRDS(res, 'saem.rds')
-gg <- plot(res, true.value = param)
 ```
 
 ```{r seam table, results='asis', echo = F }
-gg$table_estimation
+plot(res, true.value = oracle(maxi, S, data), var = 'summary')
 ```
 
 ```{r saem plot, echo = F }
+plot(res, true.value = oracle(maxi, S, data) )
 plot.fitted.value(res, data)#, 1:100)
-
-gg$plot_parameter
-gg$plot_MCMC
-
-gg.MH <- names(res@Z) %>% keep(function(var) 'MH_res' %in% class(res@Z[[var]][[1]]) ) %>%
-  lapply(function(var)plot(res@Z[[var]][[1]], name = var, var = 'acceptation'))
-
-grid.arrange(grobs  = gg.MH)
 ```
 
 

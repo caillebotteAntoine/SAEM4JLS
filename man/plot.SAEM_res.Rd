@@ -4,7 +4,7 @@
 \alias{plot.SAEM_res}
 \title{plot the result of the SAEM funciton}
 \usage{
-\method{plot}{SAEM_res}(res, var = c("parameter", "MCMC", "summary"), true.value)
+\method{plot}{SAEM_res}(res, var = c("parameter", "MCMC", "acceptation"), true.value)
 }
 \arguments{
 \item{res}{'SAEM' type response variable}

@@ -12,7 +12,7 @@ vline <- function(gg, x, col, size = 1) gg + geom_vline(xintercept = x, size = s
 #' @export
 #'
 #' @examples
-plot.SAEM_res <- function(res, var = c('parameter', 'MCMC', 'summary'), true.value )
+plot.SAEM_res <- function(res, var = c('parameter', 'MCMC', 'acceptation'), true.value )
 {
   gg <- list()
 
@@ -70,6 +70,14 @@ plot.SAEM_res <- function(res, var = c('parameter', 'MCMC', 'summary'), true.val
         geom_line() +
         labs(title = "Latent variables simulated by the SAEM" ) +
       facet_grid( vars(variable, component), scales = 'free')
+  }
+
+  if('acceptation' %in% var)
+  {
+    gg.MH <- names(res@Z) %>% keep(function(var) 'MH_res' %in% class(res@Z[[var]][[1]]) ) %>%
+      lapply(function(var)plot(res@Z[[var]][[1]], name = var, var = 'acceptation'))
+
+    gg$plot_acceptation <- grid.arrange(grobs  = gg.MH)
   }
 
   if(length(gg) == 1)

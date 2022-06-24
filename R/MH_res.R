@@ -12,7 +12,7 @@
 MH_res <- setClass(
   Class = "MH_res",
   contains = "matrix",
-  slots = list( acceptation = 'numeric',
+  slots = list( acceptation = 'matrix',
                 chain = 'matrix')
 )
 
@@ -28,6 +28,8 @@ setMethod(`$`, 'MH_res', function(x, name){
 
 #--- addacceptation ---#
 setGeneric('addacceptation', function(object, a) standardGeneric("addacceptation" ) )
+setMethod(addacceptation, signature = c('MH_res', 'matrix'),
+          function(object, a) { object@acceptation <- rbind(a, t(a[nrow(a),] + t(object@acceptation))) ; object} )
 setMethod(addacceptation, signature = c('MH_res', 'numeric'),
           function(object, a) { object@acceptation <- c(a, a[length(a)] + object@acceptation) ; object} )
 setMethod(addacceptation, signature = c('MH_res', 'integer'),
@@ -70,8 +72,12 @@ setGeneric('getacceptation', function(object) standardGeneric("getacceptation" )
 setMethod(getacceptation, 'MH_res',
           function(object){
             dim <- base::nrow(object)
-            data.frame(rate = object$acceptation) %>%
-              mutate(iteration = 1:base::nrow(.)) %>% mutate(rate = rate/(iteration*dim))
+            iter <- 1:base::nrow(object$acceptation)
+
+            if(ncol(object$acceptation) == dim) dim = 1
+
+            data.frame(rate = object$acceptation/(iter*dim),
+                       iteration = iter)
           } )
 
 #--- getchain ---#

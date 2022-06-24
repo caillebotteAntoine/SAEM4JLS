@@ -61,6 +61,7 @@ setMethod('initialize', 'NLME_data', function(.Object, ..., G, ng, time, fct, pa
   return(.Object)
 })
 
+setMethod('getLatente', 'NLME_data', function(.Object) list(eta = .Object@eta, phi =  .Object@phi))
 
 get_obs <- function(data, ...)
 {

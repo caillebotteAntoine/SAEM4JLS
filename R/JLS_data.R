@@ -50,7 +50,9 @@ setMethod('initialize', 'JLS_data', function(.Object, ..., G, ng, time, fct, par
   return(.Object)
 })
 
-
+setGeneric('getLatente', function(.Object) standardGeneric('getLatente'))
+setMethod('getLatente', 'JLS_data', function(.Object)
+  list(eta = .Object@eta, phi =  .Object@phi, gamma = .Object@gamma))
 
 plot.JLS_data = function(data, legend.position = 'null', nrow, ncol)
 {

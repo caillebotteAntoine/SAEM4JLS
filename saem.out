@@ -1,16 +1,0 @@
-  |                                                                              |                                                                      |   0%  |                                                                              |...                                                                   |   4%
-   inline R code fragments
-
-  |                                                                              |......                                                                |   8%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |........                                                              |  12%
-  ordinary text without R code
-
-  |                                                                              |...........                                                           |  16%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-

@@ -83,11 +83,14 @@ res <- MH_High_Dim(500, x0, transi, loglik, obs, verbatim = T)
 plot(res, nrow = 2)
 
 res_para <- MH_High_Dim_para_future(500, x0, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
-
 plot(res_para, nrow = 2)
+res_gibbs <- MH_Gibbs_Sampler_future(500, x0, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
+plot(res_gibbs, nrow = 2)
 
-# res %>% as.numeric()
-# res_para %>% as.numeric()
+
+
+res %>% as.numeric()
+res_para %>% as.numeric()
 ```
 
 ### Note
@@ -95,7 +98,7 @@ plot(res_para, nrow = 2)
 On peut relancer l'algorithme tout en gardant les informations déjà compiler
 
 ```{r}
-res_para2 <- MH_High_Dim_para_future(100, res_para, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
+res_para2 <- MH_Gibbs_Sampler_future(100, res_gibbs, sd = 0.1 , loglik, obs, verbatim = T, cores = 1)
 plot(res_para2, nrow = 2)
 ```
 
@@ -104,27 +107,20 @@ plot(res_para2, nrow = 2)
 
 ```{r ex 2}
 # Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
-m <- function(t, eta, phi) (phi[1] + eta)/(1+exp((phi[2]-t)/phi[3]))
-m <- function(t, eta, phi) (phi[,1] + eta)/(1+exp((phi[,2]-t)/phi[,3]))
-
+m <- function(t, eta, phi) (phi[,1] )/(1+exp((phi[,2]-t)/phi[,3]))
 #=======================================#
-param <- list(rho2 = 0.1,
-              sigma2 = 0.05,
+param <- list(sigma2 = 0.05,
               mu = c(5,4,0.5),
               omega2 = c(0.5,0.1,0.01)) 
-F. <- length(param$omega2) #dimension de phi
 #=======================================#
-
 t <- seq(2,6, length.out = 5) #valeur des temps
+# --- longitudinal data --- #
+set.seed(18031997)
+data <- NLME_data(G = 8, ng = 8, time = t, fct = m, param = param)
 
-G <- 8 ; ng = 16
-dt <- NLME_obs(G, ng, t, param, m)
-N <- G*ng ; n <- nrow(dt)
-Y <- dt$obs
-
-dt %>% ggplot(aes(t, obs, col = gen, group = id)) +
-  geom_point() + geom_line() +
-  theme(legend.position = 'null')
+getDim(data)
+Y <- data$obs
+plot(data)
 #=============================================================================#
 ```
 
@@ -134,32 +130,19 @@ Le but ici est de montre la différence de temps de calcul, a noté que certe MH
 De plus on montre
 
 ```{r time}
-S <- function(eta, phi)
-{
-  s <- c(mean((Y - get_obs(m, dt, eta = eta, phi = phi) )^2 ), #1
-         mean(eta^2),                                               #2
-         apply(phi^2, 2, mean), apply(phi  , 2, mean) )             #3 et 4
+Phi <- fct_vector(function() 
+  c(- n/(2*param$sigma2), - G/(2*param$omega2), G*param$mu/param$omega2 ),
+  dim = c(1,F.,F.) )$eval()
 
-  attr(s, '1') <- 1
-  attr(s, '2') <- 2
-  attr(s, '3') <- 2 + 1:ncol(phi)
-  attr(s, '4') <- 2 +   ncol(phi) + 1:ncol(phi)
-  return(s)
-}
-
-Phi <-  c(- n/(2*param$sigma2), -N/(2*param$rho2), - G/(2*param$omega2), G*param$mu/param$omega2 )
+S <- fct_vector(function(phi, ...) mean((Y - get_obs(data, phi = phi) )^2 ),
+                function(phi, ...) apply(phi^2, 2, mean),
+                function(phi, ...) apply(phi  , 2, mean), dim = c(1,F.,F.) )
 
 loglik.phi <- function(x, eta)
 {
-  s <- S(eta,x)
-  sum( (Phi*s)%a%c(1,3,4) ) #indice de S_1 et S_{3,.} puis S_{4,.}
+  id <- c(1,2,3) #indice de S_1 et S_{3,.} puis S_{4,.}
+  sum(Phi%a%id*S$eval(phi = x, i = id))
 }
-loglik.eta <- function(x, phi) 
-{ 
-  s <- S(x, phi)
-  sum( (Phi*s)%a%c(1,2) )
-}
-
 #=============================================================================#
 sd <- 0.02
 
@@ -169,8 +152,7 @@ transi.noopti <- function(x) rnorm(length(x), x, sd) %>% matrix(nrow = G) #Fonct
 phi0 <-  matrix(rnorm(F.*G, c(6,3,1), 0.1), ncol = G) %>% t
 n.iter <- 1000
 
-eta <- attr(dt, 'eta')
-phi <- attr(dt, 'phi')
+eta <- data@eta
 ```
 
 ---
@@ -196,11 +178,16 @@ phi.MH4 <- MH_High_Dim_para(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cor
 phi.MH5 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = 1)
 ```
 
-```{r phi6}
-tic()
+```{r phi6, time = T}
 phi.MH6 <- MH_High_Dim_para_future(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = future::availableCores() -1)
-toc()
 ```
+
+
+```{r phi6, time = T}
+phi.MH7 <- MH_Gibbs_Sampler_future(n.iter, phi0, sd, loglik.phi, eta, verbatim = T, cores = 1)
+```
+
+
 
 ```{r aff}
 #=============================================================================#
@@ -216,6 +203,7 @@ plot(phi.MH3, nrow = 2)
 plot(phi.MH4, nrow = 2)
 plot(phi.MH5, nrow = 2)
 plot(phi.MH6, nrow = 2)
+plot(phi.MH7, nrow = 2)
 ```
 
 
