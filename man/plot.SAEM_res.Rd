@@ -13,9 +13,6 @@
 
 \item{true.value}{the true value of the parameter, if it is not missing the plot function will return a knitr array summarizing the estimates with RMSE calculation}
 }
-\value{
-
-}
 \description{
 plot the result of the SAEM funciton
 }

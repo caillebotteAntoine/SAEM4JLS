@@ -52,6 +52,7 @@ param <- list(sigma2 = 0.05,
 #=======================================#
 t <- seq(60,120, length.out = 10) #value of times
 
+set.seed(18031997)
 data <- JLS_data(G = 8, ng = 4, time = t, fct = m, param = param, linkfct = function(t,eta,phi) phi[,2]/phi[,3])
 
 getDim(data)
@@ -80,7 +81,7 @@ Phi <- fct_vector(function(sigma2, rho2, mu, omega2, nu2, a, b, alpha, beta) {
 
 zeta <- function(beta, eta, phi, gamma, a,b, alpha)
 {
-  lbd <- function(t,g) t^{b-1} * exp(alpha*data@linkfct(t, eta[g], phi[g,, drop = F]))
+  lbd <- function(t,g) t^{b-1} * exp(alpha*data@linkfct(t, eta[g], matrix(phi[g,], nrow = 1)))
   P1 <- 1:nrow(data@survival) %>% sapply(function(i) lbd(data@survival$obs[i], data@survival$gen[i]) )
     # sapply(function(i) integrate(function(t) lbd(t,data@survival$gen[i]), 0, data@survival$obs[i])$value )
 
@@ -90,8 +91,8 @@ zeta <- function(beta, eta, phi, gamma, a,b, alpha)
 }
 zeta.der <- function(beta, eta, phi, gamma, a, b, alpha)
 {
-  lbd <- function(t,g) t^{b-1} * exp(alpha*data@linkfct(t, eta[g], phi[g,, drop = F]))
-  P1 <- 1:nrow(data@survival) %>%  sapply(function(i) lbd(data@survival$obs[i], data@survival$gen[i]) )
+  lbd <- function(t,g) t^{b-1} * exp(alpha*data@linkfct(t, eta[g], matrix(phi[g,], nrow = 1)))
+  P1 <- 1:nrow(data@survival) %>% sapply(function(i) data@survival$obs[i]/b*lbd(data@survival$obs[i], data@survival$gen[i]) )
     # sapply(function(i) integrate(function(t) lbd(t,data@survival$gen[i]), 0, data@survival$obs[i])$value )
 
   P2 <- data@survival$U*exp(beta*data@survival$U + as(rep(gamma, each = ng), 'matrix'))
@@ -112,13 +113,16 @@ S <- fct_vector(function(eta, phi, ...) mean((Y - get_obs(data, eta = eta, phi =
                 function(alpha, ...)    alpha^2,               #11
                 function(eta, phi, gamma, a, b, alpha)                        #12
                   uniroot(function(beta)zeta.der(beta, eta, phi, gamma, a,b,alpha), 
-                          lower = -1000, upper = 1000, tol = 1e-3)$root,
+                          lower = -1000, upper = 1000)$root,#, tol = 1e-3)$root,
                 dim = c(1,1,F., F., rep(1,8)) ) 
 
 h <- fct_vector(function(a,b, ...) N*log(b*a^-b),
                 function(b, ...) (b-1)*sum(log(t)),
                 function(gamma,...) ng*sum(gamma),
                 function(eta, phi, ...) sum(data@fct(1, eta, apply(phi, 2, rep, ng) )))
+
+S[12](data@eta, data@phi, data@gamma, param$a, param$b, param$alpha)
+
 ```
 
 # Metropolis Hastings
@@ -163,10 +167,9 @@ para <- param %>% sapply(function(x) x* runif(1, 1.1,1.4))
 # para$rho2 = 0.2 ; para$omega2 <- rep(.1,3)
 
 # --- Initialisation des chaines MC : Z_0 --- #
-Z <- list()
-Z <- getLatente(data) %>% lapply(function(z)list(z))
-# Z$eta = list( matrix(rep(0, G*ng), ncol = 1) )
-# Z$phi = list(  matrix(rep(para$mu, G), nrow = F.) %>% t  )
+Z <- getLatente(data, format = 'list') #list()
+Z$eta = list( matrix(rep(0, G*ng), ncol = 1) )
+Z$phi = list(  matrix(rep(para$mu, G), nrow = F.) %>% t  )
 
 Z$gamma = list(matrix(rep(0, G), ncol = 1))
 
@@ -180,14 +183,14 @@ Z$alpha = list(matrix(para$alpha))
 ```{r SAEM fct}
 sim <- function(niter, h, Phih, eta, phi, gamma, a, b, alpha, verbatim = F)
 {
-  # eta <- list(MH_High_Dim_future(niter, eta[[1]], sd = sd.eta, loglik.eta,
-  #                                phi[[1]], gamma[[1]], a[[1]], b[[1]], alpha[[1]],
-  #                                Phih, cores = ncores, verbatim = verbatim ))
-  # 
-  # phi <- list(MH_Gibbs_Sampler_future(niter, setoffset(phi[[1]],-Phih%a%4), sd.phi, loglik.phi, 
-  #                                     eta[[1]], gamma[[1]], a[[1]], b[[1]], alpha[[1]],
-  #                                     Phih, cores = 1, verbatim = verbatim )) %>%
-  #   lapply(setoffset, Phih%a%4)
+  eta <- list(MH_High_Dim_future(niter, eta[[1]], sd = sd.eta, loglik.eta,
+                                 phi[[1]], gamma[[1]], a[[1]], b[[1]], alpha[[1]],
+                                 Phih, cores = ncores, verbatim = verbatim ))
+
+  phi <- list(MH_Gibbs_Sampler_future(niter, setoffset(phi[[1]],-Phih%a%4), sd.phi, loglik.phi,
+                                      eta[[1]], gamma[[1]], a[[1]], b[[1]], alpha[[1]],
+                                      Phih, cores = 1, verbatim = verbatim )) %>%
+    lapply(setoffset, Phih%a%4)
   
   gamma <- list(MH_High_Dim_future(niter, gamma[[1]], sd = .03, loglik.gamma,
                                    eta[[1]], phi[[1]], a[[1]], b[[1]], alpha[[1]],
@@ -205,24 +208,19 @@ sim <- function(niter, h, Phih, eta, phi, gamma, a, b, alpha, verbatim = F)
   list(eta = eta, phi = phi, gamma = gamma, a = a, b = b, alpha = alpha)
 }
 
-#res <- simulation_test(sim, Phi, param, 100, Z) %>% lapply(function(z)plot(z[[1]], nrow = 2))
+#res <- simulation_test(sim, Phi, param, 1000, Z) %>% lapply(function(z)plot(z[[1]], nrow = 2))
 #names(res) %>% sapply(function(var) assign(var, res[[var]][[1]],envir = .GlobalEnv))
 # oracle(maxi, S, data, a = param$a, b = param$b, alpha = param$alpha)
 
 maxi <- function(S)
 {
-  res <- param
-  res$a <- S%a%5
-  res$b <- S%a%6
-  res$alpha =  S%a%10
-  return(res)
   list(sigma2 = param$sigma2,#S%a%1,
        rho2 =   param$rho2,#S%a%2,
        mu =     param$mu,#S%a%4,
        omega2 = param$omega2,#S%a%3 - (S%a%4)^2,
        nu2 =    S%a%5,
        a =      S%a%6,  b =    S%a%8,
-       alpha =  S%a%10, beta = S%a%12 )
+       alpha =  S%a%10, beta = param$beta)#S%a%12 )
 }
 
 ```
@@ -230,11 +228,13 @@ maxi <- function(S)
 # Resultats
 
 ```{r SAEM loop }
-niter <- 60
+niter <- 20
 MH.iter <- 10
 
 sd.eta <- .3
 sd.phi <- c(.05, .3, .05)
+
+gg <- simulation_test(sim, Phi, param, 250, Z) %>% lapply(function(z)plot(z[[1]], nrow = 2))
 
 res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi, eps = 1e-2,
             burnin = 150, coef.burnin = 2/3, verbatim = 2)

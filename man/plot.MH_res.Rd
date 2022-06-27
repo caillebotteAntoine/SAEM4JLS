@@ -9,9 +9,6 @@
 \arguments{
 \item{...}{}
 }
-\value{
-
-}
 \description{
 plot resultat of MH function
 }

@@ -1,0 +1,63 @@
+  |                                                                              |                                                                      |   0%  |                                                                              |...                                                                   |   4%
+   inline R code fragments
+
+  |                                                                              |......                                                                |   8%
+label: setup (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                              |........                                                              |  12%
+  ordinary text without R code
+
+  |                                                                              |...........                                                           |  16%
+label: number of cores (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                              |..............                                                        |  20%
+  ordinary text without R code
+
+  |                                                                              |.................                                                     |  24%
+label: init
+  |                                                                              |....................                                                  |  28%
+  ordinary text without R code
+
+  |                                                                              |......................                                                |  32%
+label: data ploting (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                              |.........................                                             |  36%
+  ordinary text without R code
+
+  |                                                                              |............................                                          |  40%
+label: stat exhaustive
+  |                                                                              |...............................                                       |  44%
+  ordinary text without R code
+
+  |                                                                              |..................................                                    |  48%
+label: MH
+  |                                                                              |....................................                                  |  52%
+  ordinary text without R code
+
+  |                                                                              |.......................................                               |  56%
+label: SAEM init
+  |                                                                              |..........................................                            |  60%
+  ordinary text without R code
+
+  |                                                                              |.............................................                         |  64%
+label: SAEM fct
+  |                                                                              |................................................                      |  68%
+  ordinary text without R code
+
+  |                                                                              |..................................................                    |  72%
+label: oracle (with options) 
+List of 2
+ $ echo   : logi FALSE
+ $ results: chr "asis"
+
+  |                                                                              |.....................................................                 |  76%
+  ordinary text without R code
+
+  |                                                                              |........................................................              |  80%
+label: SAEM loop

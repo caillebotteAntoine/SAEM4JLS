@@ -5,9 +5,6 @@
 \alias{MH_res-class}
 \alias{MH_res}
 \title{Metropolis Hastings Object}
-\value{
-
-}
 \description{
 Metropolis Hastings Object
 }

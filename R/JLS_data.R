@@ -40,12 +40,15 @@ setMethod('initialize', 'JLS_data', function(.Object, ..., G, ng, time, fct, par
       phi <- matrix(.Object@phi[g,], nrow = 1)
       u <- .Object@survival$U[i]
 
-      lbd <- function(t) t^{b-1} * exp(alpha * .Object@linkfct(t, eta, phi) )
+
+      lbd <- function(t) t^{b-1} * exp(beta*u + alpha * .Object@linkfct(t, eta, phi) + .Object@gamma[g])
+
+      LBD <- function(t) b*a^-b * lbd(t) *exp(b*a^-b *integrate(lbd, 0, t)$value )
+      #U = F(T) <=> F^-1 (U) = T ou chercher T
+
 
       uni <- runif(1)
-      LBD <- function(t) b*a^-b *integrate(lbd, 0, t)$value * exp(beta*u +.Object@gamma[g]) + log(1-uni)
-
-      uniroot(LBD, lower = 0, upper = 2*a)$root
+      uniroot(function(t) LBD(t) - uni, lower = 0, upper = 2*a)$root
     }
 
     .Object@survival$obs = sapply(1:nrow(.Object@survival), survival_fct)
@@ -53,9 +56,13 @@ setMethod('initialize', 'JLS_data', function(.Object, ..., G, ng, time, fct, par
   return(.Object)
 })
 
-setGeneric('getLatente', function(.Object) standardGeneric('getLatente'))
-setMethod('getLatente', 'JLS_data', function(.Object)
-  list(eta = .Object@eta, phi =  .Object@phi, gamma = .Object@gamma))
+setGeneric('getLatente', function(.Object, ...) standardGeneric('getLatente'))
+setMethod('getLatente', 'JLS_data', function(.Object, format = 'none'){
+  Z <- list(eta = .Object@eta, phi =  .Object@phi, gamma = .Object@gamma)
+  if(format == 'list')
+    Z <- Z %>% lapply(function(z)list(z))
+  return(Z)
+})
 
 plot.JLS_data = function(data, legend.position = 'null', nrow, ncol)
 {

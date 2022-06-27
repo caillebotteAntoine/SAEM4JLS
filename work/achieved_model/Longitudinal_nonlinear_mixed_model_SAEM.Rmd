@@ -109,7 +109,7 @@ sim <- function(niter, h, Phih, eta, phi, verbatim = F)
 {
   M <- length(phi)
   eta <- 1:M %>% lapply( function(i)
-    MH_High_Dim_para_future(niter, eta[[i]], sd.eta , loglik.eta, phi[[i]], Phih, 
+    MH_High_Dim_future(niter, eta[[i]], sd.eta , loglik.eta, phi[[i]], Phih, 
                             cores = 1, verbatim = verbatim))
   
   phi <- 1:M %>% lapply( function(i)
@@ -119,7 +119,6 @@ sim <- function(niter, h, Phih, eta, phi, verbatim = F)
   
   list(eta = eta, phi = phi)
 }
-#res <- simulation_test(sim, Phi, param, 1000, Z) %>% lapply(function(z)plot(z[[1]], nrow = 2))
 
 maxi <- function(S)
 {
@@ -137,14 +136,16 @@ data.frame( Oracle = oracle(maxi, S, data) %>% unlist ,
 ```
 
 ```{r SAEM loop }
-niter <- 10
+niter <- 200
 MH.iter <- 10
 
 sd.eta <- .3
 sd.phi <- c(.05, .3, .05)
 
+gg <- simulation_test(sim, Phi, param, 100, Z) %>% lapply(function(z)plot(z[[1]], nrow = 2))
+
 res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi,
-            burnin = 150, coef.burnin = 2/3, verbatim = 2)
+            burnin = 100, coef.burnin = 2/3, verbatim = 2)
 
 saveRDS(res, 'saem.rds')
 ```

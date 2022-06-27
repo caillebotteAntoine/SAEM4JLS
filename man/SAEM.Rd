@@ -38,9 +38,6 @@ SAEM(
 
 \item{verbatim}{1 message during the main loop and estimation of the remaining execution time; 2 same as 1 with in return values of the simulations of the latent variables}
 }
-\value{
-
-}
 \description{
 SAEM algorithm perform parameter estimation for nonlinear mixed effects
 }
