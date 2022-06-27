@@ -6,17 +6,20 @@ JLS_data <- setClass(
   contains = c('NLME_data','data.frame'),
   slots = list(hey = 'numeric',
 
+               linkfct = 'function',
+
                gamma = 'matrix', survival = 'data.frame')
 )
 
-setMethod('initialize', 'JLS_data', function(.Object, ..., G, ng, time, fct, param, hey){
+setMethod('initialize', 'JLS_data', function(.Object, ..., G, ng, time, fct, param, linkfct){
   args <- list(...)
   if(length(args) != 0){
     .Object <- callNextMethod()
   }else{
     .Object <- new('JLS_data', new('NLME_data', G = G, ng = ng, time = time, fct = fct, param = param) )
 
-
+    if(!missing(linkfct)) .Object@linkfct <- linkfct
+    else .Object@linkfct <- fct
 
     .Object@gamma <- rnorm(G, 0, sqrt(param$nu))  %>% matrix(ncol = 1)
 
@@ -37,7 +40,7 @@ setMethod('initialize', 'JLS_data', function(.Object, ..., G, ng, time, fct, par
       phi <- matrix(.Object@phi[g,], nrow = 1)
       u <- .Object@survival$U[i]
 
-      lbd <- function(t) t^{b-1} * exp(alpha * .Object@fct(t, eta, phi) )
+      lbd <- function(t) t^{b-1} * exp(alpha * .Object@linkfct(t, eta, phi) )
 
       uni <- runif(1)
       LBD <- function(t) b*a^-b *integrate(lbd, 0, t)$value * exp(beta*u +.Object@gamma[g]) + log(1-uni)
