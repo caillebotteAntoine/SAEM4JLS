@@ -12,7 +12,7 @@ NLME_data <- setClass(
                eps = 'numeric', eta = 'matrix', phi = 'matrix')
 )
 
-setMethod('initialize', 'NLME_data', function(.Object, ..., G, ng, time, fct, param){
+setMethod('initialize', 'NLME_data', function(.Object, ..., G, ng, time, fct, param, nonzero.value = T){
   args <- list(...)
   if(length(args) != 0){
     .Object <- callNextMethod()
@@ -57,6 +57,10 @@ setMethod('initialize', 'NLME_data', function(.Object, ..., G, ng, time, fct, pa
     .Object@fct <- fct
 
     .Object$obs <- get_obs(.Object, eta = .Object@eta, phi = .Object@phi) + .Object@eps
+
+    if(nonzero.value)
+      .Object$obs[which(.Object$obs < 0)] <- 0
+
   }
   return(.Object)
 })
@@ -96,8 +100,7 @@ plot.NLME_data = function(data, legend.position = 'null')
   gg <- data %>% ggplot(aes(time, obs, col = gen, group = id)) +
     geom_point() + geom_line()
 
-  if(legend.position == 'null')
-    gg <- gg + theme(legend.position = 'null')
+  gg <- gg + theme(legend.position = legend.position)
 
   return(gg)
 }

@@ -61,3 +61,25 @@ List of 2
 
   |                                                                              |........................................................              |  80%
 label: SAEM loop
+  |                                                                              |...........................................................           |  84%
+  ordinary text without R code
+
+  |                                                                              |..............................................................        |  88%
+label: seam table (with options) 
+List of 2
+ $ results: chr "asis"
+ $ echo   : logi FALSE
+
+  |                                                                              |................................................................      |  92%
+  ordinary text without R code
+
+  |                                                                              |...................................................................   |  96%
+label: saem plot (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                              |......................................................................| 100%
+  ordinary text without R code
+
+
+/bin/pandoc +RTS -K512m -RTS Longitudinal_nonlinear_mixed_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_nonlinear_mixed_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1077704.1.short.q/RtmpTqBjFX/rmarkdown-str1240b26bdc6b57.html 
