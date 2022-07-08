@@ -9,6 +9,9 @@ burnin_fct(burnin, coef.burnin, scale = 1)
 \arguments{
 \item{scale}{}
 }
+\value{
+
+}
 \description{
 Burn-in function for algorithm requiring a step
 }
