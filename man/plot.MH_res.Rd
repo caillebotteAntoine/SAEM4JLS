@@ -7,7 +7,7 @@
 \method{plot}{MH_res}(x, name, nrow, ncol, var = c("chain", "acceptation"))
 }
 \arguments{
-\item{...}{}
+\item{x}{}
 }
 \description{
 plot resultat of MH function

@@ -24,7 +24,7 @@ SAEM(
 
 \item{niter.MH}{number of iterations for metropolis hastings algorithm}
 
-\item{Z}{list of latent variables (with var names)}
+\item{Z}{list of latent variables (with var names) MUST BE MATRIX}
 
 \item{simulation}{function for simulation step}
 

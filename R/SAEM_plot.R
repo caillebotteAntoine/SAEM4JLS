@@ -7,26 +7,41 @@ vline <- function(gg, x, col, size = 1) gg + geom_vline(xintercept = x, size = s
 #' @param var what to plot
 #' @param res 'SAEM' type response variable
 #' @param true.value the true value of the parameter, if it is not missing the plot function will return a knitr array summarizing the estimates with RMSE calculation
+#' @param nrow
+#' @param ncol
 #'
 #' @return
 #' @export
 #'
 #' @examples
-plot.SAEM_res <- function(res, var = c('parameter', 'MCMC', 'acceptation'), true.value )
+plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptation'), exclude, time = T, true.value )
 {
+  if(missing(exclude)) exclude <- c()
+
+  if('special' %in% var)
+  {
+    gg1 <- plot(res, true.value = true.value, exclude = exclude,
+                var = c('MCMC', 'parameter'), ncol = 2)
+
+    return( grid.arrange(gg1, plot(res, var = 'acceptation', exclude = exclude, time = F), nrow = 2) )
+  }
+
   gg <- list()
 
-  diff_time <- format(as.POSIXct(as.numeric(res@times_elasped),
-                                 origin = '1970-01-01', tz = 'UTC'), "%Mmin %Ssec")
+  if(time){
+    diff_time <- format(as.POSIXct(as.numeric(res@times_elasped),
+                                   origin = '1970-01-01', tz = 'UTC'), "%Mmin %Ssec")
 
-  print(paste0('SAEM execution time = ', diff_time))
+    print(paste0('SAEM execution time = ', diff_time))
+
+  }
 
   dt <- res %>% as_data.frame
 
   if(!missing(true.value) && 'summary' %in% var)
   {
     #Resultat de l'estimations
-    est <- rbind( true.value %>% unlist, dt[nrow(dt),]) %>%
+    est <- rbind( true.value %>% unlist, dt[base::nrow(dt),]) %>%
       t %>% data.frame
 
     names(est) <- c('Real value', 'Estimated value')
@@ -43,15 +58,16 @@ plot.SAEM_res <- function(res, var = c('parameter', 'MCMC', 'acceptation'), true
   # MCMC des paramètres
   if('parameter' %in% var)
   {
-    niter <- nrow(dt)
-    dt <- dt %>% mutate(i = 1:nrow(.)-1) %>% melt(id = 'i')
+    niter <- base::nrow(dt)
+    dt <- dt %>% mutate(i = 1:base::nrow(.)-1) %>% melt(id = 'i')
     if(!missing(true.value))
       dt <- dt %>% mutate(hline = true.value %>% unlist %>% rep(each = niter) )
 
     gg$plot_parameter <- dt %>%
         ggplot(aes(i, value, col = variable)) + geom_line() +
         labs(title = "Result of the SAEM algorithm",
-             x = 'iteration') + facet_grid( vars(variable), scales = 'free')
+             x = 'iteration') + facet_grid( vars(variable), scales = 'free') +
+        theme(legend.position = 'null')
 
     if(!missing(true.value))
       gg$plot_parameter <- gg$plot_parameter +
@@ -63,25 +79,34 @@ plot.SAEM_res <- function(res, var = c('parameter', 'MCMC', 'acceptation'), true
     }
   }
 
+
   if('MCMC' %in% var)
   {
-    gg$plot_MCMC <- getchain(res) %>%
+    gg$plot_MCMC <- getchain(res) %>% filter(!variable %in% exclude) %>%
       ggplot(aes(iteration, value, group = interaction(id, component, variable), color = component)) +
         geom_line() +
         labs(title = "Latent variables simulated by the SAEM" ) +
-      facet_grid( vars(variable, component), scales = 'free')
+        facet_grid( vars(variable, component), scales = 'free') +
+        theme(legend.position = 'null')
   }
 
   if('acceptation' %in% var)
   {
-    gg.MH <- names(res@Z) %>% keep(function(var) 'MH_res' %in% class(res@Z[[var]][[1]]) ) %>%
-      lapply(function(var)plot(res@Z[[var]][[1]], name = var, var = 'acceptation'))
+    gg.MH <- names(res@Z) %>% keep(function(v) 'MH_res' %in% class(res@Z[[v]][[1]]) ) %>%
+      keep(function(v) !var %in% exclude) %>%
+      lapply(function(v)plot(res@Z[[v]][[1]], name = v, var = 'acceptation'))
 
-    gg$plot_acceptation <- grid.arrange(grobs  = gg.MH)
+    gg$plot_acceptation <- arrangeGrob(grobs  = gg.MH)
   }
 
   if(length(gg) == 1)
     return(gg[[1]])
+
+  if(!missing(nrow))
+    return( arrangeGrob(grobs =  gg, nrow = nrow))
+
+  if(!missing(ncol))
+    return( arrangeGrob(grobs =  gg, ncol = ncol))
 
   return(gg)
 }

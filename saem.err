@@ -2,211 +2,1036 @@ INFO : Large data should be stored in your work/ folder.
  
 
 
-processing file: Longitudinal_nonlinear_mixed_model_SAEM.Rmd
+processing file: Longitudinal_Surival_model_SAEM.Rmd
 number of cores available = 1
 --- SAEM started ! ---
 step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 2, remaining = 198, times elasped = 0.6s, estimated time : for one step = 0.6s, remaining = 117.4s
-step = 3, remaining = 197, times elasped = 1.5s, estimated time : for one step = 0.8s, remaining = 150.5s
-step = 4, remaining = 196, times elasped = 2.4s, estimated time : for one step = 0.8s, remaining = 160.2s
-step = 5, remaining = 195, times elasped = 3.4s, estimated time : for one step = 0.8s, remaining = 164.6s
-step = 6, remaining = 194, times elasped = 4.3s, estimated time : for one step = 0.9s, remaining = 166.1s
-step = 7, remaining = 193, times elasped = 5.2s, estimated time : for one step = 0.9s, remaining = 167.5s
-step = 8, remaining = 192, times elasped = 6.2s, estimated time : for one step = 0.9s, remaining = 169.8s
-step = 9, remaining = 191, times elasped = 7s, estimated time : for one step = 0.9s, remaining = 169s
-step = 10, remaining = 190, times elasped = 8s, estimated time : for one step = 0.9s, remaining = 168.7s
-step = 11, remaining = 189, times elasped = 8.8s, estimated time : for one step = 0.9s, remaining = 168s
-step = 12, remaining = 188, times elasped = 9.7s, estimated time : for one step = 0.9s, remaining = 167s
-step = 13, remaining = 187, times elasped = 10.6s, estimated time : for one step = 0.9s, remaining = 166.1s
-step = 14, remaining = 186, times elasped = 11.5s, estimated time : for one step = 0.9s, remaining = 165.3s
-step = 15, remaining = 185, times elasped = 12.4s, estimated time : for one step = 0.9s, remaining = 164.3s
-step = 16, remaining = 184, times elasped = 13.3s, estimated time : for one step = 0.9s, remaining = 163.5s
-step = 17, remaining = 183, times elasped = 14.2s, estimated time : for one step = 0.9s, remaining = 162.7s
-step = 18, remaining = 182, times elasped = 15s, estimated time : for one step = 0.9s, remaining = 161.9s
-step = 19, remaining = 181, times elasped = 16s, estimated time : for one step = 0.9s, remaining = 161.8s
-step = 20, remaining = 180, times elasped = 16.9s, estimated time : for one step = 0.9s, remaining = 160.8s
-step = 21, remaining = 179, times elasped = 17.8s, estimated time : for one step = 0.9s, remaining = 159.8s
-step = 22, remaining = 178, times elasped = 18.6s, estimated time : for one step = 0.9s, remaining = 159s
-step = 23, remaining = 177, times elasped = 19.5s, estimated time : for one step = 0.9s, remaining = 158s
-step = 24, remaining = 176, times elasped = 20.4s, estimated time : for one step = 0.9s, remaining = 157.1s
-step = 25, remaining = 175, times elasped = 21.3s, estimated time : for one step = 0.9s, remaining = 156.4s
-step = 26, remaining = 174, times elasped = 22.2s, estimated time : for one step = 0.9s, remaining = 155.5s
-step = 27, remaining = 173, times elasped = 23.1s, estimated time : for one step = 0.9s, remaining = 154.6s
-step = 28, remaining = 172, times elasped = 24s, estimated time : for one step = 0.9s, remaining = 153.7s
-step = 29, remaining = 171, times elasped = 25s, estimated time : for one step = 0.9s, remaining = 153.3s
-step = 30, remaining = 170, times elasped = 25.8s, estimated time : for one step = 0.9s, remaining = 152.4s
-step = 31, remaining = 169, times elasped = 26.7s, estimated time : for one step = 0.9s, remaining = 151.4s
-step = 32, remaining = 168, times elasped = 27.6s, estimated time : for one step = 0.9s, remaining = 150.4s
-step = 33, remaining = 167, times elasped = 28.5s, estimated time : for one step = 0.9s, remaining = 149.5s
-step = 34, remaining = 166, times elasped = 29.4s, estimated time : for one step = 0.9s, remaining = 148.5s
-step = 35, remaining = 165, times elasped = 30.2s, estimated time : for one step = 0.9s, remaining = 147.6s
-step = 36, remaining = 164, times elasped = 31.1s, estimated time : for one step = 0.9s, remaining = 146.7s
-step = 37, remaining = 163, times elasped = 32s, estimated time : for one step = 0.9s, remaining = 145.8s
-step = 38, remaining = 162, times elasped = 32.9s, estimated time : for one step = 0.9s, remaining = 144.8s
-step = 39, remaining = 161, times elasped = 33.8s, estimated time : for one step = 0.9s, remaining = 144s
-step = 40, remaining = 160, times elasped = 34.7s, estimated time : for one step = 0.9s, remaining = 143.4s
-step = 41, remaining = 159, times elasped = 35.6s, estimated time : for one step = 0.9s, remaining = 142.4s
-step = 42, remaining = 158, times elasped = 36.5s, estimated time : for one step = 0.9s, remaining = 141.5s
-step = 43, remaining = 157, times elasped = 37.4s, estimated time : for one step = 0.9s, remaining = 140.5s
-step = 44, remaining = 156, times elasped = 38.2s, estimated time : for one step = 0.9s, remaining = 139.7s
-step = 45, remaining = 155, times elasped = 39.1s, estimated time : for one step = 0.9s, remaining = 138.7s
-step = 46, remaining = 154, times elasped = 40s, estimated time : for one step = 0.9s, remaining = 137.8s
-step = 47, remaining = 153, times elasped = 40.9s, estimated time : for one step = 0.9s, remaining = 136.9s
-step = 48, remaining = 152, times elasped = 41.8s, estimated time : for one step = 0.9s, remaining = 136s
-step = 49, remaining = 151, times elasped = 42.7s, estimated time : for one step = 0.9s, remaining = 135.2s
-step = 50, remaining = 150, times elasped = 43.6s, estimated time : for one step = 0.9s, remaining = 134.2s
-step = 51, remaining = 149, times elasped = 44.5s, estimated time : for one step = 0.9s, remaining = 133.5s
-step = 52, remaining = 148, times elasped = 45.4s, estimated time : for one step = 0.9s, remaining = 132.6s
-step = 53, remaining = 147, times elasped = 46.3s, estimated time : for one step = 0.9s, remaining = 131.7s
-step = 54, remaining = 146, times elasped = 47.1s, estimated time : for one step = 0.9s, remaining = 130.8s
-step = 55, remaining = 145, times elasped = 48s, estimated time : for one step = 0.9s, remaining = 129.9s
-step = 56, remaining = 144, times elasped = 48.9s, estimated time : for one step = 0.9s, remaining = 129s
-step = 57, remaining = 143, times elasped = 49.8s, estimated time : for one step = 0.9s, remaining = 128.1s
-step = 58, remaining = 142, times elasped = 50.7s, estimated time : for one step = 0.9s, remaining = 127.2s
-step = 59, remaining = 141, times elasped = 51.6s, estimated time : for one step = 0.9s, remaining = 126.4s
-step = 60, remaining = 140, times elasped = 52.5s, estimated time : for one step = 0.9s, remaining = 125.5s
-step = 61, remaining = 139, times elasped = 53.5s, estimated time : for one step = 0.9s, remaining = 124.8s
-step = 62, remaining = 138, times elasped = 54.3s, estimated time : for one step = 0.9s, remaining = 123.8s
-step = 63, remaining = 137, times elasped = 55.2s, estimated time : for one step = 0.9s, remaining = 122.9s
-step = 64, remaining = 136, times elasped = 56.1s, estimated time : for one step = 0.9s, remaining = 122s
-step = 65, remaining = 135, times elasped = 57s, estimated time : for one step = 0.9s, remaining = 121s
-step = 66, remaining = 134, times elasped = 57.8s, estimated time : for one step = 0.9s, remaining = 120.1s
-step = 67, remaining = 133, times elasped = 58.7s, estimated time : for one step = 0.9s, remaining = 119.2s
-step = 68, remaining = 132, times elasped = 59.6s, estimated time : for one step = 0.9s, remaining = 118.3s
-step = 69, remaining = 131, times elasped = 60.5s, estimated time : for one step = 0.9s, remaining = 117.4s
-step = 70, remaining = 130, times elasped = 61.4s, estimated time : for one step = 0.9s, remaining = 116.5s
-step = 71, remaining = 129, times elasped = 62.2s, estimated time : for one step = 0.9s, remaining = 115.6s
-step = 72, remaining = 128, times elasped = 63.2s, estimated time : for one step = 0.9s, remaining = 114.8s
-step = 73, remaining = 127, times elasped = 64.1s, estimated time : for one step = 0.9s, remaining = 113.9s
-step = 74, remaining = 126, times elasped = 65s, estimated time : for one step = 0.9s, remaining = 113s
-step = 75, remaining = 125, times elasped = 65.8s, estimated time : for one step = 0.9s, remaining = 112.1s
-step = 76, remaining = 124, times elasped = 66.7s, estimated time : for one step = 0.9s, remaining = 111.2s
-step = 77, remaining = 123, times elasped = 67.6s, estimated time : for one step = 0.9s, remaining = 110.3s
-step = 78, remaining = 122, times elasped = 68.5s, estimated time : for one step = 0.9s, remaining = 109.4s
-step = 79, remaining = 121, times elasped = 69.4s, estimated time : for one step = 0.9s, remaining = 108.5s
-step = 80, remaining = 120, times elasped = 70.2s, estimated time : for one step = 0.9s, remaining = 107.6s
-step = 81, remaining = 119, times elasped = 71.1s, estimated time : for one step = 0.9s, remaining = 106.7s
-step = 82, remaining = 118, times elasped = 72.1s, estimated time : for one step = 0.9s, remaining = 105.9s
-step = 83, remaining = 117, times elasped = 73s, estimated time : for one step = 0.9s, remaining = 105s
-step = 84, remaining = 116, times elasped = 73.8s, estimated time : for one step = 0.9s, remaining = 104.1s
-step = 85, remaining = 115, times elasped = 74.7s, estimated time : for one step = 0.9s, remaining = 103.2s
-step = 86, remaining = 114, times elasped = 75.6s, estimated time : for one step = 0.9s, remaining = 102.3s
-step = 87, remaining = 113, times elasped = 76.5s, estimated time : for one step = 0.9s, remaining = 101.4s
-step = 88, remaining = 112, times elasped = 77.4s, estimated time : for one step = 0.9s, remaining = 100.5s
-step = 89, remaining = 111, times elasped = 78.2s, estimated time : for one step = 0.9s, remaining = 99.6s
-step = 90, remaining = 110, times elasped = 79.1s, estimated time : for one step = 0.9s, remaining = 98.7s
-step = 91, remaining = 109, times elasped = 80s, estimated time : for one step = 0.9s, remaining = 97.8s
-step = 92, remaining = 108, times elasped = 81s, estimated time : for one step = 0.9s, remaining = 97s
-step = 93, remaining = 107, times elasped = 81.9s, estimated time : for one step = 0.9s, remaining = 96.1s
-step = 94, remaining = 106, times elasped = 82.7s, estimated time : for one step = 0.9s, remaining = 95.2s
-step = 95, remaining = 105, times elasped = 83.6s, estimated time : for one step = 0.9s, remaining = 94.3s
-step = 96, remaining = 104, times elasped = 84.5s, estimated time : for one step = 0.9s, remaining = 93.4s
-step = 97, remaining = 103, times elasped = 85.4s, estimated time : for one step = 0.9s, remaining = 92.5s
-step = 98, remaining = 102, times elasped = 86.3s, estimated time : for one step = 0.9s, remaining = 91.6s
-step = 99, remaining = 101, times elasped = 87.2s, estimated time : for one step = 0.9s, remaining = 90.7s
-step = 100, remaining = 100, times elasped = 88s, estimated time : for one step = 0.9s, remaining = 89.8s
-step = 101, remaining = 99, times elasped = 88.9s, estimated time : for one step = 0.9s, remaining = 88.9s
-step = 102, remaining = 98, times elasped = 89.8s, estimated time : for one step = 0.9s, remaining = 88s
-step = 103, remaining = 97, times elasped = 90.8s, estimated time : for one step = 0.9s, remaining = 87.2s
-step = 104, remaining = 96, times elasped = 91.7s, estimated time : for one step = 0.9s, remaining = 86.3s
-step = 105, remaining = 95, times elasped = 92.5s, estimated time : for one step = 0.9s, remaining = 85.4s
-step = 106, remaining = 94, times elasped = 93.4s, estimated time : for one step = 0.9s, remaining = 84.5s
-step = 107, remaining = 93, times elasped = 94.3s, estimated time : for one step = 0.9s, remaining = 83.6s
-step = 108, remaining = 92, times elasped = 95.2s, estimated time : for one step = 0.9s, remaining = 82.7s
-step = 109, remaining = 91, times elasped = 96.1s, estimated time : for one step = 0.9s, remaining = 81.8s
-step = 110, remaining = 90, times elasped = 97s, estimated time : for one step = 0.9s, remaining = 80.9s
-step = 111, remaining = 89, times elasped = 97.8s, estimated time : for one step = 0.9s, remaining = 80.1s
-step = 112, remaining = 88, times elasped = 98.7s, estimated time : for one step = 0.9s, remaining = 79.2s
-step = 113, remaining = 87, times elasped = 99.7s, estimated time : for one step = 0.9s, remaining = 78.3s
-step = 114, remaining = 86, times elasped = 100.6s, estimated time : for one step = 0.9s, remaining = 77.4s
-step = 115, remaining = 85, times elasped = 101.5s, estimated time : for one step = 0.9s, remaining = 76.6s
-step = 116, remaining = 84, times elasped = 102.4s, estimated time : for one step = 0.9s, remaining = 75.7s
-step = 117, remaining = 83, times elasped = 103.3s, estimated time : for one step = 0.9s, remaining = 74.8s
-step = 118, remaining = 82, times elasped = 104.2s, estimated time : for one step = 0.9s, remaining = 73.9s
-step = 119, remaining = 81, times elasped = 105.1s, estimated time : for one step = 0.9s, remaining = 73s
-step = 120, remaining = 80, times elasped = 105.9s, estimated time : for one step = 0.9s, remaining = 72.1s
-step = 121, remaining = 79, times elasped = 106.8s, estimated time : for one step = 0.9s, remaining = 71.2s
-step = 122, remaining = 78, times elasped = 107.7s, estimated time : for one step = 0.9s, remaining = 70.3s
-step = 123, remaining = 77, times elasped = 108.6s, estimated time : for one step = 0.9s, remaining = 69.4s
-step = 124, remaining = 76, times elasped = 109.6s, estimated time : for one step = 0.9s, remaining = 68.6s
-step = 125, remaining = 75, times elasped = 110.4s, estimated time : for one step = 0.9s, remaining = 67.7s
-step = 126, remaining = 74, times elasped = 111.3s, estimated time : for one step = 0.9s, remaining = 66.8s
-step = 127, remaining = 73, times elasped = 112.2s, estimated time : for one step = 0.9s, remaining = 65.9s
-step = 128, remaining = 72, times elasped = 113.1s, estimated time : for one step = 0.9s, remaining = 65s
-step = 129, remaining = 71, times elasped = 114s, estimated time : for one step = 0.9s, remaining = 64.1s
-step = 130, remaining = 70, times elasped = 114.8s, estimated time : for one step = 0.9s, remaining = 63.2s
-step = 131, remaining = 69, times elasped = 115.7s, estimated time : for one step = 0.9s, remaining = 62.3s
-step = 132, remaining = 68, times elasped = 116.6s, estimated time : for one step = 0.9s, remaining = 61.4s
-step = 133, remaining = 67, times elasped = 117.5s, estimated time : for one step = 0.9s, remaining = 60.5s
-step = 134, remaining = 66, times elasped = 118.4s, estimated time : for one step = 0.9s, remaining = 59.7s
-step = 135, remaining = 65, times elasped = 119.3s, estimated time : for one step = 0.9s, remaining = 58.8s
-step = 136, remaining = 64, times elasped = 120.2s, estimated time : for one step = 0.9s, remaining = 57.9s
-step = 137, remaining = 63, times elasped = 121.1s, estimated time : for one step = 0.9s, remaining = 57s
-step = 138, remaining = 62, times elasped = 122s, estimated time : for one step = 0.9s, remaining = 56.1s
-step = 139, remaining = 61, times elasped = 122.8s, estimated time : for one step = 0.9s, remaining = 55.2s
-step = 140, remaining = 60, times elasped = 123.7s, estimated time : for one step = 0.9s, remaining = 54.3s
-step = 141, remaining = 59, times elasped = 124.6s, estimated time : for one step = 0.9s, remaining = 53.4s
-step = 142, remaining = 58, times elasped = 125.5s, estimated time : for one step = 0.9s, remaining = 52.5s
-step = 143, remaining = 57, times elasped = 126.4s, estimated time : for one step = 0.9s, remaining = 51.6s
-step = 144, remaining = 56, times elasped = 127.3s, estimated time : for one step = 0.9s, remaining = 50.8s
-step = 145, remaining = 55, times elasped = 128.2s, estimated time : for one step = 0.9s, remaining = 49.9s
-step = 146, remaining = 54, times elasped = 129.1s, estimated time : for one step = 0.9s, remaining = 49s
-step = 147, remaining = 53, times elasped = 130s, estimated time : for one step = 0.9s, remaining = 48.1s
-step = 148, remaining = 52, times elasped = 130.9s, estimated time : for one step = 0.9s, remaining = 47.2s
-step = 149, remaining = 51, times elasped = 131.8s, estimated time : for one step = 0.9s, remaining = 46.3s
-step = 150, remaining = 50, times elasped = 132.6s, estimated time : for one step = 0.9s, remaining = 45.4s
-step = 151, remaining = 49, times elasped = 133.5s, estimated time : for one step = 0.9s, remaining = 44.5s
-step = 152, remaining = 48, times elasped = 134.4s, estimated time : for one step = 0.9s, remaining = 43.6s
-step = 153, remaining = 47, times elasped = 135.3s, estimated time : for one step = 0.9s, remaining = 42.7s
-step = 154, remaining = 46, times elasped = 136.3s, estimated time : for one step = 0.9s, remaining = 41.9s
-step = 155, remaining = 45, times elasped = 137.1s, estimated time : for one step = 0.9s, remaining = 41s
-step = 156, remaining = 44, times elasped = 138s, estimated time : for one step = 0.9s, remaining = 40.1s
-step = 157, remaining = 43, times elasped = 138.9s, estimated time : for one step = 0.9s, remaining = 39.2s
-step = 158, remaining = 42, times elasped = 139.8s, estimated time : for one step = 0.9s, remaining = 38.3s
-step = 159, remaining = 41, times elasped = 140.7s, estimated time : for one step = 0.9s, remaining = 37.4s
-step = 160, remaining = 40, times elasped = 141.5s, estimated time : for one step = 0.9s, remaining = 36.5s
-step = 161, remaining = 39, times elasped = 142.4s, estimated time : for one step = 0.9s, remaining = 35.6s
-step = 162, remaining = 38, times elasped = 143.3s, estimated time : for one step = 0.9s, remaining = 34.7s
-step = 163, remaining = 37, times elasped = 144.2s, estimated time : for one step = 0.9s, remaining = 33.8s
-step = 164, remaining = 36, times elasped = 145.1s, estimated time : for one step = 0.9s, remaining = 32.9s
-step = 165, remaining = 35, times elasped = 146.1s, estimated time : for one step = 0.9s, remaining = 32.1s
-step = 166, remaining = 34, times elasped = 146.9s, estimated time : for one step = 0.9s, remaining = 31.2s
-step = 167, remaining = 33, times elasped = 147.8s, estimated time : for one step = 0.9s, remaining = 30.3s
-step = 168, remaining = 32, times elasped = 148.7s, estimated time : for one step = 0.9s, remaining = 29.4s
-step = 169, remaining = 31, times elasped = 149.6s, estimated time : for one step = 0.9s, remaining = 28.5s
-step = 170, remaining = 30, times elasped = 150.5s, estimated time : for one step = 0.9s, remaining = 27.6s
-step = 171, remaining = 29, times elasped = 151.4s, estimated time : for one step = 0.9s, remaining = 26.7s
-step = 172, remaining = 28, times elasped = 152.2s, estimated time : for one step = 0.9s, remaining = 25.8s
-step = 173, remaining = 27, times elasped = 153.1s, estimated time : for one step = 0.9s, remaining = 24.9s
-step = 174, remaining = 26, times elasped = 154s, estimated time : for one step = 0.9s, remaining = 24s
-step = 175, remaining = 25, times elasped = 155s, estimated time : for one step = 0.9s, remaining = 23.2s
-step = 176, remaining = 24, times elasped = 155.9s, estimated time : for one step = 0.9s, remaining = 22.3s
-step = 177, remaining = 23, times elasped = 156.7s, estimated time : for one step = 0.9s, remaining = 21.4s
-step = 178, remaining = 22, times elasped = 157.6s, estimated time : for one step = 0.9s, remaining = 20.5s
-step = 179, remaining = 21, times elasped = 158.5s, estimated time : for one step = 0.9s, remaining = 19.6s
-step = 180, remaining = 20, times elasped = 159.4s, estimated time : for one step = 0.9s, remaining = 18.7s
-step = 181, remaining = 19, times elasped = 160.3s, estimated time : for one step = 0.9s, remaining = 17.8s
-step = 182, remaining = 18, times elasped = 161.2s, estimated time : for one step = 0.9s, remaining = 16.9s
-step = 183, remaining = 17, times elasped = 162.1s, estimated time : for one step = 0.9s, remaining = 16s
-step = 184, remaining = 16, times elasped = 163s, estimated time : for one step = 0.9s, remaining = 15.1s
-step = 185, remaining = 15, times elasped = 163.9s, estimated time : for one step = 0.9s, remaining = 14.3s
-step = 186, remaining = 14, times elasped = 164.8s, estimated time : for one step = 0.9s, remaining = 13.4s
-step = 187, remaining = 13, times elasped = 165.7s, estimated time : for one step = 0.9s, remaining = 12.5s
-step = 188, remaining = 12, times elasped = 166.6s, estimated time : for one step = 0.9s, remaining = 11.6s
-step = 189, remaining = 11, times elasped = 167.4s, estimated time : for one step = 0.9s, remaining = 10.7s
-step = 190, remaining = 10, times elasped = 168.3s, estimated time : for one step = 0.9s, remaining = 9.8s
-step = 191, remaining = 9, times elasped = 169.2s, estimated time : for one step = 0.9s, remaining = 8.9s
-step = 192, remaining = 8, times elasped = 170.2s, estimated time : for one step = 0.9s, remaining = 8s
-step = 193, remaining = 7, times elasped = 171.1s, estimated time : for one step = 0.9s, remaining = 7.1s
-step = 194, remaining = 6, times elasped = 171.9s, estimated time : for one step = 0.9s, remaining = 6.2s
-step = 195, remaining = 5, times elasped = 173.1s, estimated time : for one step = 0.9s, remaining = 5.4s
-step = 196, remaining = 4, times elasped = 174.1s, estimated time : for one step = 0.9s, remaining = 4.5s
-step = 197, remaining = 3, times elasped = 175s, estimated time : for one step = 0.9s, remaining = 3.6s
-step = 198, remaining = 2, times elasped = 175.9s, estimated time : for one step = 0.9s, remaining = 2.7s
-step = 199, remaining = 1, times elasped = 176.8s, estimated time : for one step = 0.9s, remaining = 1.8s
-step = 200, remaining = 0, times elasped = 177.6s, estimated time : for one step = 0.9s, remaining = 0.9s
+step = 6, remaining = 194, times elasped = 5.2s, estimated time : for one step = 1s, remaining = 203.6s
+step = 11, remaining = 189, times elasped = 10.8s, estimated time : for one step = 1.1s, remaining = 204.8s
+step = 16, remaining = 184, times elasped = 16.1s, estimated time : for one step = 1.1s, remaining = 199.1s
+step = 21, remaining = 179, times elasped = 21.5s, estimated time : for one step = 1.1s, remaining = 193.7s
+step = 26, remaining = 174, times elasped = 27s, estimated time : for one step = 1.1s, remaining = 189.2s
+step = 31, remaining = 169, times elasped = 32.4s, estimated time : for one step = 1.1s, remaining = 183.5s
+step = 36, remaining = 164, times elasped = 37.8s, estimated time : for one step = 1.1s, remaining = 178.1s
+step = 41, remaining = 159, times elasped = 43.2s, estimated time : for one step = 1.1s, remaining = 173s
+step = 46, remaining = 154, times elasped = 48.6s, estimated time : for one step = 1.1s, remaining = 167.4s
+step = 51, remaining = 149, times elasped = 54s, estimated time : for one step = 1.1s, remaining = 162s
+step = 56, remaining = 144, times elasped = 59.5s, estimated time : for one step = 1.1s, remaining = 156.9s
+step = 61, remaining = 139, times elasped = 64.9s, estimated time : for one step = 1.1s, remaining = 151.4s
+step = 66, remaining = 134, times elasped = 70.3s, estimated time : for one step = 1.1s, remaining = 145.9s
+step = 71, remaining = 129, times elasped = 75.7s, estimated time : for one step = 1.1s, remaining = 140.7s
+step = 76, remaining = 124, times elasped = 81.1s, estimated time : for one step = 1.1s, remaining = 135.2s
+step = 81, remaining = 119, times elasped = 86.5s, estimated time : for one step = 1.1s, remaining = 129.8s
+step = 86, remaining = 114, times elasped = 92s, estimated time : for one step = 1.1s, remaining = 124.5s
+step = 91, remaining = 109, times elasped = 97.4s, estimated time : for one step = 1.1s, remaining = 119s
+step = 96, remaining = 104, times elasped = 102.8s, estimated time : for one step = 1.1s, remaining = 113.6s
+step = 101, remaining = 99, times elasped = 108.2s, estimated time : for one step = 1.1s, remaining = 108.2s
+step = 106, remaining = 94, times elasped = 113.6s, estimated time : for one step = 1.1s, remaining = 102.8s
+step = 111, remaining = 89, times elasped = 119s, estimated time : for one step = 1.1s, remaining = 97.3s
+step = 116, remaining = 84, times elasped = 124.5s, estimated time : for one step = 1.1s, remaining = 92s
+step = 121, remaining = 79, times elasped = 129.8s, estimated time : for one step = 1.1s, remaining = 86.6s
+step = 126, remaining = 74, times elasped = 135.2s, estimated time : for one step = 1.1s, remaining = 81.1s
+step = 131, remaining = 69, times elasped = 140.7s, estimated time : for one step = 1.1s, remaining = 75.8s
+step = 136, remaining = 64, times elasped = 146.1s, estimated time : for one step = 1.1s, remaining = 70.3s
+step = 141, remaining = 59, times elasped = 151.4s, estimated time : for one step = 1.1s, remaining = 64.9s
+step = 146, remaining = 54, times elasped = 156.9s, estimated time : for one step = 1.1s, remaining = 59.5s
+step = 151, remaining = 49, times elasped = 162.3s, estimated time : for one step = 1.1s, remaining = 54.1s
+step = 156, remaining = 44, times elasped = 167.7s, estimated time : for one step = 1.1s, remaining = 48.7s
+step = 161, remaining = 39, times elasped = 173.2s, estimated time : for one step = 1.1s, remaining = 43.3s
+step = 166, remaining = 34, times elasped = 178.5s, estimated time : for one step = 1.1s, remaining = 37.9s
+step = 171, remaining = 29, times elasped = 183.9s, estimated time : for one step = 1.1s, remaining = 32.5s
+step = 176, remaining = 24, times elasped = 189.4s, estimated time : for one step = 1.1s, remaining = 27.1s
+step = 181, remaining = 19, times elasped = 194.7s, estimated time : for one step = 1.1s, remaining = 21.6s
+step = 186, remaining = 14, times elasped = 200.1s, estimated time : for one step = 1.1s, remaining = 16.2s
+step = 191, remaining = 9, times elasped = 205.6s, estimated time : for one step = 1.1s, remaining = 10.8s
+step = 196, remaining = 4, times elasped = 211s, estimated time : for one step = 1.1s, remaining = 5.4s
 --- SAEM ended ! ---
-output file: Longitudinal_nonlinear_mixed_model_SAEM.knit.md
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 19, remaining = 181, times elasped = 5.1s, estimated time : for one step = 0.3s, remaining = 51.9s
+step = 151, remaining = 49, times elasped = 10.1s, estimated time : for one step = 0.1s, remaining = 3.4s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
 
 
-Output created: Longitudinal_nonlinear_mixed_model_SAEM.html
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 6, remaining = 194, times elasped = 5.3s, estimated time : for one step = 1.1s, remaining = 205.1s
+step = 11, remaining = 189, times elasped = 10.9s, estimated time : for one step = 1.1s, remaining = 206.5s
+step = 16, remaining = 184, times elasped = 16.3s, estimated time : for one step = 1.1s, remaining = 201.2s
+step = 21, remaining = 179, times elasped = 21.8s, estimated time : for one step = 1.1s, remaining = 195.7s
+step = 26, remaining = 174, times elasped = 27.3s, estimated time : for one step = 1.1s, remaining = 191s
+step = 31, remaining = 169, times elasped = 32.7s, estimated time : for one step = 1.1s, remaining = 185.5s
+step = 36, remaining = 164, times elasped = 38.2s, estimated time : for one step = 1.1s, remaining = 179.9s
+step = 41, remaining = 159, times elasped = 43.7s, estimated time : for one step = 1.1s, remaining = 174.8s
+step = 46, remaining = 154, times elasped = 49.1s, estimated time : for one step = 1.1s, remaining = 169.2s
+step = 51, remaining = 149, times elasped = 54.6s, estimated time : for one step = 1.1s, remaining = 163.7s
+step = 55, remaining = 145, times elasped = 61.2s, estimated time : for one step = 1.1s, remaining = 165.5s
+step = 60, remaining = 140, times elasped = 67.1s, estimated time : for one step = 1.1s, remaining = 160.3s
+step = 65, remaining = 135, times elasped = 72.6s, estimated time : for one step = 1.1s, remaining = 154.2s
+step = 70, remaining = 130, times elasped = 78.1s, estimated time : for one step = 1.1s, remaining = 148.3s
+step = 75, remaining = 125, times elasped = 83.6s, estimated time : for one step = 1.1s, remaining = 142.3s
+step = 80, remaining = 120, times elasped = 89s, estimated time : for one step = 1.1s, remaining = 136.4s
+step = 85, remaining = 115, times elasped = 94.6s, estimated time : for one step = 1.1s, remaining = 130.7s
+step = 90, remaining = 110, times elasped = 100s, estimated time : for one step = 1.1s, remaining = 124.8s
+step = 95, remaining = 105, times elasped = 105.5s, estimated time : for one step = 1.1s, remaining = 119s
+step = 100, remaining = 100, times elasped = 111.1s, estimated time : for one step = 1.1s, remaining = 113.3s
+step = 105, remaining = 95, times elasped = 116.5s, estimated time : for one step = 1.1s, remaining = 107.5s
+step = 110, remaining = 90, times elasped = 122s, estimated time : for one step = 1.1s, remaining = 101.8s
+step = 115, remaining = 85, times elasped = 127.6s, estimated time : for one step = 1.1s, remaining = 96.2s
+step = 120, remaining = 80, times elasped = 133s, estimated time : for one step = 1.1s, remaining = 90.5s
+step = 125, remaining = 75, times elasped = 138.4s, estimated time : for one step = 1.1s, remaining = 84.9s
+step = 130, remaining = 70, times elasped = 144s, estimated time : for one step = 1.1s, remaining = 79.3s
+step = 135, remaining = 65, times elasped = 149.4s, estimated time : for one step = 1.1s, remaining = 73.6s
+step = 140, remaining = 60, times elasped = 154.9s, estimated time : for one step = 1.1s, remaining = 68s
+step = 145, remaining = 55, times elasped = 160.4s, estimated time : for one step = 1.1s, remaining = 62.4s
+step = 150, remaining = 50, times elasped = 165.8s, estimated time : for one step = 1.1s, remaining = 56.8s
+step = 155, remaining = 45, times elasped = 171.3s, estimated time : for one step = 1.1s, remaining = 51.2s
+step = 160, remaining = 40, times elasped = 176.8s, estimated time : for one step = 1.1s, remaining = 45.6s
+step = 165, remaining = 35, times elasped = 182.3s, estimated time : for one step = 1.1s, remaining = 40s
+step = 170, remaining = 30, times elasped = 187.8s, estimated time : for one step = 1.1s, remaining = 34.4s
+step = 175, remaining = 25, times elasped = 193.3s, estimated time : for one step = 1.1s, remaining = 28.9s
+step = 180, remaining = 20, times elasped = 198.7s, estimated time : for one step = 1.1s, remaining = 23.3s
+step = 185, remaining = 15, times elasped = 204.2s, estimated time : for one step = 1.1s, remaining = 17.8s
+step = 190, remaining = 10, times elasped = 209.7s, estimated time : for one step = 1.1s, remaining = 12.2s
+step = 195, remaining = 5, times elasped = 215.1s, estimated time : for one step = 1.1s, remaining = 6.7s
+step = 200, remaining = 0, times elasped = 220.6s, estimated time : for one step = 1.1s, remaining = 1.1s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 19, remaining = 181, times elasped = 5.2s, estimated time : for one step = 0.3s, remaining = 52.2s
+step = 149, remaining = 51, times elasped = 10.2s, estimated time : for one step = 0.1s, remaining = 3.6s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 6, remaining = 194, times elasped = 5s, estimated time : for one step = 1s, remaining = 195.4s
+step = 11, remaining = 189, times elasped = 10.3s, estimated time : for one step = 1s, remaining = 195.3s
+step = 16, remaining = 184, times elasped = 15.4s, estimated time : for one step = 1s, remaining = 190.2s
+step = 21, remaining = 179, times elasped = 20.6s, estimated time : for one step = 1s, remaining = 185.1s
+step = 26, remaining = 174, times elasped = 25.8s, estimated time : for one step = 1s, remaining = 180.6s
+step = 31, remaining = 169, times elasped = 30.9s, estimated time : for one step = 1s, remaining = 175.1s
+step = 36, remaining = 164, times elasped = 36s, estimated time : for one step = 1s, remaining = 170s
+step = 41, remaining = 159, times elasped = 41.2s, estimated time : for one step = 1s, remaining = 165s
+step = 46, remaining = 154, times elasped = 46.4s, estimated time : for one step = 1s, remaining = 159.7s
+step = 51, remaining = 149, times elasped = 51.5s, estimated time : for one step = 1s, remaining = 154.5s
+step = 56, remaining = 144, times elasped = 56.7s, estimated time : for one step = 1s, remaining = 149.4s
+step = 61, remaining = 139, times elasped = 61.8s, estimated time : for one step = 1s, remaining = 144.2s
+step = 66, remaining = 134, times elasped = 66.9s, estimated time : for one step = 1s, remaining = 139s
+step = 71, remaining = 129, times elasped = 72.1s, estimated time : for one step = 1s, remaining = 133.9s
+step = 76, remaining = 124, times elasped = 77.2s, estimated time : for one step = 1s, remaining = 128.7s
+step = 81, remaining = 119, times elasped = 82.3s, estimated time : for one step = 1s, remaining = 123.5s
+step = 86, remaining = 114, times elasped = 87.6s, estimated time : for one step = 1s, remaining = 118.4s
+step = 91, remaining = 109, times elasped = 92.6s, estimated time : for one step = 1s, remaining = 113.2s
+step = 96, remaining = 104, times elasped = 97.7s, estimated time : for one step = 1s, remaining = 108s
+step = 101, remaining = 99, times elasped = 102.9s, estimated time : for one step = 1s, remaining = 102.9s
+step = 106, remaining = 94, times elasped = 108s, estimated time : for one step = 1s, remaining = 97.7s
+step = 111, remaining = 89, times elasped = 113.2s, estimated time : for one step = 1s, remaining = 92.6s
+step = 116, remaining = 84, times elasped = 118.3s, estimated time : for one step = 1s, remaining = 87.5s
+step = 121, remaining = 79, times elasped = 123.4s, estimated time : for one step = 1s, remaining = 82.3s
+step = 126, remaining = 74, times elasped = 128.5s, estimated time : for one step = 1s, remaining = 77.1s
+step = 131, remaining = 69, times elasped = 133.7s, estimated time : for one step = 1s, remaining = 72s
+step = 136, remaining = 64, times elasped = 138.8s, estimated time : for one step = 1s, remaining = 66.8s
+step = 141, remaining = 59, times elasped = 143.9s, estimated time : for one step = 1s, remaining = 61.7s
+step = 146, remaining = 54, times elasped = 149.1s, estimated time : for one step = 1s, remaining = 56.6s
+step = 151, remaining = 49, times elasped = 154.2s, estimated time : for one step = 1s, remaining = 51.4s
+step = 156, remaining = 44, times elasped = 159.3s, estimated time : for one step = 1s, remaining = 46.3s
+step = 161, remaining = 39, times elasped = 164.5s, estimated time : for one step = 1s, remaining = 41.1s
+step = 166, remaining = 34, times elasped = 169.6s, estimated time : for one step = 1s, remaining = 36s
+step = 171, remaining = 29, times elasped = 174.7s, estimated time : for one step = 1s, remaining = 30.8s
+step = 176, remaining = 24, times elasped = 179.9s, estimated time : for one step = 1s, remaining = 25.7s
+step = 181, remaining = 19, times elasped = 185s, estimated time : for one step = 1s, remaining = 20.6s
+step = 186, remaining = 14, times elasped = 190.1s, estimated time : for one step = 1s, remaining = 15.4s
+step = 191, remaining = 9, times elasped = 195.3s, estimated time : for one step = 1s, remaining = 10.3s
+step = 196, remaining = 4, times elasped = 200.4s, estimated time : for one step = 1s, remaining = 5.1s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 20, remaining = 180, times elasped = 5s, estimated time : for one step = 0.3s, remaining = 47.9s
+step = 170, remaining = 30, times elasped = 10s, estimated time : for one step = 0.1s, remaining = 1.8s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 6, remaining = 194, times elasped = 5.2s, estimated time : for one step = 1s, remaining = 203.6s
+step = 11, remaining = 189, times elasped = 10.7s, estimated time : for one step = 1.1s, remaining = 203.7s
+step = 16, remaining = 184, times elasped = 16s, estimated time : for one step = 1.1s, remaining = 198s
+step = 21, remaining = 179, times elasped = 21.4s, estimated time : for one step = 1.1s, remaining = 192.7s
+step = 26, remaining = 174, times elasped = 26.9s, estimated time : for one step = 1.1s, remaining = 188s
+step = 31, remaining = 169, times elasped = 32.2s, estimated time : for one step = 1.1s, remaining = 182.3s
+step = 36, remaining = 164, times elasped = 37.5s, estimated time : for one step = 1.1s, remaining = 176.9s
+step = 41, remaining = 159, times elasped = 43s, estimated time : for one step = 1.1s, remaining = 171.8s
+step = 46, remaining = 154, times elasped = 48.3s, estimated time : for one step = 1.1s, remaining = 166.3s
+step = 51, remaining = 149, times elasped = 53.6s, estimated time : for one step = 1.1s, remaining = 160.9s
+step = 56, remaining = 144, times elasped = 59s, estimated time : for one step = 1.1s, remaining = 155.7s
+step = 61, remaining = 139, times elasped = 64.4s, estimated time : for one step = 1.1s, remaining = 150.3s
+step = 66, remaining = 134, times elasped = 69.7s, estimated time : for one step = 1.1s, remaining = 144.8s
+step = 71, remaining = 129, times elasped = 75.2s, estimated time : for one step = 1.1s, remaining = 139.6s
+step = 76, remaining = 124, times elasped = 80.5s, estimated time : for one step = 1.1s, remaining = 134.1s
+step = 81, remaining = 119, times elasped = 85.8s, estimated time : for one step = 1.1s, remaining = 128.8s
+step = 86, remaining = 114, times elasped = 91.3s, estimated time : for one step = 1.1s, remaining = 123.5s
+step = 91, remaining = 109, times elasped = 96.6s, estimated time : for one step = 1.1s, remaining = 118.1s
+step = 96, remaining = 104, times elasped = 102s, estimated time : for one step = 1.1s, remaining = 112.7s
+step = 101, remaining = 99, times elasped = 107.4s, estimated time : for one step = 1.1s, remaining = 107.4s
+step = 106, remaining = 94, times elasped = 112.7s, estimated time : for one step = 1.1s, remaining = 102s
+step = 111, remaining = 89, times elasped = 118.1s, estimated time : for one step = 1.1s, remaining = 96.6s
+step = 116, remaining = 84, times elasped = 123.5s, estimated time : for one step = 1.1s, remaining = 91.3s
+step = 121, remaining = 79, times elasped = 128.8s, estimated time : for one step = 1.1s, remaining = 85.9s
+step = 126, remaining = 74, times elasped = 134.2s, estimated time : for one step = 1.1s, remaining = 80.5s
+step = 131, remaining = 69, times elasped = 139.6s, estimated time : for one step = 1.1s, remaining = 75.2s
+step = 136, remaining = 64, times elasped = 144.9s, estimated time : for one step = 1.1s, remaining = 69.8s
+step = 141, remaining = 59, times elasped = 150.3s, estimated time : for one step = 1.1s, remaining = 64.4s
+step = 146, remaining = 54, times elasped = 155.7s, estimated time : for one step = 1.1s, remaining = 59.1s
+step = 151, remaining = 49, times elasped = 161.1s, estimated time : for one step = 1.1s, remaining = 53.7s
+step = 156, remaining = 44, times elasped = 166.4s, estimated time : for one step = 1.1s, remaining = 48.3s
+step = 161, remaining = 39, times elasped = 171.8s, estimated time : for one step = 1.1s, remaining = 43s
+step = 166, remaining = 34, times elasped = 177.1s, estimated time : for one step = 1.1s, remaining = 37.6s
+step = 171, remaining = 29, times elasped = 182.5s, estimated time : for one step = 1.1s, remaining = 32.2s
+step = 176, remaining = 24, times elasped = 188.1s, estimated time : for one step = 1.1s, remaining = 26.9s
+step = 181, remaining = 19, times elasped = 193.4s, estimated time : for one step = 1.1s, remaining = 21.5s
+step = 186, remaining = 14, times elasped = 198.7s, estimated time : for one step = 1.1s, remaining = 16.1s
+step = 191, remaining = 9, times elasped = 204.1s, estimated time : for one step = 1.1s, remaining = 10.7s
+step = 196, remaining = 4, times elasped = 209.4s, estimated time : for one step = 1.1s, remaining = 5.4s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 19, remaining = 181, times elasped = 5.1s, estimated time : for one step = 0.3s, remaining = 51.5s
+step = 151, remaining = 49, times elasped = 10.1s, estimated time : for one step = 0.1s, remaining = 3.4s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 6, remaining = 194, times elasped = 5.8s, estimated time : for one step = 1.2s, remaining = 225.8s
+step = 11, remaining = 189, times elasped = 11.8s, estimated time : for one step = 1.2s, remaining = 224.6s
+step = 16, remaining = 184, times elasped = 17.7s, estimated time : for one step = 1.2s, remaining = 218.4s
+step = 21, remaining = 179, times elasped = 23.7s, estimated time : for one step = 1.2s, remaining = 213.6s
+step = 26, remaining = 174, times elasped = 29.6s, estimated time : for one step = 1.2s, remaining = 207.3s
+step = 31, remaining = 169, times elasped = 35.5s, estimated time : for one step = 1.2s, remaining = 201.2s
+step = 36, remaining = 164, times elasped = 41.5s, estimated time : for one step = 1.2s, remaining = 195.5s
+step = 41, remaining = 159, times elasped = 47.4s, estimated time : for one step = 1.2s, remaining = 189.4s
+step = 46, remaining = 154, times elasped = 53.2s, estimated time : for one step = 1.2s, remaining = 183.4s
+step = 51, remaining = 149, times elasped = 59.2s, estimated time : for one step = 1.2s, remaining = 177.6s
+step = 56, remaining = 144, times elasped = 65.1s, estimated time : for one step = 1.2s, remaining = 171.6s
+step = 61, remaining = 139, times elasped = 71s, estimated time : for one step = 1.2s, remaining = 165.7s
+step = 66, remaining = 134, times elasped = 77s, estimated time : for one step = 1.2s, remaining = 159.8s
+step = 71, remaining = 129, times elasped = 82.8s, estimated time : for one step = 1.2s, remaining = 153.9s
+step = 76, remaining = 124, times elasped = 88.8s, estimated time : for one step = 1.2s, remaining = 148s
+step = 81, remaining = 119, times elasped = 94.7s, estimated time : for one step = 1.2s, remaining = 142s
+step = 86, remaining = 114, times elasped = 100.6s, estimated time : for one step = 1.2s, remaining = 136.1s
+step = 91, remaining = 109, times elasped = 106.6s, estimated time : for one step = 1.2s, remaining = 130.3s
+step = 96, remaining = 104, times elasped = 112.5s, estimated time : for one step = 1.2s, remaining = 124.3s
+step = 101, remaining = 99, times elasped = 118.4s, estimated time : for one step = 1.2s, remaining = 118.4s
+step = 106, remaining = 94, times elasped = 124.4s, estimated time : for one step = 1.2s, remaining = 112.5s
+step = 111, remaining = 89, times elasped = 130.3s, estimated time : for one step = 1.2s, remaining = 106.6s
+step = 116, remaining = 84, times elasped = 136.3s, estimated time : for one step = 1.2s, remaining = 100.7s
+step = 121, remaining = 79, times elasped = 142.1s, estimated time : for one step = 1.2s, remaining = 94.8s
+step = 126, remaining = 74, times elasped = 148.1s, estimated time : for one step = 1.2s, remaining = 88.8s
+step = 131, remaining = 69, times elasped = 154.1s, estimated time : for one step = 1.2s, remaining = 83s
+step = 136, remaining = 64, times elasped = 159.9s, estimated time : for one step = 1.2s, remaining = 77s
+step = 141, remaining = 59, times elasped = 165.8s, estimated time : for one step = 1.2s, remaining = 71.1s
+step = 146, remaining = 54, times elasped = 171.8s, estimated time : for one step = 1.2s, remaining = 65.2s
+step = 151, remaining = 49, times elasped = 177.7s, estimated time : for one step = 1.2s, remaining = 59.2s
+step = 156, remaining = 44, times elasped = 183.7s, estimated time : for one step = 1.2s, remaining = 53.3s
+step = 161, remaining = 39, times elasped = 189.5s, estimated time : for one step = 1.2s, remaining = 47.4s
+step = 166, remaining = 34, times elasped = 195.4s, estimated time : for one step = 1.2s, remaining = 41.5s
+step = 171, remaining = 29, times elasped = 201.4s, estimated time : for one step = 1.2s, remaining = 35.5s
+step = 176, remaining = 24, times elasped = 207.3s, estimated time : for one step = 1.2s, remaining = 29.6s
+step = 181, remaining = 19, times elasped = 213.1s, estimated time : for one step = 1.2s, remaining = 23.7s
+step = 186, remaining = 14, times elasped = 219.1s, estimated time : for one step = 1.2s, remaining = 17.8s
+step = 191, remaining = 9, times elasped = 225s, estimated time : for one step = 1.2s, remaining = 11.8s
+step = 196, remaining = 4, times elasped = 231s, estimated time : for one step = 1.2s, remaining = 5.9s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 20, remaining = 180, times elasped = 5.2s, estimated time : for one step = 0.3s, remaining = 49.6s
+step = 169, remaining = 31, times elasped = 10.2s, estimated time : for one step = 0.1s, remaining = 2s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 5, remaining = 195, times elasped = 5.2s, estimated time : for one step = 1.3s, remaining = 253.3s
+step = 9, remaining = 191, times elasped = 10.8s, estimated time : for one step = 1.3s, remaining = 259s
+step = 13, remaining = 187, times elasped = 16.3s, estimated time : for one step = 1.4s, remaining = 254.9s
+step = 17, remaining = 183, times elasped = 21.8s, estimated time : for one step = 1.4s, remaining = 250.5s
+step = 21, remaining = 179, times elasped = 27.3s, estimated time : for one step = 1.4s, remaining = 246s
+step = 25, remaining = 175, times elasped = 32.8s, estimated time : for one step = 1.4s, remaining = 240.5s
+step = 29, remaining = 171, times elasped = 38.3s, estimated time : for one step = 1.4s, remaining = 235.3s
+step = 33, remaining = 167, times elasped = 43.9s, estimated time : for one step = 1.4s, remaining = 230.2s
+step = 37, remaining = 163, times elasped = 49.3s, estimated time : for one step = 1.4s, remaining = 224.7s
+step = 41, remaining = 159, times elasped = 54.8s, estimated time : for one step = 1.4s, remaining = 219.2s
+step = 45, remaining = 155, times elasped = 60.3s, estimated time : for one step = 1.4s, remaining = 213.9s
+step = 49, remaining = 151, times elasped = 65.8s, estimated time : for one step = 1.4s, remaining = 208.4s
+step = 53, remaining = 147, times elasped = 71.3s, estimated time : for one step = 1.4s, remaining = 202.9s
+step = 57, remaining = 143, times elasped = 76.8s, estimated time : for one step = 1.4s, remaining = 197.5s
+step = 61, remaining = 139, times elasped = 82.3s, estimated time : for one step = 1.4s, remaining = 192s
+step = 65, remaining = 135, times elasped = 87.8s, estimated time : for one step = 1.4s, remaining = 186.7s
+step = 69, remaining = 131, times elasped = 93.3s, estimated time : for one step = 1.4s, remaining = 181.1s
+step = 73, remaining = 127, times elasped = 98.8s, estimated time : for one step = 1.4s, remaining = 175.6s
+step = 77, remaining = 123, times elasped = 104.3s, estimated time : for one step = 1.4s, remaining = 170.2s
+step = 81, remaining = 119, times elasped = 109.8s, estimated time : for one step = 1.4s, remaining = 164.7s
+step = 85, remaining = 115, times elasped = 115.3s, estimated time : for one step = 1.4s, remaining = 159.2s
+step = 89, remaining = 111, times elasped = 120.8s, estimated time : for one step = 1.4s, remaining = 153.8s
+step = 93, remaining = 107, times elasped = 126.3s, estimated time : for one step = 1.4s, remaining = 148.2s
+step = 97, remaining = 103, times elasped = 131.7s, estimated time : for one step = 1.4s, remaining = 142.7s
+step = 101, remaining = 99, times elasped = 137.3s, estimated time : for one step = 1.4s, remaining = 137.3s
+step = 105, remaining = 95, times elasped = 142.8s, estimated time : for one step = 1.4s, remaining = 131.8s
+step = 109, remaining = 91, times elasped = 148.2s, estimated time : for one step = 1.4s, remaining = 126.3s
+step = 113, remaining = 87, times elasped = 153.8s, estimated time : for one step = 1.4s, remaining = 120.8s
+step = 117, remaining = 83, times elasped = 159.2s, estimated time : for one step = 1.4s, remaining = 115.3s
+step = 121, remaining = 79, times elasped = 164.7s, estimated time : for one step = 1.4s, remaining = 109.8s
+step = 125, remaining = 75, times elasped = 170.2s, estimated time : for one step = 1.4s, remaining = 104.3s
+step = 129, remaining = 71, times elasped = 175.7s, estimated time : for one step = 1.4s, remaining = 98.8s
+step = 133, remaining = 67, times elasped = 181.2s, estimated time : for one step = 1.4s, remaining = 93.3s
+step = 137, remaining = 63, times elasped = 186.7s, estimated time : for one step = 1.4s, remaining = 87.9s
+step = 141, remaining = 59, times elasped = 192.2s, estimated time : for one step = 1.4s, remaining = 82.4s
+step = 145, remaining = 55, times elasped = 197.7s, estimated time : for one step = 1.4s, remaining = 76.9s
+step = 149, remaining = 51, times elasped = 203.2s, estimated time : for one step = 1.4s, remaining = 71.4s
+step = 153, remaining = 47, times elasped = 208.7s, estimated time : for one step = 1.4s, remaining = 65.9s
+step = 157, remaining = 43, times elasped = 214.1s, estimated time : for one step = 1.4s, remaining = 60.4s
+step = 161, remaining = 39, times elasped = 219.7s, estimated time : for one step = 1.4s, remaining = 54.9s
+step = 165, remaining = 35, times elasped = 225.1s, estimated time : for one step = 1.4s, remaining = 49.4s
+step = 169, remaining = 31, times elasped = 230.6s, estimated time : for one step = 1.4s, remaining = 43.9s
+step = 173, remaining = 27, times elasped = 236.2s, estimated time : for one step = 1.4s, remaining = 38.4s
+step = 177, remaining = 23, times elasped = 241.6s, estimated time : for one step = 1.4s, remaining = 32.9s
+step = 181, remaining = 19, times elasped = 247.2s, estimated time : for one step = 1.4s, remaining = 27.5s
+step = 185, remaining = 15, times elasped = 252.7s, estimated time : for one step = 1.4s, remaining = 22s
+step = 189, remaining = 11, times elasped = 258.1s, estimated time : for one step = 1.4s, remaining = 16.5s
+step = 193, remaining = 7, times elasped = 263.7s, estimated time : for one step = 1.4s, remaining = 11s
+step = 197, remaining = 3, times elasped = 269.1s, estimated time : for one step = 1.4s, remaining = 5.5s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 20, remaining = 180, times elasped = 5.2s, estimated time : for one step = 0.3s, remaining = 49.3s
+step = 167, remaining = 33, times elasped = 10.2s, estimated time : for one step = 0.1s, remaining = 2.1s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 3, remaining = 197, times elasped = 9.6s, estimated time : for one step = 4.8s, remaining = 947.4s
+step = 4, remaining = 196, times elasped = 18s, estimated time : for one step = 6s, remaining = 1185.3s
+step = 5, remaining = 195, times elasped = 26.6s, estimated time : for one step = 6.6s, remaining = 1301.9s
+step = 6, remaining = 194, times elasped = 35s, estimated time : for one step = 7s, remaining = 1366.6s
+step = 7, remaining = 193, times elasped = 43.5s, estimated time : for one step = 7.2s, remaining = 1404.9s
+step = 8, remaining = 192, times elasped = 51.9s, estimated time : for one step = 7.4s, remaining = 1432.1s
+step = 9, remaining = 191, times elasped = 60.4s, estimated time : for one step = 7.6s, remaining = 1450.1s
+step = 10, remaining = 190, times elasped = 68.8s, estimated time : for one step = 7.6s, remaining = 1461.1s
+step = 11, remaining = 189, times elasped = 77.3s, estimated time : for one step = 7.7s, remaining = 1468.9s
+step = 12, remaining = 188, times elasped = 85.8s, estimated time : for one step = 7.8s, remaining = 1474.5s
+step = 13, remaining = 187, times elasped = 94.2s, estimated time : for one step = 7.8s, remaining = 1475.6s
+step = 14, remaining = 186, times elasped = 102.7s, estimated time : for one step = 7.9s, remaining = 1476.7s
+step = 15, remaining = 185, times elasped = 111.1s, estimated time : for one step = 7.9s, remaining = 1476.4s
+step = 16, remaining = 184, times elasped = 119.6s, estimated time : for one step = 8s, remaining = 1474.7s
+step = 17, remaining = 183, times elasped = 128s, estimated time : for one step = 8s, remaining = 1472.5s
+step = 18, remaining = 182, times elasped = 136.5s, estimated time : for one step = 8s, remaining = 1469.7s
+step = 19, remaining = 181, times elasped = 144.9s, estimated time : for one step = 8.1s, remaining = 1465.2s
+step = 20, remaining = 180, times elasped = 153.4s, estimated time : for one step = 8.1s, remaining = 1461.2s
+step = 21, remaining = 179, times elasped = 161.9s, estimated time : for one step = 8.1s, remaining = 1456.8s
+step = 22, remaining = 178, times elasped = 170.2s, estimated time : for one step = 8.1s, remaining = 1451.2s
+step = 23, remaining = 177, times elasped = 178.7s, estimated time : for one step = 8.1s, remaining = 1445.9s
+step = 24, remaining = 176, times elasped = 187.2s, estimated time : for one step = 8.1s, remaining = 1440.9s
+step = 25, remaining = 175, times elasped = 195.6s, estimated time : for one step = 8.2s, remaining = 1434.7s
+step = 26, remaining = 174, times elasped = 204.1s, estimated time : for one step = 8.2s, remaining = 1428.7s
+step = 27, remaining = 173, times elasped = 212.6s, estimated time : for one step = 8.2s, remaining = 1422.5s
+step = 28, remaining = 172, times elasped = 220.9s, estimated time : for one step = 8.2s, remaining = 1415.7s
+step = 29, remaining = 171, times elasped = 229.4s, estimated time : for one step = 8.2s, remaining = 1409.2s
+step = 30, remaining = 170, times elasped = 237.8s, estimated time : for one step = 8.2s, remaining = 1402.1s
+step = 31, remaining = 169, times elasped = 246.2s, estimated time : for one step = 8.2s, remaining = 1395.4s
+step = 32, remaining = 168, times elasped = 254.7s, estimated time : for one step = 8.2s, remaining = 1388.6s
+step = 33, remaining = 167, times elasped = 263.1s, estimated time : for one step = 8.2s, remaining = 1381.4s
+step = 34, remaining = 166, times elasped = 271.6s, estimated time : for one step = 8.2s, remaining = 1374.4s
+step = 35, remaining = 165, times elasped = 280s, estimated time : for one step = 8.2s, remaining = 1367.2s
+step = 36, remaining = 164, times elasped = 288.4s, estimated time : for one step = 8.2s, remaining = 1359.6s
+step = 37, remaining = 163, times elasped = 296.9s, estimated time : for one step = 8.2s, remaining = 1352.4s
+step = 38, remaining = 162, times elasped = 305.3s, estimated time : for one step = 8.3s, remaining = 1345.1s
+step = 39, remaining = 161, times elasped = 313.7s, estimated time : for one step = 8.3s, remaining = 1337.5s
+step = 40, remaining = 160, times elasped = 322.2s, estimated time : for one step = 8.3s, remaining = 1330.1s
+step = 41, remaining = 159, times elasped = 330.7s, estimated time : for one step = 8.3s, remaining = 1322.7s
+step = 42, remaining = 158, times elasped = 339s, estimated time : for one step = 8.3s, remaining = 1314.9s
+step = 43, remaining = 157, times elasped = 347.5s, estimated time : for one step = 8.3s, remaining = 1307.3s
+step = 44, remaining = 156, times elasped = 356s, estimated time : for one step = 8.3s, remaining = 1299.7s
+step = 45, remaining = 155, times elasped = 364.4s, estimated time : for one step = 8.3s, remaining = 1291.8s
+step = 46, remaining = 154, times elasped = 372.8s, estimated time : for one step = 8.3s, remaining = 1284.1s
+step = 47, remaining = 153, times elasped = 381.5s, estimated time : for one step = 8.3s, remaining = 1277.1s
+step = 48, remaining = 152, times elasped = 390s, estimated time : for one step = 8.3s, remaining = 1269.6s
+step = 49, remaining = 151, times elasped = 398.7s, estimated time : for one step = 8.3s, remaining = 1262.5s
+step = 50, remaining = 150, times elasped = 407.3s, estimated time : for one step = 8.3s, remaining = 1255.1s
+step = 51, remaining = 149, times elasped = 415.9s, estimated time : for one step = 8.3s, remaining = 1247.7s
+step = 52, remaining = 148, times elasped = 424.6s, estimated time : for one step = 8.3s, remaining = 1240.5s
+step = 53, remaining = 147, times elasped = 433.4s, estimated time : for one step = 8.3s, remaining = 1233.6s
+step = 54, remaining = 146, times elasped = 441.9s, estimated time : for one step = 8.3s, remaining = 1225.5s
+step = 55, remaining = 145, times elasped = 450.3s, estimated time : for one step = 8.3s, remaining = 1217.6s
+step = 56, remaining = 144, times elasped = 458.8s, estimated time : for one step = 8.3s, remaining = 1209.6s
+step = 57, remaining = 143, times elasped = 467.2s, estimated time : for one step = 8.3s, remaining = 1201.3s
+step = 58, remaining = 142, times elasped = 475.6s, estimated time : for one step = 8.3s, remaining = 1193.3s
+step = 59, remaining = 141, times elasped = 484.1s, estimated time : for one step = 8.3s, remaining = 1185.3s
+step = 60, remaining = 140, times elasped = 492.5s, estimated time : for one step = 8.3s, remaining = 1177s
+step = 61, remaining = 139, times elasped = 501s, estimated time : for one step = 8.3s, remaining = 1169s
+step = 62, remaining = 138, times elasped = 509.5s, estimated time : for one step = 8.4s, remaining = 1160.9s
+step = 63, remaining = 137, times elasped = 517.9s, estimated time : for one step = 8.4s, remaining = 1152.6s
+step = 64, remaining = 136, times elasped = 526.3s, estimated time : for one step = 8.4s, remaining = 1144.6s
+step = 65, remaining = 135, times elasped = 534.7s, estimated time : for one step = 8.4s, remaining = 1136.3s
+step = 66, remaining = 134, times elasped = 543.2s, estimated time : for one step = 8.4s, remaining = 1128.1s
+step = 67, remaining = 133, times elasped = 551.7s, estimated time : for one step = 8.4s, remaining = 1120.1s
+step = 68, remaining = 132, times elasped = 560.2s, estimated time : for one step = 8.4s, remaining = 1112s
+step = 69, remaining = 131, times elasped = 568.7s, estimated time : for one step = 8.4s, remaining = 1103.9s
+step = 70, remaining = 130, times elasped = 577.1s, estimated time : for one step = 8.4s, remaining = 1095.7s
+step = 71, remaining = 129, times elasped = 585.5s, estimated time : for one step = 8.4s, remaining = 1087.4s
+step = 72, remaining = 128, times elasped = 594s, estimated time : for one step = 8.4s, remaining = 1079.1s
+step = 73, remaining = 127, times elasped = 602.4s, estimated time : for one step = 8.4s, remaining = 1070.9s
+step = 74, remaining = 126, times elasped = 610.8s, estimated time : for one step = 8.4s, remaining = 1062.6s
+step = 75, remaining = 125, times elasped = 619.3s, estimated time : for one step = 8.4s, remaining = 1054.4s
+step = 76, remaining = 124, times elasped = 627.8s, estimated time : for one step = 8.4s, remaining = 1046.3s
+step = 77, remaining = 123, times elasped = 636.2s, estimated time : for one step = 8.4s, remaining = 1038s
+step = 78, remaining = 122, times elasped = 644.6s, estimated time : for one step = 8.4s, remaining = 1029.7s
+step = 79, remaining = 121, times elasped = 653.1s, estimated time : for one step = 8.4s, remaining = 1021.5s
+step = 80, remaining = 120, times elasped = 661.5s, estimated time : for one step = 8.4s, remaining = 1013.1s
+step = 81, remaining = 119, times elasped = 669.9s, estimated time : for one step = 8.4s, remaining = 1004.9s
+step = 82, remaining = 118, times elasped = 678.4s, estimated time : for one step = 8.4s, remaining = 996.7s
+step = 83, remaining = 117, times elasped = 686.8s, estimated time : for one step = 8.4s, remaining = 988.3s
+step = 84, remaining = 116, times elasped = 695.3s, estimated time : for one step = 8.4s, remaining = 980.1s
+step = 85, remaining = 115, times elasped = 703.7s, estimated time : for one step = 8.4s, remaining = 971.8s
+step = 86, remaining = 114, times elasped = 712.1s, estimated time : for one step = 8.4s, remaining = 963.4s
+step = 87, remaining = 113, times elasped = 720.6s, estimated time : for one step = 8.4s, remaining = 955.2s
+step = 88, remaining = 112, times elasped = 729.1s, estimated time : for one step = 8.4s, remaining = 947s
+step = 89, remaining = 111, times elasped = 737.5s, estimated time : for one step = 8.4s, remaining = 938.6s
+step = 90, remaining = 110, times elasped = 745.9s, estimated time : for one step = 8.4s, remaining = 930.3s
+step = 91, remaining = 109, times elasped = 754.4s, estimated time : for one step = 8.4s, remaining = 922.1s
+step = 92, remaining = 108, times elasped = 762.8s, estimated time : for one step = 8.4s, remaining = 913.7s
+step = 93, remaining = 107, times elasped = 771.2s, estimated time : for one step = 8.4s, remaining = 905.4s
+step = 94, remaining = 106, times elasped = 779.7s, estimated time : for one step = 8.4s, remaining = 897.1s
+step = 95, remaining = 105, times elasped = 788.1s, estimated time : for one step = 8.4s, remaining = 888.7s
+step = 96, remaining = 104, times elasped = 796.6s, estimated time : for one step = 8.4s, remaining = 880.4s
+step = 97, remaining = 103, times elasped = 805.1s, estimated time : for one step = 8.4s, remaining = 872.2s
+step = 98, remaining = 102, times elasped = 813.5s, estimated time : for one step = 8.4s, remaining = 863.8s
+step = 99, remaining = 101, times elasped = 821.9s, estimated time : for one step = 8.4s, remaining = 855.5s
+step = 100, remaining = 100, times elasped = 830.3s, estimated time : for one step = 8.4s, remaining = 847.1s
+step = 101, remaining = 99, times elasped = 838.8s, estimated time : for one step = 8.4s, remaining = 838.7s
+step = 102, remaining = 98, times elasped = 847.2s, estimated time : for one step = 8.4s, remaining = 830.4s
+step = 103, remaining = 97, times elasped = 855.6s, estimated time : for one step = 8.4s, remaining = 822.1s
+step = 104, remaining = 96, times elasped = 864.1s, estimated time : for one step = 8.4s, remaining = 813.7s
+step = 105, remaining = 95, times elasped = 872.5s, estimated time : for one step = 8.4s, remaining = 805.4s
+step = 106, remaining = 94, times elasped = 880.9s, estimated time : for one step = 8.4s, remaining = 797s
+step = 107, remaining = 93, times elasped = 889.4s, estimated time : for one step = 8.4s, remaining = 788.7s
+step = 108, remaining = 92, times elasped = 897.8s, estimated time : for one step = 8.4s, remaining = 780.4s
+step = 109, remaining = 91, times elasped = 906.2s, estimated time : for one step = 8.4s, remaining = 772s
+step = 110, remaining = 90, times elasped = 914.7s, estimated time : for one step = 8.4s, remaining = 763.6s
+step = 111, remaining = 89, times elasped = 923.2s, estimated time : for one step = 8.4s, remaining = 755.3s
+step = 112, remaining = 88, times elasped = 931.5s, estimated time : for one step = 8.4s, remaining = 746.9s
+step = 113, remaining = 87, times elasped = 940s, estimated time : for one step = 8.4s, remaining = 738.6s
+step = 114, remaining = 86, times elasped = 948.5s, estimated time : for one step = 8.4s, remaining = 730.2s
+step = 115, remaining = 85, times elasped = 956.8s, estimated time : for one step = 8.4s, remaining = 721.8s
+step = 116, remaining = 84, times elasped = 965.3s, estimated time : for one step = 8.4s, remaining = 713.5s
+step = 117, remaining = 83, times elasped = 973.8s, estimated time : for one step = 8.4s, remaining = 705.1s
+step = 118, remaining = 82, times elasped = 982.2s, estimated time : for one step = 8.4s, remaining = 696.8s
+step = 119, remaining = 81, times elasped = 990.7s, estimated time : for one step = 8.4s, remaining = 688.5s
+step = 120, remaining = 80, times elasped = 999.2s, estimated time : for one step = 8.4s, remaining = 680.2s
+step = 121, remaining = 79, times elasped = 1007.7s, estimated time : for one step = 8.4s, remaining = 671.8s
+step = 122, remaining = 78, times elasped = 1016.1s, estimated time : for one step = 8.4s, remaining = 663.4s
+step = 123, remaining = 77, times elasped = 1024.6s, estimated time : for one step = 8.4s, remaining = 655.1s
+step = 124, remaining = 76, times elasped = 1033s, estimated time : for one step = 8.4s, remaining = 646.7s
+step = 125, remaining = 75, times elasped = 1041.6s, estimated time : for one step = 8.4s, remaining = 638.4s
+step = 126, remaining = 74, times elasped = 1050.1s, estimated time : for one step = 8.4s, remaining = 630s
+step = 127, remaining = 73, times elasped = 1058.5s, estimated time : for one step = 8.4s, remaining = 621.6s
+step = 128, remaining = 72, times elasped = 1066.9s, estimated time : for one step = 8.4s, remaining = 613.3s
+step = 129, remaining = 71, times elasped = 1075.4s, estimated time : for one step = 8.4s, remaining = 604.9s
+step = 130, remaining = 70, times elasped = 1083.8s, estimated time : for one step = 8.4s, remaining = 596.5s
+step = 131, remaining = 69, times elasped = 1092.3s, estimated time : for one step = 8.4s, remaining = 588.2s
+step = 132, remaining = 68, times elasped = 1100.8s, estimated time : for one step = 8.4s, remaining = 579.8s
+step = 133, remaining = 67, times elasped = 1109.2s, estimated time : for one step = 8.4s, remaining = 571.4s
+step = 134, remaining = 66, times elasped = 1117.7s, estimated time : for one step = 8.4s, remaining = 563s
+step = 135, remaining = 65, times elasped = 1126.1s, estimated time : for one step = 8.4s, remaining = 554.7s
+step = 136, remaining = 64, times elasped = 1134.5s, estimated time : for one step = 8.4s, remaining = 546.2s
+step = 137, remaining = 63, times elasped = 1142.9s, estimated time : for one step = 8.4s, remaining = 537.9s
+step = 138, remaining = 62, times elasped = 1151.3s, estimated time : for one step = 8.4s, remaining = 529.4s
+step = 139, remaining = 61, times elasped = 1159.8s, estimated time : for one step = 8.4s, remaining = 521.1s
+step = 140, remaining = 60, times elasped = 1168.3s, estimated time : for one step = 8.4s, remaining = 512.7s
+step = 141, remaining = 59, times elasped = 1176.7s, estimated time : for one step = 8.4s, remaining = 504.3s
+step = 142, remaining = 58, times elasped = 1185.1s, estimated time : for one step = 8.4s, remaining = 495.9s
+step = 143, remaining = 57, times elasped = 1193.6s, estimated time : for one step = 8.4s, remaining = 487.5s
+step = 144, remaining = 56, times elasped = 1202s, estimated time : for one step = 8.4s, remaining = 479.1s
+step = 145, remaining = 55, times elasped = 1210.4s, estimated time : for one step = 8.4s, remaining = 470.7s
+step = 146, remaining = 54, times elasped = 1218.9s, estimated time : for one step = 8.4s, remaining = 462.4s
+step = 147, remaining = 53, times elasped = 1227.3s, estimated time : for one step = 8.4s, remaining = 454s
+step = 148, remaining = 52, times elasped = 1235.8s, estimated time : for one step = 8.4s, remaining = 445.6s
+step = 149, remaining = 51, times elasped = 1244.3s, estimated time : for one step = 8.4s, remaining = 437.2s
+step = 150, remaining = 50, times elasped = 1252.7s, estimated time : for one step = 8.4s, remaining = 428.8s
+step = 151, remaining = 49, times elasped = 1261.1s, estimated time : for one step = 8.4s, remaining = 420.4s
+step = 152, remaining = 48, times elasped = 1269.6s, estimated time : for one step = 8.4s, remaining = 412s
+step = 153, remaining = 47, times elasped = 1278s, estimated time : for one step = 8.4s, remaining = 403.6s
+step = 154, remaining = 46, times elasped = 1286.5s, estimated time : for one step = 8.4s, remaining = 395.2s
+step = 155, remaining = 45, times elasped = 1295s, estimated time : for one step = 8.4s, remaining = 386.8s
+step = 156, remaining = 44, times elasped = 1303.4s, estimated time : for one step = 8.4s, remaining = 378.4s
+step = 157, remaining = 43, times elasped = 1311.8s, estimated time : for one step = 8.4s, remaining = 370s
+step = 158, remaining = 42, times elasped = 1320.3s, estimated time : for one step = 8.4s, remaining = 361.6s
+step = 159, remaining = 41, times elasped = 1328.7s, estimated time : for one step = 8.4s, remaining = 353.2s
+step = 160, remaining = 40, times elasped = 1337.2s, estimated time : for one step = 8.4s, remaining = 344.8s
+step = 161, remaining = 39, times elasped = 1345.7s, estimated time : for one step = 8.4s, remaining = 336.4s
+step = 162, remaining = 38, times elasped = 1354.1s, estimated time : for one step = 8.4s, remaining = 328s
+step = 163, remaining = 37, times elasped = 1362.5s, estimated time : for one step = 8.4s, remaining = 319.6s
+step = 164, remaining = 36, times elasped = 1371s, estimated time : for one step = 8.4s, remaining = 311.2s
+step = 165, remaining = 35, times elasped = 1379.4s, estimated time : for one step = 8.4s, remaining = 302.8s
+step = 166, remaining = 34, times elasped = 1387.8s, estimated time : for one step = 8.4s, remaining = 294.4s
+step = 167, remaining = 33, times elasped = 1396.4s, estimated time : for one step = 8.4s, remaining = 286s
+step = 168, remaining = 32, times elasped = 1404.7s, estimated time : for one step = 8.4s, remaining = 277.6s
+step = 169, remaining = 31, times elasped = 1413.2s, estimated time : for one step = 8.4s, remaining = 269.2s
+step = 170, remaining = 30, times elasped = 1421.7s, estimated time : for one step = 8.4s, remaining = 260.8s
+step = 171, remaining = 29, times elasped = 1430s, estimated time : for one step = 8.4s, remaining = 252.4s
+step = 172, remaining = 28, times elasped = 1438.5s, estimated time : for one step = 8.4s, remaining = 244s
+step = 173, remaining = 27, times elasped = 1446.9s, estimated time : for one step = 8.4s, remaining = 235.5s
+step = 174, remaining = 26, times elasped = 1455.3s, estimated time : for one step = 8.4s, remaining = 227.1s
+step = 175, remaining = 25, times elasped = 1463.8s, estimated time : for one step = 8.4s, remaining = 218.7s
+step = 176, remaining = 24, times elasped = 1472.2s, estimated time : for one step = 8.4s, remaining = 210.3s
+step = 177, remaining = 23, times elasped = 1480.7s, estimated time : for one step = 8.4s, remaining = 201.9s
+step = 178, remaining = 22, times elasped = 1489.2s, estimated time : for one step = 8.4s, remaining = 193.5s
+step = 179, remaining = 21, times elasped = 1497.6s, estimated time : for one step = 8.4s, remaining = 185.1s
+step = 180, remaining = 20, times elasped = 1506s, estimated time : for one step = 8.4s, remaining = 176.7s
+step = 181, remaining = 19, times elasped = 1514.5s, estimated time : for one step = 8.4s, remaining = 168.3s
+step = 182, remaining = 18, times elasped = 1522.9s, estimated time : for one step = 8.4s, remaining = 159.9s
+step = 183, remaining = 17, times elasped = 1531.4s, estimated time : for one step = 8.4s, remaining = 151.5s
+step = 184, remaining = 16, times elasped = 1539.9s, estimated time : for one step = 8.4s, remaining = 143s
+step = 185, remaining = 15, times elasped = 1548.2s, estimated time : for one step = 8.4s, remaining = 134.6s
+step = 186, remaining = 14, times elasped = 1556.7s, estimated time : for one step = 8.4s, remaining = 126.2s
+step = 187, remaining = 13, times elasped = 1565.2s, estimated time : for one step = 8.4s, remaining = 117.8s
+step = 188, remaining = 12, times elasped = 1573.6s, estimated time : for one step = 8.4s, remaining = 109.4s
+step = 189, remaining = 11, times elasped = 1582.1s, estimated time : for one step = 8.4s, remaining = 101s
+step = 190, remaining = 10, times elasped = 1590.5s, estimated time : for one step = 8.4s, remaining = 92.6s
+step = 191, remaining = 9, times elasped = 1598.9s, estimated time : for one step = 8.4s, remaining = 84.2s
+step = 192, remaining = 8, times elasped = 1607.4s, estimated time : for one step = 8.4s, remaining = 75.7s
+step = 193, remaining = 7, times elasped = 1615.8s, estimated time : for one step = 8.4s, remaining = 67.3s
+step = 194, remaining = 6, times elasped = 1624.2s, estimated time : for one step = 8.4s, remaining = 58.9s
+step = 195, remaining = 5, times elasped = 1632.7s, estimated time : for one step = 8.4s, remaining = 50.5s
+step = 196, remaining = 4, times elasped = 1641.2s, estimated time : for one step = 8.4s, remaining = 42.1s
+step = 197, remaining = 3, times elasped = 1649.6s, estimated time : for one step = 8.4s, remaining = 33.7s
+step = 198, remaining = 2, times elasped = 1658s, estimated time : for one step = 8.4s, remaining = 25.2s
+step = 199, remaining = 1, times elasped = 1666.5s, estimated time : for one step = 8.4s, remaining = 16.8s
+step = 200, remaining = 0, times elasped = 1674.9s, estimated time : for one step = 8.4s, remaining = 8.4s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 30, remaining = 170, times elasped = 5s, estimated time : for one step = 0.2s, remaining = 29.5s
+step = 195, remaining = 5, times elasped = 10s, estimated time : for one step = 0.1s, remaining = 0.3s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 3, remaining = 197, times elasped = 9.5s, estimated time : for one step = 4.8s, remaining = 940.5s
+step = 4, remaining = 196, times elasped = 17.8s, estimated time : for one step = 5.9s, remaining = 1170.2s
+step = 5, remaining = 195, times elasped = 26.3s, estimated time : for one step = 6.6s, remaining = 1286.7s
+step = 6, remaining = 194, times elasped = 34.6s, estimated time : for one step = 6.9s, remaining = 1351s
+step = 7, remaining = 193, times elasped = 43s, estimated time : for one step = 7.2s, remaining = 1390s
+step = 8, remaining = 192, times elasped = 51.4s, estimated time : for one step = 7.3s, remaining = 1416.9s
+step = 9, remaining = 191, times elasped = 59.8s, estimated time : for one step = 7.5s, remaining = 1434.2s
+step = 10, remaining = 190, times elasped = 68.1s, estimated time : for one step = 7.6s, remaining = 1444.8s
+step = 11, remaining = 189, times elasped = 76.4s, estimated time : for one step = 7.6s, remaining = 1452.4s
+step = 12, remaining = 188, times elasped = 84.8s, estimated time : for one step = 7.7s, remaining = 1457s
+step = 13, remaining = 187, times elasped = 93.1s, estimated time : for one step = 7.8s, remaining = 1459s
+step = 14, remaining = 186, times elasped = 101.5s, estimated time : for one step = 7.8s, remaining = 1459.9s
+step = 15, remaining = 185, times elasped = 109.9s, estimated time : for one step = 7.8s, remaining = 1459.8s
+step = 16, remaining = 184, times elasped = 118.2s, estimated time : for one step = 7.9s, remaining = 1457.8s
+step = 17, remaining = 183, times elasped = 126.6s, estimated time : for one step = 7.9s, remaining = 1455.8s
+step = 18, remaining = 182, times elasped = 135s, estimated time : for one step = 7.9s, remaining = 1452.9s
+step = 19, remaining = 181, times elasped = 143.3s, estimated time : for one step = 8s, remaining = 1448.6s
+step = 20, remaining = 180, times elasped = 151.7s, estimated time : for one step = 8s, remaining = 1445s
+step = 21, remaining = 179, times elasped = 160.1s, estimated time : for one step = 8s, remaining = 1440.5s
+step = 22, remaining = 178, times elasped = 168.3s, estimated time : for one step = 8s, remaining = 1434.8s
+step = 23, remaining = 177, times elasped = 176.7s, estimated time : for one step = 8s, remaining = 1429.7s
+step = 24, remaining = 176, times elasped = 185s, estimated time : for one step = 8s, remaining = 1423.6s
+step = 25, remaining = 175, times elasped = 193.3s, estimated time : for one step = 8.1s, remaining = 1417.8s
+step = 26, remaining = 174, times elasped = 201.7s, estimated time : for one step = 8.1s, remaining = 1412.2s
+step = 27, remaining = 173, times elasped = 210s, estimated time : for one step = 8.1s, remaining = 1405.5s
+step = 28, remaining = 172, times elasped = 218.4s, estimated time : for one step = 8.1s, remaining = 1399.2s
+step = 29, remaining = 171, times elasped = 226.8s, estimated time : for one step = 8.1s, remaining = 1392.9s
+step = 30, remaining = 170, times elasped = 235s, estimated time : for one step = 8.1s, remaining = 1385.9s
+step = 31, remaining = 169, times elasped = 243.4s, estimated time : for one step = 8.1s, remaining = 1379.2s
+step = 32, remaining = 168, times elasped = 251.8s, estimated time : for one step = 8.1s, remaining = 1372.4s
+step = 33, remaining = 167, times elasped = 260.1s, estimated time : for one step = 8.1s, remaining = 1365.4s
+step = 34, remaining = 166, times elasped = 268.4s, estimated time : for one step = 8.1s, remaining = 1358.4s
+step = 35, remaining = 165, times elasped = 276.8s, estimated time : for one step = 8.1s, remaining = 1351.4s
+step = 36, remaining = 164, times elasped = 285.1s, estimated time : for one step = 8.1s, remaining = 1343.9s
+step = 37, remaining = 163, times elasped = 293.4s, estimated time : for one step = 8.2s, remaining = 1336.8s
+step = 38, remaining = 162, times elasped = 301.8s, estimated time : for one step = 8.2s, remaining = 1329.7s
+step = 39, remaining = 161, times elasped = 310.1s, estimated time : for one step = 8.2s, remaining = 1322.1s
+step = 40, remaining = 160, times elasped = 318.5s, estimated time : for one step = 8.2s, remaining = 1314.9s
+step = 41, remaining = 159, times elasped = 326.9s, estimated time : for one step = 8.2s, remaining = 1307.6s
+step = 42, remaining = 158, times elasped = 335.2s, estimated time : for one step = 8.2s, remaining = 1299.8s
+step = 43, remaining = 157, times elasped = 343.6s, estimated time : for one step = 8.2s, remaining = 1292.4s
+step = 44, remaining = 156, times elasped = 351.9s, estimated time : for one step = 8.2s, remaining = 1284.9s
+step = 45, remaining = 155, times elasped = 360.2s, estimated time : for one step = 8.2s, remaining = 1277s
+step = 46, remaining = 154, times elasped = 368.6s, estimated time : for one step = 8.2s, remaining = 1269.4s
+step = 47, remaining = 153, times elasped = 377s, estimated time : for one step = 8.2s, remaining = 1262s
+step = 48, remaining = 152, times elasped = 385.2s, estimated time : for one step = 8.2s, remaining = 1254s
+step = 49, remaining = 151, times elasped = 393.6s, estimated time : for one step = 8.2s, remaining = 1246.4s
+step = 50, remaining = 150, times elasped = 401.9s, estimated time : for one step = 8.2s, remaining = 1238.4s
+step = 51, remaining = 149, times elasped = 410.2s, estimated time : for one step = 8.2s, remaining = 1230.6s
+step = 52, remaining = 148, times elasped = 418.6s, estimated time : for one step = 8.2s, remaining = 1222.9s
+step = 53, remaining = 147, times elasped = 426.8s, estimated time : for one step = 8.2s, remaining = 1214.8s
+step = 54, remaining = 146, times elasped = 435.2s, estimated time : for one step = 8.2s, remaining = 1207s
+step = 55, remaining = 145, times elasped = 443.6s, estimated time : for one step = 8.2s, remaining = 1199.3s
+step = 56, remaining = 144, times elasped = 451.9s, estimated time : for one step = 8.2s, remaining = 1191.3s
+step = 57, remaining = 143, times elasped = 460.2s, estimated time : for one step = 8.2s, remaining = 1183.4s
+step = 58, remaining = 142, times elasped = 468.6s, estimated time : for one step = 8.2s, remaining = 1175.6s
+step = 59, remaining = 141, times elasped = 476.9s, estimated time : for one step = 8.2s, remaining = 1167.5s
+step = 60, remaining = 140, times elasped = 485.2s, estimated time : for one step = 8.2s, remaining = 1159.6s
+step = 61, remaining = 139, times elasped = 493.6s, estimated time : for one step = 8.2s, remaining = 1151.7s
+step = 62, remaining = 138, times elasped = 501.9s, estimated time : for one step = 8.2s, remaining = 1143.6s
+step = 63, remaining = 137, times elasped = 510.2s, estimated time : for one step = 8.2s, remaining = 1135.7s
+step = 64, remaining = 136, times elasped = 518.6s, estimated time : for one step = 8.2s, remaining = 1127.7s
+step = 65, remaining = 135, times elasped = 526.9s, estimated time : for one step = 8.2s, remaining = 1119.7s
+step = 66, remaining = 134, times elasped = 535.2s, estimated time : for one step = 8.2s, remaining = 1111.7s
+step = 67, remaining = 133, times elasped = 543.6s, estimated time : for one step = 8.2s, remaining = 1103.7s
+step = 68, remaining = 132, times elasped = 551.9s, estimated time : for one step = 8.2s, remaining = 1095.5s
+step = 69, remaining = 131, times elasped = 560.3s, estimated time : for one step = 8.2s, remaining = 1087.6s
+step = 70, remaining = 130, times elasped = 568.6s, estimated time : for one step = 8.2s, remaining = 1079.6s
+step = 71, remaining = 129, times elasped = 576.9s, estimated time : for one step = 8.2s, remaining = 1071.4s
+step = 72, remaining = 128, times elasped = 585.3s, estimated time : for one step = 8.2s, remaining = 1063.4s
+step = 73, remaining = 127, times elasped = 593.7s, estimated time : for one step = 8.2s, remaining = 1055.4s
+step = 74, remaining = 126, times elasped = 601.9s, estimated time : for one step = 8.2s, remaining = 1047.2s
+step = 75, remaining = 125, times elasped = 610.3s, estimated time : for one step = 8.2s, remaining = 1039.2s
+step = 76, remaining = 124, times elasped = 618.6s, estimated time : for one step = 8.2s, remaining = 1031.1s
+step = 77, remaining = 123, times elasped = 627s, estimated time : for one step = 8.2s, remaining = 1023s
+step = 78, remaining = 122, times elasped = 635.4s, estimated time : for one step = 8.3s, remaining = 1014.9s
+step = 79, remaining = 121, times elasped = 643.6s, estimated time : for one step = 8.3s, remaining = 1006.7s
+step = 80, remaining = 120, times elasped = 652s, estimated time : for one step = 8.3s, remaining = 998.6s
+step = 81, remaining = 119, times elasped = 660.4s, estimated time : for one step = 8.3s, remaining = 990.5s
+step = 82, remaining = 118, times elasped = 668.6s, estimated time : for one step = 8.3s, remaining = 982.3s
+step = 83, remaining = 117, times elasped = 677s, estimated time : for one step = 8.3s, remaining = 974.2s
+step = 84, remaining = 116, times elasped = 685.4s, estimated time : for one step = 8.3s, remaining = 966.2s
+step = 85, remaining = 115, times elasped = 693.7s, estimated time : for one step = 8.3s, remaining = 958s
+step = 86, remaining = 114, times elasped = 702s, estimated time : for one step = 8.3s, remaining = 949.8s
+step = 87, remaining = 113, times elasped = 710.4s, estimated time : for one step = 8.3s, remaining = 941.7s
+step = 88, remaining = 112, times elasped = 718.7s, estimated time : for one step = 8.3s, remaining = 933.5s
+step = 89, remaining = 111, times elasped = 727s, estimated time : for one step = 8.3s, remaining = 925.3s
+step = 90, remaining = 110, times elasped = 735.4s, estimated time : for one step = 8.3s, remaining = 917.2s
+step = 91, remaining = 109, times elasped = 743.7s, estimated time : for one step = 8.3s, remaining = 909s
+step = 92, remaining = 108, times elasped = 752.1s, estimated time : for one step = 8.3s, remaining = 900.8s
+step = 93, remaining = 107, times elasped = 760.4s, estimated time : for one step = 8.3s, remaining = 892.7s
+step = 94, remaining = 106, times elasped = 768.7s, estimated time : for one step = 8.3s, remaining = 884.4s
+step = 95, remaining = 105, times elasped = 777s, estimated time : for one step = 8.3s, remaining = 876.2s
+step = 96, remaining = 104, times elasped = 785.4s, estimated time : for one step = 8.3s, remaining = 868.1s
+step = 97, remaining = 103, times elasped = 793.7s, estimated time : for one step = 8.3s, remaining = 859.8s
+step = 98, remaining = 102, times elasped = 802.1s, estimated time : for one step = 8.3s, remaining = 851.7s
+step = 99, remaining = 101, times elasped = 810.5s, estimated time : for one step = 8.3s, remaining = 843.5s
+step = 100, remaining = 100, times elasped = 818.7s, estimated time : for one step = 8.3s, remaining = 835.3s
+step = 101, remaining = 99, times elasped = 827.1s, estimated time : for one step = 8.3s, remaining = 827.1s
+step = 102, remaining = 98, times elasped = 835.4s, estimated time : for one step = 8.3s, remaining = 818.8s
+step = 103, remaining = 97, times elasped = 843.7s, estimated time : for one step = 8.3s, remaining = 810.6s
+step = 104, remaining = 96, times elasped = 852.1s, estimated time : for one step = 8.3s, remaining = 802.5s
+step = 105, remaining = 95, times elasped = 860.4s, estimated time : for one step = 8.3s, remaining = 794.2s
+step = 106, remaining = 94, times elasped = 868.8s, estimated time : for one step = 8.3s, remaining = 786s
+step = 107, remaining = 93, times elasped = 877.1s, estimated time : for one step = 8.3s, remaining = 777.8s
+step = 108, remaining = 92, times elasped = 885.4s, estimated time : for one step = 8.3s, remaining = 769.6s
+step = 109, remaining = 91, times elasped = 893.8s, estimated time : for one step = 8.3s, remaining = 761.4s
+step = 110, remaining = 90, times elasped = 902.1s, estimated time : for one step = 8.3s, remaining = 753.2s
+step = 111, remaining = 89, times elasped = 910.4s, estimated time : for one step = 8.3s, remaining = 744.9s
+step = 112, remaining = 88, times elasped = 918.8s, estimated time : for one step = 8.3s, remaining = 736.7s
+step = 113, remaining = 87, times elasped = 927.2s, estimated time : for one step = 8.3s, remaining = 728.5s
+step = 114, remaining = 86, times elasped = 935.5s, estimated time : for one step = 8.3s, remaining = 720.2s
+step = 115, remaining = 85, times elasped = 943.8s, estimated time : for one step = 8.3s, remaining = 712s
+step = 116, remaining = 84, times elasped = 952.2s, estimated time : for one step = 8.3s, remaining = 703.8s
+step = 117, remaining = 83, times elasped = 960.4s, estimated time : for one step = 8.3s, remaining = 695.5s
+step = 118, remaining = 82, times elasped = 968.8s, estimated time : for one step = 8.3s, remaining = 687.3s
+step = 119, remaining = 81, times elasped = 977.2s, estimated time : for one step = 8.3s, remaining = 679.1s
+step = 120, remaining = 80, times elasped = 985.5s, estimated time : for one step = 8.3s, remaining = 670.8s
+step = 121, remaining = 79, times elasped = 993.9s, estimated time : for one step = 8.3s, remaining = 662.6s
+step = 122, remaining = 78, times elasped = 1002.2s, estimated time : for one step = 8.3s, remaining = 654.3s
+step = 123, remaining = 77, times elasped = 1010.5s, estimated time : for one step = 8.3s, remaining = 646.1s
+step = 124, remaining = 76, times elasped = 1018.9s, estimated time : for one step = 8.3s, remaining = 637.8s
+step = 125, remaining = 75, times elasped = 1027.2s, estimated time : for one step = 8.3s, remaining = 629.6s
+step = 126, remaining = 74, times elasped = 1035.5s, estimated time : for one step = 8.3s, remaining = 621.3s
+step = 127, remaining = 73, times elasped = 1043.9s, estimated time : for one step = 8.3s, remaining = 613.1s
+step = 128, remaining = 72, times elasped = 1052.2s, estimated time : for one step = 8.3s, remaining = 604.8s
+step = 129, remaining = 71, times elasped = 1060.5s, estimated time : for one step = 8.3s, remaining = 596.5s
+step = 130, remaining = 70, times elasped = 1068.9s, estimated time : for one step = 8.3s, remaining = 588.3s
+step = 131, remaining = 69, times elasped = 1077.2s, estimated time : for one step = 8.3s, remaining = 580s
+step = 132, remaining = 68, times elasped = 1085.5s, estimated time : for one step = 8.3s, remaining = 571.8s
+step = 133, remaining = 67, times elasped = 1093.9s, estimated time : for one step = 8.3s, remaining = 563.5s
+step = 134, remaining = 66, times elasped = 1102.2s, estimated time : for one step = 8.3s, remaining = 555.2s
+step = 135, remaining = 65, times elasped = 1110.5s, estimated time : for one step = 8.3s, remaining = 547s
+step = 136, remaining = 64, times elasped = 1118.9s, estimated time : for one step = 8.3s, remaining = 538.7s
+step = 137, remaining = 63, times elasped = 1127.2s, estimated time : for one step = 8.3s, remaining = 530.4s
+step = 138, remaining = 62, times elasped = 1135.6s, estimated time : for one step = 8.3s, remaining = 522.2s
+step = 139, remaining = 61, times elasped = 1143.9s, estimated time : for one step = 8.3s, remaining = 513.9s
+step = 140, remaining = 60, times elasped = 1152.2s, estimated time : for one step = 8.3s, remaining = 505.6s
+step = 141, remaining = 59, times elasped = 1160.6s, estimated time : for one step = 8.3s, remaining = 497.4s
+step = 142, remaining = 58, times elasped = 1168.9s, estimated time : for one step = 8.3s, remaining = 489.1s
+step = 143, remaining = 57, times elasped = 1177.2s, estimated time : for one step = 8.3s, remaining = 480.8s
+step = 144, remaining = 56, times elasped = 1185.6s, estimated time : for one step = 8.3s, remaining = 472.6s
+step = 145, remaining = 55, times elasped = 1193.9s, estimated time : for one step = 8.3s, remaining = 464.3s
+step = 146, remaining = 54, times elasped = 1202.2s, estimated time : for one step = 8.3s, remaining = 456s
+step = 147, remaining = 53, times elasped = 1210.6s, estimated time : for one step = 8.3s, remaining = 447.7s
+step = 148, remaining = 52, times elasped = 1219s, estimated time : for one step = 8.3s, remaining = 439.5s
+step = 149, remaining = 51, times elasped = 1227.2s, estimated time : for one step = 8.3s, remaining = 431.2s
+step = 150, remaining = 50, times elasped = 1235.6s, estimated time : for one step = 8.3s, remaining = 422.9s
+step = 151, remaining = 49, times elasped = 1244s, estimated time : for one step = 8.3s, remaining = 414.7s
+step = 152, remaining = 48, times elasped = 1252.2s, estimated time : for one step = 8.3s, remaining = 406.4s
+step = 153, remaining = 47, times elasped = 1260.6s, estimated time : for one step = 8.3s, remaining = 398.1s
+step = 154, remaining = 46, times elasped = 1268.9s, estimated time : for one step = 8.3s, remaining = 389.8s
+step = 155, remaining = 45, times elasped = 1277.2s, estimated time : for one step = 8.3s, remaining = 381.5s
+step = 156, remaining = 44, times elasped = 1285.6s, estimated time : for one step = 8.3s, remaining = 373.2s
+step = 157, remaining = 43, times elasped = 1293.9s, estimated time : for one step = 8.3s, remaining = 364.9s
+step = 158, remaining = 42, times elasped = 1302.3s, estimated time : for one step = 8.3s, remaining = 356.7s
+step = 159, remaining = 41, times elasped = 1310.6s, estimated time : for one step = 8.3s, remaining = 348.4s
+step = 160, remaining = 40, times elasped = 1318.9s, estimated time : for one step = 8.3s, remaining = 340.1s
+step = 161, remaining = 39, times elasped = 1327.2s, estimated time : for one step = 8.3s, remaining = 331.8s
+step = 162, remaining = 38, times elasped = 1335.7s, estimated time : for one step = 8.3s, remaining = 323.5s
+step = 163, remaining = 37, times elasped = 1344s, estimated time : for one step = 8.3s, remaining = 315.2s
+step = 164, remaining = 36, times elasped = 1352.3s, estimated time : for one step = 8.3s, remaining = 307s
+step = 165, remaining = 35, times elasped = 1360.7s, estimated time : for one step = 8.3s, remaining = 298.7s
+step = 166, remaining = 34, times elasped = 1368.9s, estimated time : for one step = 8.3s, remaining = 290.4s
+step = 167, remaining = 33, times elasped = 1377.3s, estimated time : for one step = 8.3s, remaining = 282.1s
+step = 168, remaining = 32, times elasped = 1385.7s, estimated time : for one step = 8.3s, remaining = 273.8s
+step = 169, remaining = 31, times elasped = 1394s, estimated time : for one step = 8.3s, remaining = 265.5s
+step = 170, remaining = 30, times elasped = 1402.3s, estimated time : for one step = 8.3s, remaining = 257.2s
+step = 171, remaining = 29, times elasped = 1410.7s, estimated time : for one step = 8.3s, remaining = 249s
+step = 172, remaining = 28, times elasped = 1419s, estimated time : for one step = 8.3s, remaining = 240.6s
+step = 173, remaining = 27, times elasped = 1427.4s, estimated time : for one step = 8.3s, remaining = 232.4s
+step = 174, remaining = 26, times elasped = 1435.7s, estimated time : for one step = 8.3s, remaining = 224.1s
+step = 175, remaining = 25, times elasped = 1444s, estimated time : for one step = 8.3s, remaining = 215.8s
+step = 176, remaining = 24, times elasped = 1452.4s, estimated time : for one step = 8.3s, remaining = 207.5s
+step = 177, remaining = 23, times elasped = 1460.8s, estimated time : for one step = 8.3s, remaining = 199.2s
+step = 178, remaining = 22, times elasped = 1469.1s, estimated time : for one step = 8.3s, remaining = 190.9s
+step = 179, remaining = 21, times elasped = 1477.4s, estimated time : for one step = 8.3s, remaining = 182.6s
+step = 180, remaining = 20, times elasped = 1485.7s, estimated time : for one step = 8.3s, remaining = 174.3s
+step = 181, remaining = 19, times elasped = 1494s, estimated time : for one step = 8.3s, remaining = 166s
+step = 182, remaining = 18, times elasped = 1502.4s, estimated time : for one step = 8.3s, remaining = 157.7s
+step = 183, remaining = 17, times elasped = 1510.7s, estimated time : for one step = 8.3s, remaining = 149.4s
+step = 184, remaining = 16, times elasped = 1519.1s, estimated time : for one step = 8.3s, remaining = 141.1s
+step = 185, remaining = 15, times elasped = 1527.4s, estimated time : for one step = 8.3s, remaining = 132.8s
+step = 186, remaining = 14, times elasped = 1535.7s, estimated time : for one step = 8.3s, remaining = 124.5s
+step = 187, remaining = 13, times elasped = 1544.1s, estimated time : for one step = 8.3s, remaining = 116.2s
+step = 188, remaining = 12, times elasped = 1552.5s, estimated time : for one step = 8.3s, remaining = 107.9s
+step = 189, remaining = 11, times elasped = 1560.8s, estimated time : for one step = 8.3s, remaining = 99.6s
+step = 190, remaining = 10, times elasped = 1569.1s, estimated time : for one step = 8.3s, remaining = 91.3s
+step = 191, remaining = 9, times elasped = 1577.5s, estimated time : for one step = 8.3s, remaining = 83s
+step = 192, remaining = 8, times elasped = 1585.8s, estimated time : for one step = 8.3s, remaining = 74.7s
+step = 193, remaining = 7, times elasped = 1594.2s, estimated time : for one step = 8.3s, remaining = 66.4s
+step = 194, remaining = 6, times elasped = 1602.5s, estimated time : for one step = 8.3s, remaining = 58.1s
+step = 195, remaining = 5, times elasped = 1610.8s, estimated time : for one step = 8.3s, remaining = 49.8s
+step = 196, remaining = 4, times elasped = 1619.2s, estimated time : for one step = 8.3s, remaining = 41.5s
+step = 197, remaining = 3, times elasped = 1627.5s, estimated time : for one step = 8.3s, remaining = 33.2s
+step = 198, remaining = 2, times elasped = 1635.8s, estimated time : for one step = 8.3s, remaining = 24.9s
+step = 199, remaining = 1, times elasped = 1644.2s, estimated time : for one step = 8.3s, remaining = 16.6s
+step = 200, remaining = 0, times elasped = 1652.6s, estimated time : for one step = 8.3s, remaining = 8.3s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 30, remaining = 170, times elasped = 5s, estimated time : for one step = 0.2s, remaining = 29.5s
+step = 192, remaining = 8, times elasped = 10s, estimated time : for one step = 0.1s, remaining = 0.5s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: Longitudinal_Surival_model_SAEM.Rmd
+number of cores available = 1
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 3, remaining = 197, times elasped = 9.7s, estimated time : for one step = 4.8s, remaining = 956.3s
+step = 4, remaining = 196, times elasped = 18.2s, estimated time : for one step = 6.1s, remaining = 1194.5s
+step = 5, remaining = 195, times elasped = 26.8s, estimated time : for one step = 6.7s, remaining = 1311.7s
+step = 6, remaining = 194, times elasped = 35.4s, estimated time : for one step = 7.1s, remaining = 1378.7s
+step = 7, remaining = 193, times elasped = 43.8s, estimated time : for one step = 7.3s, remaining = 1416.2s
+step = 8, remaining = 192, times elasped = 52.4s, estimated time : for one step = 7.5s, remaining = 1443.9s
+step = 9, remaining = 191, times elasped = 60.9s, estimated time : for one step = 7.6s, remaining = 1462.3s
+step = 10, remaining = 190, times elasped = 69.4s, estimated time : for one step = 7.7s, remaining = 1473.2s
+step = 11, remaining = 189, times elasped = 78s, estimated time : for one step = 7.8s, remaining = 1481s
+step = 12, remaining = 188, times elasped = 86.5s, estimated time : for one step = 7.9s, remaining = 1486.9s
+step = 13, remaining = 187, times elasped = 95s, estimated time : for one step = 7.9s, remaining = 1488.2s
+step = 14, remaining = 186, times elasped = 103.5s, estimated time : for one step = 8s, remaining = 1489.2s
+step = 15, remaining = 185, times elasped = 112.1s, estimated time : for one step = 8s, remaining = 1489.1s
+step = 16, remaining = 184, times elasped = 120.6s, estimated time : for one step = 8s, remaining = 1487.2s
+step = 17, remaining = 183, times elasped = 129.1s, estimated time : for one step = 8.1s, remaining = 1484.9s
+step = 18, remaining = 182, times elasped = 137.7s, estimated time : for one step = 8.1s, remaining = 1482s
+step = 19, remaining = 181, times elasped = 146.1s, estimated time : for one step = 8.1s, remaining = 1477.4s
+step = 20, remaining = 180, times elasped = 154.7s, estimated time : for one step = 8.1s, remaining = 1473.6s
+step = 21, remaining = 179, times elasped = 163.2s, estimated time : for one step = 8.2s, remaining = 1469.1s
+step = 22, remaining = 178, times elasped = 171.7s, estimated time : for one step = 8.2s, remaining = 1463.4s
+step = 23, remaining = 177, times elasped = 180.2s, estimated time : for one step = 8.2s, remaining = 1458s
+step = 24, remaining = 176, times elasped = 188.7s, estimated time : for one step = 8.2s, remaining = 1451.9s
+step = 25, remaining = 175, times elasped = 197.2s, estimated time : for one step = 8.2s, remaining = 1446.4s
+step = 26, remaining = 174, times elasped = 205.8s, estimated time : for one step = 8.2s, remaining = 1440.4s
+step = 27, remaining = 173, times elasped = 214.2s, estimated time : for one step = 8.2s, remaining = 1433.8s
+step = 28, remaining = 172, times elasped = 222.8s, estimated time : for one step = 8.3s, remaining = 1427.3s
+step = 29, remaining = 171, times elasped = 231.3s, estimated time : for one step = 8.3s, remaining = 1420.8s
+step = 30, remaining = 170, times elasped = 239.7s, estimated time : for one step = 8.3s, remaining = 1413.6s
+step = 31, remaining = 169, times elasped = 248.3s, estimated time : for one step = 8.3s, remaining = 1406.8s
+step = 32, remaining = 168, times elasped = 256.8s, estimated time : for one step = 8.3s, remaining = 1400.1s
+step = 33, remaining = 167, times elasped = 265.3s, estimated time : for one step = 8.3s, remaining = 1392.8s
+step = 34, remaining = 166, times elasped = 273.8s, estimated time : for one step = 8.3s, remaining = 1385.6s
+step = 35, remaining = 165, times elasped = 282.4s, estimated time : for one step = 8.3s, remaining = 1378.5s
+step = 36, remaining = 164, times elasped = 290.8s, estimated time : for one step = 8.3s, remaining = 1371s
+step = 37, remaining = 163, times elasped = 299.3s, estimated time : for one step = 8.3s, remaining = 1363.7s
+step = 38, remaining = 162, times elasped = 307.9s, estimated time : for one step = 8.3s, remaining = 1356.4s
+step = 39, remaining = 161, times elasped = 316.4s, estimated time : for one step = 8.3s, remaining = 1348.9s
+step = 40, remaining = 160, times elasped = 324.9s, estimated time : for one step = 8.3s, remaining = 1341.4s
+step = 41, remaining = 159, times elasped = 333.5s, estimated time : for one step = 8.3s, remaining = 1333.8s
+step = 42, remaining = 158, times elasped = 341.9s, estimated time : for one step = 8.3s, remaining = 1326s
+step = 43, remaining = 157, times elasped = 350.5s, estimated time : for one step = 8.3s, remaining = 1318.4s
+step = 44, remaining = 156, times elasped = 359s, estimated time : for one step = 8.3s, remaining = 1310.8s
+step = 45, remaining = 155, times elasped = 367.4s, estimated time : for one step = 8.4s, remaining = 1302.8s
+step = 46, remaining = 154, times elasped = 376s, estimated time : for one step = 8.4s, remaining = 1295.2s
+step = 47, remaining = 153, times elasped = 384.6s, estimated time : for one step = 8.4s, remaining = 1287.5s
+step = 48, remaining = 152, times elasped = 393s, estimated time : for one step = 8.4s, remaining = 1279.4s
+step = 49, remaining = 151, times elasped = 401.6s, estimated time : for one step = 8.4s, remaining = 1271.6s
+step = 50, remaining = 150, times elasped = 410s, estimated time : for one step = 8.4s, remaining = 1263.5s
+step = 51, remaining = 149, times elasped = 418.6s, estimated time : for one step = 8.4s, remaining = 1255.7s
+step = 52, remaining = 148, times elasped = 427.1s, estimated time : for one step = 8.4s, remaining = 1247.8s
+step = 53, remaining = 147, times elasped = 435.6s, estimated time : for one step = 8.4s, remaining = 1239.8s
+step = 54, remaining = 146, times elasped = 444.1s, estimated time : for one step = 8.4s, remaining = 1231.8s
+step = 55, remaining = 145, times elasped = 452.6s, estimated time : for one step = 8.4s, remaining = 1223.8s
+step = 56, remaining = 144, times elasped = 461.1s, estimated time : for one step = 8.4s, remaining = 1215.7s
+step = 57, remaining = 143, times elasped = 469.6s, estimated time : for one step = 8.4s, remaining = 1207.6s
+step = 58, remaining = 142, times elasped = 478.2s, estimated time : for one step = 8.4s, remaining = 1199.6s
+step = 59, remaining = 141, times elasped = 486.6s, estimated time : for one step = 8.4s, remaining = 1191.4s
+step = 60, remaining = 140, times elasped = 495.1s, estimated time : for one step = 8.4s, remaining = 1183.3s
+step = 61, remaining = 139, times elasped = 503.7s, estimated time : for one step = 8.4s, remaining = 1175.4s
+step = 62, remaining = 138, times elasped = 512.2s, estimated time : for one step = 8.4s, remaining = 1167.1s
+step = 63, remaining = 137, times elasped = 520.7s, estimated time : for one step = 8.4s, remaining = 1159s
+step = 64, remaining = 136, times elasped = 529.3s, estimated time : for one step = 8.4s, remaining = 1150.9s
+step = 65, remaining = 135, times elasped = 537.7s, estimated time : for one step = 8.4s, remaining = 1142.6s
+step = 66, remaining = 134, times elasped = 546.2s, estimated time : for one step = 8.4s, remaining = 1134.5s
+step = 67, remaining = 133, times elasped = 554.8s, estimated time : for one step = 8.4s, remaining = 1126.4s
+step = 68, remaining = 132, times elasped = 563.3s, estimated time : for one step = 8.4s, remaining = 1118.1s
+step = 69, remaining = 131, times elasped = 571.8s, estimated time : for one step = 8.4s, remaining = 1110s
+step = 70, remaining = 130, times elasped = 580.4s, estimated time : for one step = 8.4s, remaining = 1101.8s
+step = 71, remaining = 129, times elasped = 588.8s, estimated time : for one step = 8.4s, remaining = 1093.5s
+step = 72, remaining = 128, times elasped = 597.3s, estimated time : for one step = 8.4s, remaining = 1085.3s
+step = 73, remaining = 127, times elasped = 605.9s, estimated time : for one step = 8.4s, remaining = 1077.1s
+step = 74, remaining = 126, times elasped = 614.3s, estimated time : for one step = 8.4s, remaining = 1068.8s
+step = 75, remaining = 125, times elasped = 622.9s, estimated time : for one step = 8.4s, remaining = 1060.6s
+step = 76, remaining = 124, times elasped = 631.4s, estimated time : for one step = 8.4s, remaining = 1052.3s
+step = 77, remaining = 123, times elasped = 639.9s, estimated time : for one step = 8.4s, remaining = 1044s
+step = 78, remaining = 122, times elasped = 648.4s, estimated time : for one step = 8.4s, remaining = 1035.8s
+step = 79, remaining = 121, times elasped = 656.9s, estimated time : for one step = 8.4s, remaining = 1027.5s
+step = 80, remaining = 120, times elasped = 665.4s, estimated time : for one step = 8.4s, remaining = 1019.2s
+step = 81, remaining = 119, times elasped = 674s, estimated time : for one step = 8.4s, remaining = 1010.9s
+step = 82, remaining = 118, times elasped = 682.4s, estimated time : for one step = 8.4s, remaining = 1002.6s
+step = 83, remaining = 117, times elasped = 691s, estimated time : for one step = 8.4s, remaining = 994.3s
+step = 84, remaining = 116, times elasped = 699.5s, estimated time : for one step = 8.4s, remaining = 986s
+step = 85, remaining = 115, times elasped = 708s, estimated time : for one step = 8.4s, remaining = 977.7s
+step = 86, remaining = 114, times elasped = 716.5s, estimated time : for one step = 8.4s, remaining = 969.4s
+step = 87, remaining = 113, times elasped = 725s, estimated time : for one step = 8.4s, remaining = 961.1s
+step = 88, remaining = 112, times elasped = 733.5s, estimated time : for one step = 8.4s, remaining = 952.7s
+step = 89, remaining = 111, times elasped = 742.1s, estimated time : for one step = 8.4s, remaining = 944.4s
+step = 90, remaining = 110, times elasped = 750.6s, estimated time : for one step = 8.4s, remaining = 936.1s
+step = 91, remaining = 109, times elasped = 759s, estimated time : for one step = 8.4s, remaining = 927.7s
+step = 92, remaining = 108, times elasped = 767.6s, estimated time : for one step = 8.4s, remaining = 919.4s
+step = 93, remaining = 107, times elasped = 776.1s, estimated time : for one step = 8.4s, remaining = 911.1s
+step = 94, remaining = 106, times elasped = 784.6s, estimated time : for one step = 8.4s, remaining = 902.7s
+step = 95, remaining = 105, times elasped = 793.1s, estimated time : for one step = 8.4s, remaining = 894.3s
+step = 96, remaining = 104, times elasped = 801.7s, estimated time : for one step = 8.4s, remaining = 886.1s
+step = 97, remaining = 103, times elasped = 810.2s, estimated time : for one step = 8.4s, remaining = 877.7s
+step = 98, remaining = 102, times elasped = 818.7s, estimated time : for one step = 8.4s, remaining = 869.3s
+step = 99, remaining = 101, times elasped = 827.2s, estimated time : for one step = 8.4s, remaining = 861s
+step = 100, remaining = 100, times elasped = 835.7s, estimated time : for one step = 8.4s, remaining = 852.6s
+step = 101, remaining = 99, times elasped = 844.2s, estimated time : for one step = 8.4s, remaining = 844.2s
+step = 102, remaining = 98, times elasped = 852.7s, estimated time : for one step = 8.4s, remaining = 835.8s
+step = 103, remaining = 97, times elasped = 861.2s, estimated time : for one step = 8.4s, remaining = 827.4s
+step = 104, remaining = 96, times elasped = 869.8s, estimated time : for one step = 8.4s, remaining = 819.1s
+step = 105, remaining = 95, times elasped = 878.2s, estimated time : for one step = 8.4s, remaining = 810.7s
+step = 106, remaining = 94, times elasped = 886.8s, estimated time : for one step = 8.4s, remaining = 802.3s
+step = 107, remaining = 93, times elasped = 895.3s, estimated time : for one step = 8.4s, remaining = 793.9s
+step = 108, remaining = 92, times elasped = 903.7s, estimated time : for one step = 8.4s, remaining = 785.5s
+step = 109, remaining = 91, times elasped = 912.2s, estimated time : for one step = 8.4s, remaining = 777.1s
+step = 110, remaining = 90, times elasped = 920.8s, estimated time : for one step = 8.4s, remaining = 768.8s
+step = 111, remaining = 89, times elasped = 929.3s, estimated time : for one step = 8.4s, remaining = 760.3s
+step = 112, remaining = 88, times elasped = 937.8s, estimated time : for one step = 8.4s, remaining = 751.9s
+step = 113, remaining = 87, times elasped = 946.3s, estimated time : for one step = 8.4s, remaining = 743.6s
+step = 114, remaining = 86, times elasped = 954.8s, estimated time : for one step = 8.4s, remaining = 735.1s
+step = 115, remaining = 85, times elasped = 963.3s, estimated time : for one step = 8.5s, remaining = 726.7s
+step = 116, remaining = 84, times elasped = 971.8s, estimated time : for one step = 8.5s, remaining = 718.3s
+step = 117, remaining = 83, times elasped = 980.3s, estimated time : for one step = 8.5s, remaining = 709.9s
+step = 118, remaining = 82, times elasped = 988.9s, estimated time : for one step = 8.5s, remaining = 701.5s
+step = 119, remaining = 81, times elasped = 997.4s, estimated time : for one step = 8.5s, remaining = 693.1s
+step = 120, remaining = 80, times elasped = 1005.8s, estimated time : for one step = 8.5s, remaining = 684.6s
+step = 121, remaining = 79, times elasped = 1014.4s, estimated time : for one step = 8.5s, remaining = 676.2s
+step = 122, remaining = 78, times elasped = 1022.9s, estimated time : for one step = 8.5s, remaining = 667.8s
+step = 123, remaining = 77, times elasped = 1031.3s, estimated time : for one step = 8.5s, remaining = 659.4s
+step = 124, remaining = 76, times elasped = 1039.9s, estimated time : for one step = 8.5s, remaining = 651s
+step = 125, remaining = 75, times elasped = 1048.4s, estimated time : for one step = 8.5s, remaining = 642.6s
+step = 126, remaining = 74, times elasped = 1056.9s, estimated time : for one step = 8.5s, remaining = 634.1s
+step = 127, remaining = 73, times elasped = 1065.4s, estimated time : for one step = 8.5s, remaining = 625.7s
+step = 128, remaining = 72, times elasped = 1073.9s, estimated time : for one step = 8.5s, remaining = 617.3s
+step = 129, remaining = 71, times elasped = 1082.4s, estimated time : for one step = 8.5s, remaining = 608.9s
+step = 130, remaining = 70, times elasped = 1091s, estimated time : for one step = 8.5s, remaining = 600.4s
+step = 131, remaining = 69, times elasped = 1099.4s, estimated time : for one step = 8.5s, remaining = 592s
+step = 132, remaining = 68, times elasped = 1108s, estimated time : for one step = 8.5s, remaining = 583.6s
+step = 133, remaining = 67, times elasped = 1116.5s, estimated time : for one step = 8.5s, remaining = 575.2s
+step = 134, remaining = 66, times elasped = 1124.9s, estimated time : for one step = 8.5s, remaining = 566.7s
+step = 135, remaining = 65, times elasped = 1133.5s, estimated time : for one step = 8.5s, remaining = 558.3s
+step = 136, remaining = 64, times elasped = 1142s, estimated time : for one step = 8.5s, remaining = 549.9s
+step = 137, remaining = 63, times elasped = 1150.5s, estimated time : for one step = 8.5s, remaining = 541.4s
+step = 138, remaining = 62, times elasped = 1159s, estimated time : for one step = 8.5s, remaining = 533s
+step = 139, remaining = 61, times elasped = 1167.6s, estimated time : for one step = 8.5s, remaining = 524.6s
+step = 140, remaining = 60, times elasped = 1176s, estimated time : for one step = 8.5s, remaining = 516.1s
+step = 141, remaining = 59, times elasped = 1184.6s, estimated time : for one step = 8.5s, remaining = 507.7s
+step = 142, remaining = 58, times elasped = 1193.1s, estimated time : for one step = 8.5s, remaining = 499.2s
+step = 143, remaining = 57, times elasped = 1201.6s, estimated time : for one step = 8.5s, remaining = 490.8s
+step = 144, remaining = 56, times elasped = 1210.1s, estimated time : for one step = 8.5s, remaining = 482.3s
+step = 145, remaining = 55, times elasped = 1218.7s, estimated time : for one step = 8.5s, remaining = 473.9s
+step = 146, remaining = 54, times elasped = 1227.2s, estimated time : for one step = 8.5s, remaining = 465.5s
+step = 147, remaining = 53, times elasped = 1235.7s, estimated time : for one step = 8.5s, remaining = 457s
+step = 148, remaining = 52, times elasped = 1244.2s, estimated time : for one step = 8.5s, remaining = 448.6s
+step = 149, remaining = 51, times elasped = 1252.7s, estimated time : for one step = 8.5s, remaining = 440.1s
+step = 150, remaining = 50, times elasped = 1261.2s, estimated time : for one step = 8.5s, remaining = 431.7s
+step = 151, remaining = 49, times elasped = 1269.7s, estimated time : for one step = 8.5s, remaining = 423.2s
+step = 152, remaining = 48, times elasped = 1278.2s, estimated time : for one step = 8.5s, remaining = 414.8s
+step = 153, remaining = 47, times elasped = 1286.8s, estimated time : for one step = 8.5s, remaining = 406.3s
+step = 154, remaining = 46, times elasped = 1295.2s, estimated time : for one step = 8.5s, remaining = 397.9s
+step = 155, remaining = 45, times elasped = 1303.7s, estimated time : for one step = 8.5s, remaining = 389.4s
+step = 156, remaining = 44, times elasped = 1312.3s, estimated time : for one step = 8.5s, remaining = 381s
+step = 157, remaining = 43, times elasped = 1320.8s, estimated time : for one step = 8.5s, remaining = 372.5s
+step = 158, remaining = 42, times elasped = 1329.3s, estimated time : for one step = 8.5s, remaining = 364.1s
+step = 159, remaining = 41, times elasped = 1337.8s, estimated time : for one step = 8.5s, remaining = 355.6s
+step = 160, remaining = 40, times elasped = 1346.3s, estimated time : for one step = 8.5s, remaining = 347.2s
+step = 161, remaining = 39, times elasped = 1354.8s, estimated time : for one step = 8.5s, remaining = 338.7s
+step = 162, remaining = 38, times elasped = 1363.4s, estimated time : for one step = 8.5s, remaining = 330.3s
+step = 163, remaining = 37, times elasped = 1371.8s, estimated time : for one step = 8.5s, remaining = 321.8s
+step = 164, remaining = 36, times elasped = 1380.4s, estimated time : for one step = 8.5s, remaining = 313.3s
+step = 165, remaining = 35, times elasped = 1388.9s, estimated time : for one step = 8.5s, remaining = 304.9s
+step = 166, remaining = 34, times elasped = 1397.4s, estimated time : for one step = 8.5s, remaining = 296.4s
+step = 167, remaining = 33, times elasped = 1405.9s, estimated time : for one step = 8.5s, remaining = 288s
+step = 168, remaining = 32, times elasped = 1414.5s, estimated time : for one step = 8.5s, remaining = 279.5s
+step = 169, remaining = 31, times elasped = 1422.9s, estimated time : for one step = 8.5s, remaining = 271s
+step = 170, remaining = 30, times elasped = 1431.5s, estimated time : for one step = 8.5s, remaining = 262.6s
+step = 171, remaining = 29, times elasped = 1440s, estimated time : for one step = 8.5s, remaining = 254.1s
+step = 172, remaining = 28, times elasped = 1448.5s, estimated time : for one step = 8.5s, remaining = 245.6s
+step = 173, remaining = 27, times elasped = 1457s, estimated time : for one step = 8.5s, remaining = 237.2s
+step = 174, remaining = 26, times elasped = 1465.6s, estimated time : for one step = 8.5s, remaining = 228.7s
+step = 175, remaining = 25, times elasped = 1474s, estimated time : for one step = 8.5s, remaining = 220.3s
+step = 176, remaining = 24, times elasped = 1482.5s, estimated time : for one step = 8.5s, remaining = 211.8s
+step = 177, remaining = 23, times elasped = 1491.1s, estimated time : for one step = 8.5s, remaining = 203.3s
+step = 178, remaining = 22, times elasped = 1499.5s, estimated time : for one step = 8.5s, remaining = 194.9s
+step = 179, remaining = 21, times elasped = 1508.1s, estimated time : for one step = 8.5s, remaining = 186.4s
+step = 180, remaining = 20, times elasped = 1516.6s, estimated time : for one step = 8.5s, remaining = 177.9s
+step = 181, remaining = 19, times elasped = 1525.1s, estimated time : for one step = 8.5s, remaining = 169.5s
+step = 182, remaining = 18, times elasped = 1533.6s, estimated time : for one step = 8.5s, remaining = 161s
+step = 183, remaining = 17, times elasped = 1542.1s, estimated time : for one step = 8.5s, remaining = 152.5s
+step = 184, remaining = 16, times elasped = 1550.6s, estimated time : for one step = 8.5s, remaining = 144s
+step = 185, remaining = 15, times elasped = 1559.1s, estimated time : for one step = 8.5s, remaining = 135.6s
+step = 186, remaining = 14, times elasped = 1567.6s, estimated time : for one step = 8.5s, remaining = 127.1s
+step = 187, remaining = 13, times elasped = 1576.1s, estimated time : for one step = 8.5s, remaining = 118.6s
+step = 188, remaining = 12, times elasped = 1584.7s, estimated time : for one step = 8.5s, remaining = 110.2s
+step = 189, remaining = 11, times elasped = 1593.1s, estimated time : for one step = 8.5s, remaining = 101.7s
+step = 190, remaining = 10, times elasped = 1601.7s, estimated time : for one step = 8.5s, remaining = 93.2s
+step = 191, remaining = 9, times elasped = 1610.2s, estimated time : for one step = 8.5s, remaining = 84.7s
+step = 192, remaining = 8, times elasped = 1618.7s, estimated time : for one step = 8.5s, remaining = 76.3s
+step = 193, remaining = 7, times elasped = 1627.2s, estimated time : for one step = 8.5s, remaining = 67.8s
+step = 194, remaining = 6, times elasped = 1635.8s, estimated time : for one step = 8.5s, remaining = 59.3s
+step = 195, remaining = 5, times elasped = 1644.2s, estimated time : for one step = 8.5s, remaining = 50.9s
+step = 196, remaining = 4, times elasped = 1652.8s, estimated time : for one step = 8.5s, remaining = 42.4s
+step = 197, remaining = 3, times elasped = 1661.3s, estimated time : for one step = 8.5s, remaining = 33.9s
+step = 198, remaining = 2, times elasped = 1669.8s, estimated time : for one step = 8.5s, remaining = 25.4s
+step = 199, remaining = 1, times elasped = 1678.3s, estimated time : for one step = 8.5s, remaining = 17s
+step = 200, remaining = 0, times elasped = 1686.8s, estimated time : for one step = 8.5s, remaining = 8.5s
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+--- SAEM ended ! ---
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 29, remaining = 171, times elasped = 5s, estimated time : for one step = 0.2s, remaining = 30.8s
+step = 186, remaining = 14, times elasped = 10s, estimated time : for one step = 0.1s, remaining = 0.8s
+--- SAEM ended ! ---
+output file: Longitudinal_Surival_model_SAEM.knit.md
+
+
+Output created: Longitudinal_Surival_model_SAEM.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)

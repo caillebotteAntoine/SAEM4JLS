@@ -1,5 +1,5 @@
 
-#' Metropolis Hastings MCMC
+#' Gibbs Sampler MCMC
 #'
 #' Will run the metropolis hasting algorithm on the rows of x.
 #' For example if we have x = (x_{i,j}), we will do an iteration of MH for each x_{i,.}
@@ -12,12 +12,12 @@
 #' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #'
 #' @param niter number of iteration
-#' @param x the initial value of the MCMC
 #' @param loglik function that return the acceptation rate, the first argument must be the proposition value in the algorithm
 #' @param ... the parameter for loglik function
 #' @param verbatim boolean value, true will return the whole chain, false will return by default only the last value
 #' @param sd
 #' @param cores
+#' @param x0
 #'
 #' @example
 #'n <- 10000# nombre d'observation
@@ -57,7 +57,7 @@ MH_Gibbs_Sampler_future <- function(niter, x0, sd, loglik, ..., verbatim = F, co
   {
     #Initialisation des variables de retour
     if(verbatim)
-      value <- c(x[k,], id = k)
+      value <- c(x[k,], id = k, iteration = 0)
     acceptation <- matrix(rep(0, niter*ncomp), ncol = ncomp)#nombre d'iteration et d'acceptation
     naccept <- rep(0, ncomp)
 
@@ -81,7 +81,7 @@ MH_Gibbs_Sampler_future <- function(niter, x0, sd, loglik, ..., verbatim = F, co
       #mise a jour du nombre d'acceptation
       acceptation[i,] <- naccept
       if(verbatim)
-        value <- rbind(value, c(x[k,], id = k))#, iteration = i))
+        value <- rbind(value, c(x[k,], id = k, iteration = i))
     }
 
     res <- x[k,] #on retourne uniquement la kème composante (l'unique modifier)
@@ -104,15 +104,15 @@ MH_Gibbs_Sampler_future <- function(niter, x0, sd, loglik, ..., verbatim = F, co
   #unlist of the paralized result ... a little boring
 
   #Get only the final values to structure the variable to return
-  x <- res %>% sapply(function(x) as.numeric(x)) %>% matrix(ncol = dim) %>% t %>%
-    MH_res
+  x <-  MH_res( t(matrix( sapply(res, function(x) as.numeric(x)), ncol = dim )) )
+
 
   # === Acceptation rate === #
-  x@acceptation <- res %>% lapply(function(x) attr(x, 'acceptation'))  %>%
-    reduce(`+`) #%>% matrix(nrow = niter)
+  x@acceptation <- lapply(res, function(x) attr(x, 'acceptation'))  %>%
+    reduce(`+`)
 
   if(verbatim)
-    x@chain <- do.call(rbind , res %>% lapply(function(x) attr(x, 'value')))
+    x@chain <- do.call(rbind , lapply(res, function(x) attr(x, 'value')))
 
   return(SAEM4JLS::link(x0, x) )
 }

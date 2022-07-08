@@ -11,12 +11,12 @@
 #' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #'
 #' @param niter number of iteration
-#' @param x the initial value of the MCMC
 #' @param loglik function that return the acceptation rate, the first argument must be the proposition value in the algorithm
 #' @param ... the parameter for loglik function
 #' @param verbatim boolean value, true will return the whole chain, false will return by default only the last value
 #' @param sd
 #' @param cores
+#' @param x0
 #'
 #' @example
 #'n <- 10000# nombre d'observation
@@ -55,7 +55,7 @@ MH_High_Dim_future <- function(niter, x0, sd, loglik, ..., verbatim = F, cores =
   {
     #Initialisation des variables de retour
     if(verbatim)
-      value <- c(x[k,], id = k)#, iteration = 0)
+      value <- c(x[k,], id = k, iteration = 0)
     acceptation <- matrix(rep(0, niter), ncol = 1)#nombre d'iteration et d'acceptation
     naccept <- 0
 
@@ -73,7 +73,7 @@ MH_High_Dim_future <- function(niter, x0, sd, loglik, ..., verbatim = F, cores =
       #mise a jour du nombre d'acceptation
       acceptation[i,] <- naccept
       if(verbatim)
-        value <- rbind(value, c(x[k,], id = k))#, iteration = i))
+        value <- rbind(value, c(x[k,], id = k, iteration = i))
     }
 
     res <- x[k,] #on retourne uniquement la kème composante (l'unique modifier)

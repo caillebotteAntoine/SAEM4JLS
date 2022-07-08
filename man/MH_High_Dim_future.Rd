@@ -9,15 +9,13 @@ MH_High_Dim_future(niter, x0, sd, loglik, ..., verbatim = F, cores = 1)
 \arguments{
 \item{niter}{number of iteration}
 
+\item{x0}{}
+
 \item{loglik}{function that return the acceptation rate, the first argument must be the proposition value in the algorithm}
 
 \item{...}{the parameter for loglik function}
 
 \item{verbatim}{boolean value, true will return the whole chain, false will return by default only the last value}
-
-\item{cores}{}
-
-\item{x}{the initial value of the MCMC}
 }
 \description{
 Will run the metropolis hasting algorithm on the rows of x.

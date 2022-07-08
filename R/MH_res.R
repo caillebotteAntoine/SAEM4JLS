@@ -1,6 +1,9 @@
 
 #' Metropolis Hastings Object
 #'
+#' @slot acceptation
+#' @slot chain
+#'
 #' @field value matrix.
 #' @field acceptation data.frame.
 #' @field chain data.frame.
@@ -39,7 +42,10 @@ setMethod(addacceptation, signature = c('MH_res', 'integer'),
 #--- addchain ---#
 setGeneric('addchain', function(object, c) standardGeneric("addchain" ) )
 setMethod(addchain, signature = c('MH_res', 'matrix'),
-          function(object, c) { object@chain <- rbind(c, object@chain) ; object})
+          function(object, c) {
+            if(nrow(c) > 0 ) object@chain[,'iteration'] <- object@chain[,'iteration'] + max(c[,'iteration'])
+
+            object@chain <- rbind(c, object@chain) ; return(object) })
 
 #--- setoffset ---#
 setGeneric('setoffset', function(object, offset) standardGeneric("setoffset" ) )
@@ -83,7 +89,8 @@ setMethod(getacceptation, 'MH_res',
 #--- getchain ---#
 setGeneric('getchain', function(object) standardGeneric("getchain" ) )
 setMethod(getchain, 'MH_res',
-          function(object){
+          function(object){ return(object@chain %>% data.frame(row.names = NULL))
+
             dim <- base::nrow(object)
             n <- base::nrow(object$chain)
 

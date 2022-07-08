@@ -18,3 +18,9 @@ Metropolis Hastings Object
 \item{\code{chain}}{data.frame.}
 }}
 
+\section{Slots}{
+
+\describe{
+\item{\code{chain}}{}
+}}
+

@@ -74,7 +74,8 @@ simulation_test <- function(simulation, Phi, parameter, niter, Z, h = 0, verbati
 {
   Phih <- do.call(Phi, parameter)
 
-  res <- do.call(simulation, c(list(niter = niter, h = h, Phih = Phih), Z, list(verbatim = verbatim)))
+  res <- do.call(simulation, c(list(niter = niter, h = h, Phih = Phih), Z, list(verbatim = verbatim))) %>%
+    keep(function(x) 'MH_res' %in% class(x[[1]]) )
 
   return(res)
 }

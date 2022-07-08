@@ -1,8 +1,11 @@
 
 #' plot resultat of MH function
 #'
+#' @param name
+#' @param nrow
+#' @param ncol
+#' @param var
 #' @param x
-#' @param ...
 #'
 #' @return
 #' @export
