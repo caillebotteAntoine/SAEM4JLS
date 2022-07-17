@@ -4,7 +4,7 @@
 \alias{burnin_fct}
 \title{Burn-in function for algorithm requiring a step}
 \usage{
-burnin_fct(burnin, coef.burnin, scale = 1)
+burnin_fct(burnin, coef.burnin, scale = 1, format = "double")
 }
 \arguments{
 \item{scale}{}

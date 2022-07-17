@@ -19,9 +19,13 @@
 #'v <- burnin_fct(10, 3/4, 0.5)
 #'plot(1:20, u(1:20))
 #'plot(1:20, v(1:20))
-burnin_fct <- function(burnin, coef.burnin, scale = 1)
+burnin_fct <- function(burnin, coef.burnin, scale = 1, format = "double")
 {
-  function(k) scale * ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin ))
+  if(format == 'double')
+    return( function(k) scale * ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin )) )
+
+  if(format == 'int')
+    return( function(k) round(scale * ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin )) ))
 }
 
 

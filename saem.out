@@ -1,99 +1,95 @@
   |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
    inline R code fragments
 
-  |                                                                              |....                                                                  |   6%
+  |                                                                              |.....                                                                 |   6%
 label: setup (with options) 
 List of 1
  $ include: logi FALSE
 
-  |                                                                              |......                                                                |   9%
+  |                                                                              |.......                                                               |  10%
   ordinary text without R code
 
-  |                                                                              |........                                                              |  12%
+  |                                                                              |.........                                                             |  13%
 label: number of cores (with options) 
 List of 1
  $ echo: logi FALSE
 
-  |                                                                              |...........                                                           |  15%
+  |                                                                              |...........                                                           |  16%
   ordinary text without R code
 
-  |                                                                              |.............                                                         |  18%
+  |                                                                              |..............                                                        |  19%
 label: init
-  |                                                                              |...............                                                       |  21%
+  |                                                                              |................                                                      |  23%
   ordinary text without R code
 
-  |                                                                              |.................                                                     |  24%
+  |                                                                              |..................                                                    |  26%
 label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
+List of 2
+ $ eval   : logi FALSE
+ $ include: logi FALSE
 
-  |                                                                              |...................                                                   |  27%
+  |                                                                              |....................                                                  |  29%
   ordinary text without R code
 
-  |                                                                              |.....................                                                 |  30%
+  |                                                                              |.......................                                               |  32%
 label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
+  |                                                                              |.........................                                             |  35%
   ordinary text without R code
 
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
+  |                                                                              |...........................                                           |  39%
 label: SAEM init
+  |                                                                              |.............................                                         |  42%
+  ordinary text without R code
+
   |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
 label: SAEM fct
+  |                                                                              |..................................                                    |  48%
+  ordinary text without R code
+
   |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
 label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
+  |                                                                              |......................................                                |  55%
   ordinary text without R code
 
-  |                                                                              |..........................................                            |  61%
+  |                                                                              |.........................................                             |  58%
 label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
+  |                                                                              |...........................................                           |  61%
   ordinary text without R code
 
-  |                                                                              |...............................................                       |  67%
+  |                                                                              |.............................................                         |  65%
 label: SAEM ab
-  |                                                                              |.................................................                     |  70%
+  |                                                                              |...............................................                       |  68%
   ordinary text without R code
 
-  |                                                                              |...................................................                   |  73%
+  |                                                                              |..................................................                    |  71%
 label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
+  |                                                                              |....................................................                  |  74%
   ordinary text without R code
 
-  |                                                                              |.......................................................               |  79%
+  |                                                                              |......................................................                |  77%
 label: SAEM alpha (with options) 
 List of 2
  $ eval   : logi FALSE
  $ include: logi FALSE
 
-  |                                                                              |.........................................................             |  82%
+  |                                                                              |........................................................              |  81%
   ordinary text without R code
 
-  |                                                                              |...........................................................           |  85%
+  |                                                                              |...........................................................           |  84%
 label: SAEM ab, alpha et gamma (with options) 
 List of 2
  $ eval   : logi FALSE
  $ include: logi FALSE
 
-  |                                                                              |..............................................................        |  88%
+  |                                                                              |.............................................................         |  87%
   ordinary text without R code
 
-  |                                                                              |................................................................      |  91%
+  |                                                                              |...............................................................       |  90%
 label: saem plot (with options) 
 List of 1
  $ echo: logi FALSE
 
-  |                                                                              |..................................................................    |  94%
+  |                                                                              |.................................................................     |  94%
   ordinary text without R code
 
   |                                                                              |....................................................................  |  97%
@@ -106,103 +102,98 @@ List of 2
   ordinary text without R code
 
 
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1507477.1.short.q/RtmpoXr0kt/rmarkdown-str19bb957e78405b.html 
+/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1518630.1.short.q/RtmpdPGSVN/rmarkdown-str2b7a7bd41fb5.html 
   |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
    inline R code fragments
 
-  |                                                                              |....                                                                  |   6%
+  |                                                                              |.....                                                                 |   6%
 label: setup (with options) 
 List of 1
  $ include: logi FALSE
 
-  |                                                                              |......                                                                |   9%
+  |                                                                              |.......                                                               |  10%
   ordinary text without R code
 
-  |                                                                              |........                                                              |  12%
+  |                                                                              |.........                                                             |  13%
 label: number of cores (with options) 
 List of 1
  $ echo: logi FALSE
 
-  |                                                                              |...........                                                           |  15%
+  |                                                                              |...........                                                           |  16%
   ordinary text without R code
 
-  |                                                                              |.............                                                         |  18%
+  |                                                                              |..............                                                        |  19%
 label: init
-  |                                                                              |...............                                                       |  21%
+  |                                                                              |................                                                      |  23%
   ordinary text without R code
 
-  |                                                                              |.................                                                     |  24%
+  |                                                                              |..................                                                    |  26%
 label: data ploting (with options) 
 List of 1
  $ echo: logi FALSE
 
-  |                                                                              |...................                                                   |  27%
+  |                                                                              |....................                                                  |  29%
   ordinary text without R code
 
-  |                                                                              |.....................                                                 |  30%
+  |                                                                              |.......................                                               |  32%
 label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
+  |                                                                              |.........................                                             |  35%
   ordinary text without R code
 
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
+  |                                                                              |...........................                                           |  39%
 label: SAEM init
+  |                                                                              |.............................                                         |  42%
+  ordinary text without R code
+
   |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
 label: SAEM fct
+  |                                                                              |..................................                                    |  48%
+  ordinary text without R code
+
   |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
 label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
+  |                                                                              |......................................                                |  55%
   ordinary text without R code
 
-  |                                                                              |..........................................                            |  61%
+  |                                                                              |.........................................                             |  58%
 label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
+  |                                                                              |...........................................                           |  61%
   ordinary text without R code
 
-  |                                                                              |...............................................                       |  67%
+  |                                                                              |.............................................                         |  65%
 label: SAEM ab
-  |                                                                              |.................................................                     |  70%
+  |                                                                              |...............................................                       |  68%
   ordinary text without R code
 
-  |                                                                              |...................................................                   |  73%
+  |                                                                              |..................................................                    |  71%
 label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
+  |                                                                              |....................................................                  |  74%
   ordinary text without R code
 
-  |                                                                              |.......................................................               |  79%
+  |                                                                              |......................................................                |  77%
 label: SAEM alpha (with options) 
 List of 2
  $ eval   : logi FALSE
  $ include: logi FALSE
 
-  |                                                                              |.........................................................             |  82%
+  |                                                                              |........................................................              |  81%
   ordinary text without R code
 
-  |                                                                              |...........................................................           |  85%
+  |                                                                              |...........................................................           |  84%
 label: SAEM ab, alpha et gamma (with options) 
 List of 2
  $ eval   : logi FALSE
  $ include: logi FALSE
 
-  |                                                                              |..............................................................        |  88%
+  |                                                                              |.............................................................         |  87%
   ordinary text without R code
 
-  |                                                                              |................................................................      |  91%
+  |                                                                              |...............................................................       |  90%
 label: saem plot (with options) 
 List of 1
  $ echo: logi FALSE
 
-  |                                                                              |..................................................................    |  94%
+  |                                                                              |.................................................................     |  94%
   ordinary text without R code
 
   |                                                                              |....................................................................  |  97%
@@ -215,767 +206,4 @@ List of 2
   ordinary text without R code
 
 
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1507481.1.short.q/RtmpL4DAuW/rmarkdown-str19bc2d4b3897e4.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |....                                                                  |   6%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |......                                                                |   9%
-  ordinary text without R code
-
-  |                                                                              |........                                                              |  12%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...........                                                           |  15%
-  ordinary text without R code
-
-  |                                                                              |.............                                                         |  18%
-label: init
-  |                                                                              |...............                                                       |  21%
-  ordinary text without R code
-
-  |                                                                              |.................                                                     |  24%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...................                                                   |  27%
-  ordinary text without R code
-
-  |                                                                              |.....................                                                 |  30%
-label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
-label: SAEM init
-  |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM fct
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
-label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
-  ordinary text without R code
-
-  |                                                                              |..........................................                            |  61%
-label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
-  ordinary text without R code
-
-  |                                                                              |...............................................                       |  67%
-label: SAEM ab
-  |                                                                              |.................................................                     |  70%
-  ordinary text without R code
-
-  |                                                                              |...................................................                   |  73%
-label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
-  ordinary text without R code
-
-  |                                                                              |.......................................................               |  79%
-label: SAEM alpha (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |.........................................................             |  82%
-  ordinary text without R code
-
-  |                                                                              |...........................................................           |  85%
-label: SAEM ab, alpha et gamma (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |................................................................      |  91%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1507683.1.short.q/RtmpVseA7q/rmarkdown-str1868e759186eeb.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |....                                                                  |   6%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |......                                                                |   9%
-  ordinary text without R code
-
-  |                                                                              |........                                                              |  12%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...........                                                           |  15%
-  ordinary text without R code
-
-  |                                                                              |.............                                                         |  18%
-label: init
-  |                                                                              |...............                                                       |  21%
-  ordinary text without R code
-
-  |                                                                              |.................                                                     |  24%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...................                                                   |  27%
-  ordinary text without R code
-
-  |                                                                              |.....................                                                 |  30%
-label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
-label: SAEM init
-  |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM fct
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
-label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
-  ordinary text without R code
-
-  |                                                                              |..........................................                            |  61%
-label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
-  ordinary text without R code
-
-  |                                                                              |...............................................                       |  67%
-label: SAEM ab
-  |                                                                              |.................................................                     |  70%
-  ordinary text without R code
-
-  |                                                                              |...................................................                   |  73%
-label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
-  ordinary text without R code
-
-  |                                                                              |.......................................................               |  79%
-label: SAEM alpha (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |.........................................................             |  82%
-  ordinary text without R code
-
-  |                                                                              |...........................................................           |  85%
-label: SAEM ab, alpha et gamma (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |................................................................      |  91%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1507699.1.short.q/RtmpOxTPv8/rmarkdown-str19bcdc2731cec1.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |....                                                                  |   6%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |......                                                                |   9%
-  ordinary text without R code
-
-  |                                                                              |........                                                              |  12%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...........                                                           |  15%
-  ordinary text without R code
-
-  |                                                                              |.............                                                         |  18%
-label: init
-  |                                                                              |...............                                                       |  21%
-  ordinary text without R code
-
-  |                                                                              |.................                                                     |  24%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...................                                                   |  27%
-  ordinary text without R code
-
-  |                                                                              |.....................                                                 |  30%
-label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
-label: SAEM init
-  |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM fct
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
-label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
-  ordinary text without R code
-
-  |                                                                              |..........................................                            |  61%
-label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
-  ordinary text without R code
-
-  |                                                                              |...............................................                       |  67%
-label: SAEM ab
-  |                                                                              |.................................................                     |  70%
-  ordinary text without R code
-
-  |                                                                              |...................................................                   |  73%
-label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
-  ordinary text without R code
-
-  |                                                                              |.......................................................               |  79%
-label: SAEM alpha (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |.........................................................             |  82%
-  ordinary text without R code
-
-  |                                                                              |...........................................................           |  85%
-label: SAEM ab, alpha et gamma (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |................................................................      |  91%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1507734.1.short.q/RtmpPOxvNW/rmarkdown-str13d5dc318d326.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |....                                                                  |   6%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |......                                                                |   9%
-  ordinary text without R code
-
-  |                                                                              |........                                                              |  12%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...........                                                           |  15%
-  ordinary text without R code
-
-  |                                                                              |.............                                                         |  18%
-label: init
-  |                                                                              |...............                                                       |  21%
-  ordinary text without R code
-
-  |                                                                              |.................                                                     |  24%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...................                                                   |  27%
-  ordinary text without R code
-
-  |                                                                              |.....................                                                 |  30%
-label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
-label: SAEM init
-  |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM fct
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
-label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
-  ordinary text without R code
-
-  |                                                                              |..........................................                            |  61%
-label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
-  ordinary text without R code
-
-  |                                                                              |...............................................                       |  67%
-label: SAEM ab
-  |                                                                              |.................................................                     |  70%
-  ordinary text without R code
-
-  |                                                                              |...................................................                   |  73%
-label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
-  ordinary text without R code
-
-  |                                                                              |.......................................................               |  79%
-label: SAEM alpha (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |.........................................................             |  82%
-  ordinary text without R code
-
-  |                                                                              |...........................................................           |  85%
-label: SAEM ab, alpha et gamma (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |................................................................      |  91%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1507761.1.short.q/RtmpFaTmfr/rmarkdown-str2071fc594005bc.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |....                                                                  |   6%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |......                                                                |   9%
-  ordinary text without R code
-
-  |                                                                              |........                                                              |  12%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...........                                                           |  15%
-  ordinary text without R code
-
-  |                                                                              |.............                                                         |  18%
-label: init
-  |                                                                              |...............                                                       |  21%
-  ordinary text without R code
-
-  |                                                                              |.................                                                     |  24%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...................                                                   |  27%
-  ordinary text without R code
-
-  |                                                                              |.....................                                                 |  30%
-label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
-label: SAEM init
-  |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM fct
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
-label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
-  ordinary text without R code
-
-  |                                                                              |..........................................                            |  61%
-label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
-  ordinary text without R code
-
-  |                                                                              |...............................................                       |  67%
-label: SAEM ab
-  |                                                                              |.................................................                     |  70%
-  ordinary text without R code
-
-  |                                                                              |...................................................                   |  73%
-label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
-  ordinary text without R code
-
-  |                                                                              |.......................................................               |  79%
-label: SAEM alpha (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |.........................................................             |  82%
-  ordinary text without R code
-
-  |                                                                              |...........................................................           |  85%
-label: SAEM ab, alpha et gamma (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |................................................................      |  91%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1507792.1.short.q/Rtmp3q7kxB/rmarkdown-str2d421d53423653.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |....                                                                  |   6%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |......                                                                |   9%
-  ordinary text without R code
-
-  |                                                                              |........                                                              |  12%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...........                                                           |  15%
-  ordinary text without R code
-
-  |                                                                              |.............                                                         |  18%
-label: init
-  |                                                                              |...............                                                       |  21%
-  ordinary text without R code
-
-  |                                                                              |.................                                                     |  24%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...................                                                   |  27%
-  ordinary text without R code
-
-  |                                                                              |.....................                                                 |  30%
-label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
-label: SAEM init
-  |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM fct
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
-label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
-  ordinary text without R code
-
-  |                                                                              |..........................................                            |  61%
-label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
-  ordinary text without R code
-
-  |                                                                              |...............................................                       |  67%
-label: SAEM ab
-  |                                                                              |.................................................                     |  70%
-  ordinary text without R code
-
-  |                                                                              |...................................................                   |  73%
-label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
-  ordinary text without R code
-
-  |                                                                              |.......................................................               |  79%
-label: SAEM alpha (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |.........................................................             |  82%
-  ordinary text without R code
-
-  |                                                                              |...........................................................           |  85%
-label: SAEM ab, alpha et gamma (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |................................................................      |  91%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1508252.1.short.q/RtmpBsMSN4/rmarkdown-str2d5698704763da.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |..                                                                    |   3%
-   inline R code fragments
-
-  |                                                                              |....                                                                  |   6%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |......                                                                |   9%
-  ordinary text without R code
-
-  |                                                                              |........                                                              |  12%
-label: number of cores (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...........                                                           |  15%
-  ordinary text without R code
-
-  |                                                                              |.............                                                         |  18%
-label: init
-  |                                                                              |...............                                                       |  21%
-  ordinary text without R code
-
-  |                                                                              |.................                                                     |  24%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...................                                                   |  27%
-  ordinary text without R code
-
-  |                                                                              |.....................                                                 |  30%
-label: stat exhaustive
-  |                                                                              |.......................                                               |  33%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  36%
-label: MH
-  |                                                                              |............................                                          |  39%
-  ordinary text without R code
-
-  |                                                                              |..............................                                        |  42%
-label: SAEM init
-  |                                                                              |................................                                      |  45%
-  ordinary text without R code
-
-  |                                                                              |..................................                                    |  48%
-label: SAEM fct
-  |                                                                              |....................................                                  |  52%
-  ordinary text without R code
-
-  |                                                                              |......................................                                |  55%
-label: SAEM loop setup
-  |                                                                              |........................................                              |  58%
-  ordinary text without R code
-
-  |                                                                              |..........................................                            |  61%
-label: SAEM gamma
-  |                                                                              |.............................................                         |  64%
-  ordinary text without R code
-
-  |                                                                              |...............................................                       |  67%
-label: SAEM ab
-  |                                                                              |.................................................                     |  70%
-  ordinary text without R code
-
-  |                                                                              |...................................................                   |  73%
-label: SAEM ab et gamma
-  |                                                                              |.....................................................                 |  76%
-  ordinary text without R code
-
-  |                                                                              |.......................................................               |  79%
-label: SAEM alpha (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |.........................................................             |  82%
-  ordinary text without R code
-
-  |                                                                              |...........................................................           |  85%
-label: SAEM ab, alpha et gamma (with options) 
-List of 2
- $ eval   : logi FALSE
- $ include: logi FALSE
-
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |................................................................      |  91%
-label: saem plot (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |....................................................................  |  97%
-label: seam table (with options) 
-List of 2
- $ results: chr "asis"
- $ echo   : logi FALSE
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1509321.1.short.q/RtmpYeUUxp/rmarkdown-str2d583754a66e89.html 
+/bin/pandoc +RTS -K512m -RTS Longitudinal_Surival_model_SAEM.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Longitudinal_Surival_model_SAEM.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1518648.1.short.q/RtmpsQck5I/rmarkdown-str2d483e94b346.html 

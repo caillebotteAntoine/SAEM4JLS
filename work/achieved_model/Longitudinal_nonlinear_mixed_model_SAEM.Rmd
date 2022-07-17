@@ -64,28 +64,45 @@ plot(data)
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
 ```{r  stat exhaustive}
-Phi <- fct_vector(function(sigma2, rho2, mu, omega2) 
-  c(-n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), mu), dim = c(1,1,F.,F.) )$eval
+model <- SAEM_model(
+  function(sigma2, ...) -n/(2*sigma2),
+  function(eta, phi) mean((Y - get_obs(data, eta = eta, phi = phi) )^2 ),
+  latent_vars = list(
+    latent_variable('eta', nrow = N, prior = list(variance = 'rho2')),
+    latent_variable('phi', nrow = G, ncol = F., prior = list(mean = 'mu', variance = 'omega2'))
+    )
+  )
 
-S <- fct_vector(function(eta, phi) mean((Y - get_obs(data, eta = eta, phi = phi) )^2 ),
-                function(eta, ...) mean(eta^2),
-                function(phi, ...) apply(phi^2, 2, mean),
-                function(phi, ...) apply(phi  , 2, mean), dim = c(1,1,F.,F.) )
+Phi <- model$Phi$eval
+S <- model$S
+
+loglik.phi <- model$loglik.fct$phi
+loglik.eta <- model$loglik.fct$eta
+sim <- model$simulation.fct
 ```
 
-## Metropolis Hastings
 
-```{r MH}
-loglik.phi <- function(x, eta, Phi)
-{
-  id <- c(1,3,4) #indice de S_1 et S_{3,.} puis S_{4,.}
-  sum(Phi%a%1*S$eval(eta = eta, phi = setoffset(x, Phi%a%4), i = 1) + Phi%a%3 * S$eval(phi = x, i = 3) )
-}
-loglik.eta <- function(x, phi, Phi) 
-{ 
-  id <- c(1,2)
-  sum( Phi%a%id * S$eval(eta = x, phi = phi, i = id) )
-}
+
+```{r MH, eval=FALSE, include=FALSE}
+## Metropolis Hastings
+# Phi <- fct_vector(function(sigma2, rho2, mu, omega2) 
+#   c(-n/(2*sigma2), -N/(2*rho2), -G/(2*omega2), mu), dim = c(1,1,F.,F.) )$eval
+# 
+# S <- fct_vector(function(eta, phi) mean((Y - get_obs(data, eta = eta, phi = phi) )^2 ),
+#                 function(eta, ...) mean(eta^2),
+#                 function(phi, ...) apply(phi^2, 2, mean),
+#                 function(phi, ...) apply(phi  , 2, mean), dim = c(1,1,F.,F.) )
+
+# loglik.phi <- function(x, eta, Phi)
+# {
+#   id <- c(1,3,4) #indice de S_1 et S_{3,.} puis S_{4,.}
+#   sum(Phi%a%1*S$eval(eta = eta, phi = setoffset(x, Phi%a%4), i = 1) + Phi%a%3 * S$eval(phi = x, i = 3) )
+# }
+# loglik.eta <- function(x, phi, Phi) 
+# { 
+#   id <- c(1,2)
+#   sum( Phi%a%id * S$eval(eta = x, phi = phi, i = id) )
+# }
 ```
 
 ## SAEM
@@ -103,27 +120,12 @@ Z <- list(eta = list( matrix(rep(0, G*ng), ncol = 1) ),
 ## Etape simulation et maximisation du SEAM
 
 ```{r SAEM fct}
-sim <- function(niter, h, Phih, eta, phi, verbatim = F)
-{
-  M <- length(phi)
-  eta <- 1:M %>% lapply( function(i)
-    MH_High_Dim_future(niter, eta[[i]], sd.eta , loglik.eta, phi[[i]], Phih, 
-                            cores = 1, verbatim = verbatim))
-  
-  phi <- 1:M %>% lapply( function(i)
-    MH_Gibbs_Sampler_future(niter, setoffset(phi[[i]],-Phih%a%4), sd.phi, loglik.phi, eta[[i]], Phih, 
-                            cores = 1, verbatim = verbatim )) %>%
-    lapply(setoffset, Phih%a%4)
-  
-  list(eta = eta, phi = phi)
-}
-
 maxi <- function(S)
 {
   list(sigma2 = S%a%1,
        rho2 =   S%a%2,
-       mu =     S%a%4,
-       omega2 = S%a%3 - (S%a%4)^2 )
+       mu =     S%a%3,
+       omega2 = S%a%4 - (S%a%3)^2 )
 }
 ```
 
@@ -140,7 +142,7 @@ MH.iter <- 10
 sd.eta <- .3
 sd.phi <- c(.05, .3, .05)
 
-gg <- simulation_test(sim, Phi, param, 100, Z) %>% lapply(function(z)plot(z[[1]], nrow = 2))
+#gg <- simulation_test(sim, Phi, param, 10, Z) %>% lapply(function(z)plot(z[[1]], nrow = 2))
 
 res <- SAEM(niter, MH.iter, para, Phi, S$eval, Z, sim, maxi,
             burnin = 100, coef.burnin = 2/3, verbatim = 2)
@@ -153,7 +155,8 @@ plot(res, true.value = oracle(maxi, S, data), var = 'summary')
 ```
 
 ```{r saem plot, echo = F }
-plot(res, true.value = oracle(maxi, S, data) )
+plot(res, var = 'special', true.value = oracle(maxi, S, data) )
+# plot(res, true.value = oracle(maxi, S, data) )
 plot.fitted.value(res, data)#, 1:100)
 ```
 

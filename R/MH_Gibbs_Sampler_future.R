@@ -42,7 +42,9 @@ MH_Gibbs_Sampler_future <- function(niter, x0, sd, loglik, ..., verbatim = F, co
   x <- as.matrix(x0)
 
   args <- list(...) # initialization of the parameters for the calculation of the acceptance rate
-  x_lik <- do.call(loglik, c(list(x), args)) #log-Likelihood of the initiale value x
+  if(length(args) == 1 && is.list(args[[1]])) args <- args[[1]]
+
+  x_lik <- do.call(loglik, c(list(x = x), args)) #log-Likelihood of the initiale value x
   dim <- nrow(x) #dimension of the vector x
   ncomp <- ncol(x) #number of composante
 
@@ -68,7 +70,7 @@ MH_Gibbs_Sampler_future <- function(niter, x0, sd, loglik, ..., verbatim = F, co
       for(h in 1:ncomp)
       {
         x_new[k,h] <- x_prop[h]
-        x_new_lik <- do.call(loglik, c(list(x_new), args))
+        x_new_lik <- do.call(loglik, c(list(x = x_new), args))
         if(x_new_lik > x_lik || log(runif(1)) < x_new_lik - x_lik ) #min(1,\rho(x,xnew))
         {
           x[k,h] <- x_new[k,h]

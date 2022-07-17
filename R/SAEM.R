@@ -118,7 +118,7 @@ SAEM <- function(niter, niter.MH, param, Phi, exhaustive, Z, simulation, maximis
 
     # --- Step M : maximisation --- #
     res <- maximisation(Sh)
-    for( i in names(para)) para[[i]][h,] <- res[[i]] #mise à jour de chaque ligne de chaque parametre
+    for( i in names(res)) para[[i]][h,] <- res[[i]] #mise à jour de chaque ligne de chaque parametre
 
     cmp <- ifelse(stopCondi(h), cmp + 1, 0) #compteur après convergence des para pour verifier la CV
     h <- h + 1

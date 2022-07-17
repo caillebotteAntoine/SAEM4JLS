@@ -87,9 +87,19 @@ fct_vector <- setRefClass(
 )
 
 
+setMethod('length', signature = 'fct_vector', definition = function(x) length())
+
 setMethod('[', signature = c('fct_vector', 'numeric'), definition = function(x, i) x$subset(i)$eval)
 
 setMethod('[[', signature = c('fct_vector', 'numeric'), definition = function(x, i) x$subset(i))
+
+setGeneric('as.fct_vector', def = function(list, dim) standardGeneric("as.fct_vector" ))
+setMethod('as.fct_vector', signature = c('list', 'numeric'), definition = function(list, dim){
+
+  g <- function(..., dim) new('fct_vector', ..., dim = dim)
+
+  do.call(g, c(list, list(dim = dim) ))
+})
 
 # `[.fct_vector` <- function(vec, i) vec$subset(i)$eval
 
@@ -98,4 +108,18 @@ setMethod('[[', signature = c('fct_vector', 'numeric'), definition = function(x,
   if(length(var)== 1) return(x[ attr(x,as.character(var)) ])
   lapply(var, function(v) x%a%v) %>% unlist
 }
+
+setMethod("+", c("fct_vector", "fct_vector"), function(e1, e2) {
+
+  dim <- c(sapply(e1$dimention, length),
+           sapply(e2$dimention, length))
+
+  names(dim) <- NULL
+
+  as.fct_vector(c(e1$fct, e2$fct), dim = dim)
+})
+
+
+
+
 
