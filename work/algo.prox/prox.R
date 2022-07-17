@@ -70,7 +70,11 @@ SPGD <- function(niter, m, theta0, step = 1e-6, grad.fi, f, ...)
     theta.tilde <- apply(theta.t, 2, mean)
     grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
 
+<<<<<<< HEAD
     # print(mean(grad.f.tilde))
+=======
+    print(mean(grad.f.tilde))
+>>>>>>> 921be6196f3715ca4457f1fda9a740a63d721f55
     f.value[k+1] <- do.call(f, c(list(theta.tilde), args))
     theta.t[1,] <- theta.tilde
 
@@ -127,11 +131,16 @@ x <- readRDS('nirs_feuille_irr_mean.rds')
 
 
 
+<<<<<<< HEAD
 param <- list(sigma2 = 0.5,
+=======
+param <- list(sigma2 = 0.00005,
+>>>>>>> 921be6196f3715ca4457f1fda9a740a63d721f55
               rho2 = .5,
               mu = 3)
 
 J <- 10
+<<<<<<< HEAD
 n <- 100#nrow(x)
 p <- 10#ncol(x)
 
@@ -139,6 +148,15 @@ time <- seq(-1,1, len = J)
 ttime <- t(time)
 S <- sample(1:p, 5) #c(50, 110, 155, 510, 750, 820)
 U <- matrix(runif(n*p), nrow = n, ncol = p)#1e4*as.matrix(x)
+=======
+n <- nrow(x)
+p <- ncol(x)
+
+time <- seq(-1,1, len = J)
+ttime <- t(time)
+S <- c(50, 110, 155, 510, 750, 820) #sample(1:p, 5)
+U <- 1e4*as.matrix(x) #matrix(runif(n*p), nrow = n, ncol = p)
+>>>>>>> 921be6196f3715ca4457f1fda9a740a63d721f55
 tU <- t(U)
 beta <- matrix(rep(0, p), nrow = 1) ; beta[S] <- 1
 
@@ -159,7 +177,11 @@ l <- function(beta, Z, ... ) - 1/param$sigma2 * sum( (Y - as.vector(beta %*% t(U
 grad.li <- function(beta, i, Z, ...)  -1/param$sigma2 * sum( (Y[i,] - sum(beta * U[i,]) - Z[i]*time) )* U[i,] /n
 
 
+<<<<<<< HEAD
 res <- SPGD(500, 10, theta0 = matrix(rep(0, p), nrow = 1),
+=======
+res <- stochastic.proximal.gradient.descent(500, 10, theta0 = matrix(rep(0, p), nrow = 1),
+>>>>>>> 921be6196f3715ca4457f1fda9a740a63d721f55
                                             step = burnin_fct(200, 0.8, 1e-5), grad.li, l, Z)
 
 as.numeric(beta)
