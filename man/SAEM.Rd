@@ -6,29 +6,32 @@
 \usage{
 SAEM(
   niter,
-  niter.MH,
-  param,
+  sim.iter,
+  parameter0,
+  var0,
   Phi,
   exhaustive,
-  Z,
-  simulation,
   maximisation,
+  simulation,
+  adptative.sd = NULL,
   burnin = NULL,
   coef.burnin = 1,
-  eps,
+  eps = NULL,
   verbatim = F
 )
 }
 \arguments{
 \item{niter}{number of iterations for SAEM loop}
 
-\item{niter.MH}{number of iterations for metropolis hastings algorithm}
+\item{sim.iter}{number of iterations for Gibbs sampler algorithm}
 
-\item{Z}{list of latent variables (with var names) MUST BE MATRIX}
+\item{var0}{list of latent variables (with var names) MUST BE VECTOR}
+
+\item{maximisation}{function for maximisation step}
 
 \item{simulation}{function for simulation step}
 
-\item{maximisation}{function for maximisation step}
+\item{adptative.sd}{target sd value}
 
 \item{burnin}{step at which burn-in period ends}
 
@@ -36,46 +39,8 @@ SAEM(
 
 \item{eps}{Stop criterion}
 
-\item{verbatim}{1 message during the main loop and estimation of the remaining execution time; 2 same as 1 with in return values of the simulations of the latent variables}
-}
-\value{
-
+\item{verbatim}{1 = message only, 2 add MCMC, 3 add full MCMC}
 }
 \description{
 SAEM algorithm perform parameter estimation for nonlinear mixed effects
-}
-\examples{
-
-# Y_i,j = a_i*t_j + eps_{i,j}
-# a_i ~ N(mu, omega2)
-m <- function(t,a) a*t
-
-n <- 10
-a <- rnorm(n, 4, sqrt(0.1))
-nt <- 10
-t <- seq(0,1, length.out = nt)
-eps <- rnorm(nt*n, 0, 0.5)
-Y <- data.frame(id = rep(1:n, each = nt),
-                obs = m(rep(a, each = nt), rep(t, n)) + eps)
-
-#log(f(Y,a)) = log(f(Y|a)) + log(f(a)) = <S(a),Phi(sigma^2,mu,omega^2)> + psi
-
-Phi <- function(sigma2, mu, omega2) c(-n*nt/(2*sigma2),  -n/(2*omega2), n*mu/omega2)
-
-S <- function(a)
-  c(mean( (Y$obs - m(rep(a, each = nt), rep(t, n)) )^2 ),
-    mean(a),
-    mean(a^2))
-
-loglik <- function(a, Phih) Phih*S(a)
-
-simulation <- function(niter,iter, Phih, a)
-  list(a = list(MH_High_Dim_para_future(niter, a[[1]], sd = 0.05, loglik, Phih, cores = 1 )))
-
-maximisation <- function(S) list(sigma2 = S[1], mu = S[2], omega2 = S[3]-S[2]^2)
-
-res <- SAEM(100, 10, list(sigma2 = 0.1, mu = 1, omega2 = 0.1), Phi, S,
-            Z = list(a = list(matrix(rep(1,n), ncol = 1))), simulation, maximisation, verbatim = 2)
-
-plot(res)
 }

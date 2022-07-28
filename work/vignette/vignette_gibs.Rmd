@@ -1,0 +1,161 @@
+---
+title: "vignette_gibbs sampler"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+knitr::knit_hooks$set(time = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      # record the current time before each chunk
+      now <<- Sys.time()
+    } else {
+      # calculate the time difference after a chunk
+      res <- difftime(Sys.time(), now, units = 's')
+      # return a character string to show the time
+      diff_time <- format(as.POSIXct(as.numeric(res), 
+                                     origin = '1970-01-01', tz = 'UTC'), "%Mmin %Ssec")
+      paste("Chunk execution time = ", diff_time)
+    }
+  }
+}))
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.weightedidth = 12,
+               fig.asp = 0.8,
+               out.weightedidth = "100%")
+
+require(SAEM4JLS)
+require(tictoc)
+```
+
+
+
+```{r init}
+n <- 10000# nombre d'observation
+x <- c(3,6) #moyenne et variance
+obs <-  rnorm(n, x[1], sqrt(x[2]))#tirage dans une loi normale
+
+  
+x0 <- chain(c(1,1), 
+            sd = 0.1,
+            propto_distrib_fct =function(x, obs) sum( -1/2*log(2*pi*x[2]) -1/(2*x[2])* (obs-x[1])^2 ) #vraisemblence
+            )
+
+#Metropolis hasting
+for(j in 1:500) 
+  x0 <- Gibbs_sampler_step(x0, obs, verbatim = T)
+
+plot(x0, nrow = 2)
+```
+
+### Note
+
+On peut relancer l'algorithme tout en gardant les informations déjà compiler
+
+```{r}
+for(j in 1:100)
+  x0 <- Gibbs_sampler_step(x0, obs, verbatim = T)
+
+plot(x0, nrow = 2)
+```
+
+
+
+
+
+
+```{r}
+# Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
+m <- function(t, phi1, phi2, phi3) (phi1 )/(1+exp((phi2-t)/phi3))
+
+#=======================================#
+param <- list(sigma2 = 0.05,
+              mu = c(5,4,0.5),
+              omega2 = c(1,0.1,0.01)) 
+#=======================================#
+
+t <- seq(2,6, length.out = 10) #valeur des temps
+
+G <- 8 ; ng = 4
+N <- G*ng
+n <- N*length(t)
+
+time <- rep(t, N)
+phi1 <- rnorm(G, param$mu[1], sqrt(param$omega2[1]))
+phi2 <- rnorm(G, param$mu[2], sqrt(param$omega2[2]))
+phi3 <- rnorm(G, param$mu[3], sqrt(param$omega2[3]))
+
+eps <- rnorm(n, 0, sqrt(param$sigma2))
+
+get_obs <- function(phi1, phi2, phi3){
+  m( time, 
+     rep(phi1, each = ng*length(t)),
+     rep(phi2, each = ng*length(t)),
+     rep(phi3, each = ng*length(t)) )
+}
+
+Y <- get_obs(phi1, phi2, phi3) + eps
+
+data.frame(time, Y, id = rep(1:N, each = length(t)), gen = rep(1:G, each = ng*length(t)) ) %>%
+  ggplot(aes(time, Y, col = factor(gen), group = factor(id) )) +
+  geom_point() + geom_line() +
+  theme(legend.position = 'null')
+```
+
+
+
+```{r}
+Phi <-  function(sigma2, mu, omega2) c(- 1/(2*sigma2), -1/(2*omega2), mu/omega2)
+
+S <- function(phi1, phi2, phi3)
+  c(sum((Y - get_obs(phi1, phi2, phi3) )^2 ),
+    mean(phi1^2),mean(phi2^2),mean(phi3^2),
+    mean(phi1),mean(phi2),mean(phi3) )
+
+loglik.phi <- function(phi1, phi2, phi3, Phi)
+{
+  sum( Phi*S(phi1 = phi1, phi2 = phi2, phi3 = phi3) )
+}
+#=============================================================================#
+phi0 <-  matrix(rnorm(3*G, c(6,3,1), 0.1), ncol = G) %>% t
+
+var <- list() ; class(var) <- c('list', 'chain')
+
+var$phi1 <- chain(phi0[,1], sd = 0.02,
+            propto_distrib_fct = function(x, ...) loglik.phi(phi1 = x, ...) )
+var$phi2 <- chain(phi0[,2], sd = 0.02,
+            propto_distrib_fct = function(x, ...) loglik.phi(phi2 = x, ...) )
+var$phi3 <- chain(phi0[,3], sd = 0.02,
+            propto_distrib_fct = function(x, ...) loglik.phi(phi3 = x, ...) )
+
+tic()
+var <- simulation(1000, var, Phi, param, 0.6, verbatim = 2)
+toc()
+
+var$phi1@sd
+
+plot(var, nrow = 2)
+```
+
+
+
+
+
+

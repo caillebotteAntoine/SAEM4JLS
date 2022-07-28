@@ -30,13 +30,6 @@ require(SAEM4JLS)
 
 
 
-
-
-
-
-
-
-
 proxi <- function(theta, gamma, alpha, lambda)
 {
   coef <- ifelse(theta > gamma*alpha*lambda, theta-gamma*alpha*lambda,
@@ -78,9 +71,7 @@ SPGD <- function(niter, m, theta0, step = 1e-6, grad.fi, f, ...)
     grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
 
     # print(mean(grad.f.tilde))
-    # cat('theta = ', theta.tilde)
     f.value[k+1] <- do.call(f, c(list(theta.tilde), args))
-    # print(cat('f = ', f.value[k+1]))
     theta.t[1,] <- theta.tilde
 
     k <- k + 1
@@ -93,6 +84,42 @@ SPGD <- function(niter, m, theta0, step = 1e-6, grad.fi, f, ...)
 }
 
 
+#
+#
+# t_NIRS <- function(spectre)
+# {
+#   NIRS <- spectre$NIRS
+#   variety <- colnames(NIRS)
+#
+#   data <- t(NIRS)
+#
+#   data <- as.data.frame(apply(data,2, as.numeric))
+#
+#   colnames(data) <- sapply(spectre$lambda, function(x) paste0('x',x))
+#
+#   row.names(data) <- variety
+#
+#   return(data)
+# }
+#
+# load('spectres_gamme_BT_Irr_Mean.Rdata')
+# #dt <- readRDS('nirs_feuille_irr_mean.rds')
+# saveRDS(dt, 'nirs_feuille_irr_mean.rds')
+#
+# x <- t_NIRS(dt$der1)
+#
+#
+# dt <- spectres %>% lapply(t_NIRS)
+# saveRDS(dt$der1, 'nirs_feuille_irr_mean.rds')
+
+# x <- readRDS('nirs_feuille_irr_mean.rds')
+
+#
+# x %>% t %>% as_tibble %>% mutate(lambda = 1:nrow(.)) %>% melt(id = 'lambda') %>%
+#   ggplot(aes(lambda, value, col = variable)) + geom_line() + theme(legend.position = 'null') +
+#   geom_vline(xintercept = c(50, 110, 155, 510, 750, 820))
+#
+# heatmap(as.matrix(x))
 
 
 
@@ -100,22 +127,17 @@ SPGD <- function(niter, m, theta0, step = 1e-6, grad.fi, f, ...)
 
 
 
-
-
-
-
-
-param <- list(sigma2 = 0.05,
-              rho2 = .5,
-              mu = 3)
+param <- list(sigma2 = 0.5,
+                rho2 = .5,
+                mu = 3)
 
 J <- 10
 n <- 100#nrow(x)
-p <- 1#ncol(x)
+p <- 10#ncol(x)
 
 time <- seq(-1,1, len = J)
 ttime <- t(time)
-S <- 1#sample(1:p, 5) #c(50, 110, 155, 510, 750, 820)
+S <- sample(1:p, 5) #c(50, 110, 155, 510, 750, 820)
 U <- matrix(runif(n*p), nrow = n, ncol = p)#1e4*as.matrix(x)
 
 tU <- t(U)
@@ -124,8 +146,7 @@ beta <- matrix(rep(0, p), nrow = 1) ; beta[S] <- 1
 eps <- matrix(rnorm(n*J, sd = sqrt(param$sigma2)), nrow = n)
 Z <- rnorm(n, param$mu, sd = sqrt(param$rho2))
 
-Y <- as.vector(beta %*% tU) + Z %*% ttime + eps
-
+Y <- as.vector(beta %*% t(U)) + Z %*% t(time) + eps
 
 data.frame(Y) %>% mutate(id = 1:n) %>%
   melt(id = 'id', value.name = 'Y') %>%
@@ -135,11 +156,11 @@ data.frame(Y) %>% mutate(id = 1:n) %>%
 
 
 
-l <- function(beta, Z, ... ) -1/param$sigma2 * sum( (Y - as.vector(beta %*% tU) - Z %*% ttime )^2 ) /n
-grad.li <- function(beta, i, Z, ...)  1/param$sigma2 * sum(Y[i,] - sum(beta * U[i,]) - Z[i]*time) * U[i,] /n
+l <- function(beta, Z, ... ) - 1/param$sigma2 * sum( (Y - as.vector(beta %*% t(U)) - Z %*% t(time) )^2 ) /n
+grad.li <- function(beta, i, Z, ...)  -1/param$sigma2 * sum( (Y[i,] - sum(beta * U[i,]) - Z[i]*time) )* U[i,] /n
 
 
-res <- SPGD(100, 10, theta0 = matrix(rep(0, p), nrow = 1),
+res <- SPGD(500, 10, theta0 = matrix(rep(0, p), nrow = 1),
             step = burnin_fct(200, 0.8, 1e-5), grad.li, l, Z)
 
 as.numeric(beta)
@@ -147,55 +168,11 @@ plot(attr(res,'f.value'))
 as.numeric(res)
 sum(beta - round(as.numeric(res)))
 
-
-
 l(beta, Z)
 l(res, Z)
 
 
-
-#==========================================#
-#               --- SAEM ---               #
-#==========================================#
-
-model <- SAEM_model(
-  function(sigma2, ...) - n*J/(2*sigma2),
-  function(Z, beta, ...) mean( (Y - as.vector(beta %*% t(U)) - Z %*% t(time) )^2 ),
-  noise.name = 'sigma2',
-
-  # === Variable Latente === #
-  latent_vars = list(
-    latent_variable('Z', dim = n, prior = list(mean = 'mu', variance = 'rho2'))
-    ),
-
-  # === Paramètre de regression === #
-  regression.parameter = list(
-    regression_parameter('beta', p, function(...)SPGD(100, 10, theta0 = beta,
-                                                   step = burnin_fct(15, 0.8, 1e-5),
-                                                   grad.li, l, ...) )
-    )
-  )
-
-#==============================================================================#
-
-load.SAEM(model)
-var0 <- init.SAEM(model,
-                  x0 = list(Z = 0),
-                  sd = list(Z = .2))
-
-
-param0 <- list(sigma2 = 0.1, rho2 = 0.1, mu = 1, beta = rep(0, p))
-
-res <- SAEM(50, 5, param0, var0, Phi, S$eval, max, sim, verbatim = 3)
-
-
-plot(res)
-
-
-
-
-tmp <- sim(50, var0, Phi, param0, 2)
-
-
+beta %*% tU
+res %*% tU
 
 

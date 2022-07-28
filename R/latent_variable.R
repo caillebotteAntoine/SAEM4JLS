@@ -1,37 +1,12 @@
 
-rename_fct_expression <- function(fct, new.names)
-{
-  old.names <- names(new.names)#names(formals(fct))
-
-  #argument rename
-  tmp <- names(formals(fct))
-  for (i in 1:length(tmp)) {
-    if( tmp[[i]] %in% names(new.names ) )
-      tmp[[i]] <- new.names[[tmp[[i]]]]
-  }
-  names(formals(fct)) <- tmp
-
-  #body rename
-  fct.body <- deparse(body(fct))
-
-  for (j in 1:length(fct.body))
-  {
-    for (i in 1:length(new.names)) {
-      fct.body[j] = gsub(old.names[i], new.names[[i]], fct.body[j], fixed = TRUE)
-    }
-  }
-
-  body(fct) <- parse(text = fct.body) #analyse du texte
-  return(fct)
-}
-
 
 
 latent_variable <- setClass(
   Class = "latent_variable",
   slots = list( name = 'character',
-                nrow = 'numeric', ncol = 'numeric',
-                dim.name = 'list',
+                dim = 'numeric',
+                dim.name = 'character',
+                size = 'numeric',
                 prior = 'list',
                 add_on = 'character'),
 
@@ -39,21 +14,12 @@ latent_variable <- setClass(
 
 )
 
-setMethod('initialize', 'latent_variable', function(.Object, name, nrow, ncol, prior, add_on){
-
-  # if(!'ncol' %in% names(dim))
-  #   warning('ncol value missing in the dim list !')
-  # if(!'nrow' %in% names(dim))
-  #   warning('nrow value missing in the dim list !')
-
+setMethod('initialize', 'latent_variable', function(.Object, name, dim = 1, size = 1, prior, add_on){
   .Object@name <- name
-  .Object@nrow <- nrow
+  .Object@dim <- dim
+  .Object@size <- size
 
-  if(missing(ncol)) ncol = 1
-  .Object@ncol <- ncol
-
-  .Object@dim.name <- list(nrow = deparse(substitute(nrow)),
-                           ncol = deparse(substitute(ncol)))
+  .Object@dim.name <- deparse(substitute(dim))
 
   if(!'variance' %in% names(prior) && !'variance.hyper' %in% names(prior))
   {
@@ -70,61 +36,64 @@ setMethod('initialize', 'latent_variable', function(.Object, name, nrow, ncol, p
 
 get_complet_log_likelihood <- function(var)
 {
+  if(var@size != 1)
+  {
+    name <- var@name
+    S <- fct_vector()
+    Phi <- fct_vector()
+    size <- var@size
+    for(i in 1:size)
+    {
+      var@name <- paste0(name, i)
+      var@size <- 1
+
+      res <- get_complet_log_likelihood(var)
+      S <- S + res$S
+
+      new.name <- var@prior %>% lapply(function(n) paste0(n,'[',i,']'))
+      names(new.name) <- unlist(var@prior)
+      dim <- res$Phi$dimention %>% sapply(length)
+
+      Phi <- Phi + res$Phi$fct %>% lapply(rename_fct_expression , new.name) %>% as.fct_vector(dim = dim)
+    }
+
+    return(list(Phi = Phi, S = S))
+  }
+
+
+  # === Phi === #
   # - n/(2*rho2), n*mu/rho2
-  phi1 <- function(mean, variance, ...) nrow * mean/variance
-  phi2 <- function(variance, ...) - nrow/(2*variance)
+  Phi = list(function(mean, variance, ...) dim * mean/variance,
+             function(variance, ...) - dim/(2*variance) )
 
-  phi1.hyper <- function(mean, ...) nrow * mean/variance
-  phi2.hyper <- function(...) - nrow/(2*variance)
+  Phi <- lapply(Phi, function(f) {environment(f) <- globalenv() ; f} )
+  # === S === #
+  S <- list(rename_fct(function(X, ...) mean(X), list(X = var@name)),
+             rename_fct(function(X, ...) mean(X^2), list(X = var@name)) )
 
-  if(var@ncol == 1)
-  {
-    S1 <- rename_fct_expression(function(X, ...) mean(X), list(X = var@name))
-    S2 <- rename_fct_expression(function(X, ...) mean(X^2), list(X = var@name))
+  S <- lapply(S, function(f) {environment(f) <- globalenv() ; f} )
 
-  }else{
-    S1 <- rename_fct_expression(function(X, ...) apply(X, 2, mean), list(X = var@name))
-    S2 <- rename_fct_expression(function(X, ...) apply(X^2, 2, mean), list(X = var@name))
-  }
-
-  environment(phi1) <- globalenv() ; environment(phi2) <- globalenv()
-  environment(phi1.hyper) <- globalenv() ;   environment(phi2.hyper) <- globalenv()
-  environment(S1) <- globalenv() ; environment(S2) <- globalenv()
-
-
-  if('variance' %in% names(var@prior))
-  {
-    phi1 <- rename_fct_expression(phi1, list(variance = var@prior$variance, nrow = var@dim.name$nrow))
-    phi2 <- rename_fct_expression(phi2, list(variance = var@prior$variance, nrow = var@dim.name$nrow))
-  }
+  # === Rename variable === #
+  rename <- list(dim = var@dim.name)
 
   if('mean' %in% names(var@prior))
   {
-    phi1 <- rename_fct_expression(phi1, list(mean = var@prior$mean))
-    phi2 <- rename_fct_expression(phi2, list(mean = var@prior$mean))
-    phi1.hyper <- rename_fct_expression(phi1.hyper, list(mean = var@prior$mean))
-    phi2.hyper <- rename_fct_expression(phi2.hyper, list(mean = var@prior$mean))
-
-
-    if('variance.hyper' %in% names(var@prior))
-    {
-      phi1.hyper <- rename_fct_expression(phi1.hyper, list(variance = var@prior$variance.hyper, nrow = var@dim.name$nrow))
-      phi2.hyper <- rename_fct_expression(phi2.hyper, list(variance = var@prior$variance.hyper, nrow = var@dim.name$nrow))
-      Phi <- list(phi1.hyper, phi2.hyper)
-    }else{
-      Phi <- list(phi1, phi2)
-    }
-    S <- list(S1, S2)
-    dim <- c(var@ncol, var@ncol)
-
+    rename$mean <- var@prior$mean
   }else{
-    Phi <- list(phi2)
-    S <- list(S2)
-    dim <- var@ncol
+    # remove compotnent one
+    Phi <- Phi[-1]
+    S <- S[-1]
   }
 
-  list(Phi = as.fct_vector(Phi, dim),
-       S = as.fct_vector(S, dim) )
+  if('variance' %in% names(var@prior)) rename$variance <- var@prior$variance
+  if('variance.hyper' %in% names(var@prior))
+  {
+    rename$variance <- var@prior$variance.hyper
+    Phi <- lapply(Phi, remove_arguement, exclude = 'variance')
+  }
+
+  list(Phi = lapply(Phi, rename_fct, rename) %>% as.fct_vector(dim = rep(1,length(Phi)) ),
+       S = as.fct_vector(S, dim = rep(1,length(S)) ) )
 }
 
 

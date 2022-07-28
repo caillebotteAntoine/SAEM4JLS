@@ -3,7 +3,11 @@
 # print(future::availableCores())
 
 # rmarkdown::render('work/vignette/vignette_SAEM.Rmd')
-rmarkdown::render('work/Longitudinal_Surival_model_SAEM.Rmd')#, output_file = 'work/try_2.html')
+filename <- gsub(' ','_',  gsub('-','_', gsub(':','_', Sys.time()) ))
+rmarkdown::render('work/JLS_bis.Rmd', output_file = filename)
+
+
+
 # rmarkdown::render('work/achieved_model/Longitudinal_nonlinear_mixed_model_SAEM.Rmd')
 # rmarkdown::render('work/vignette/vignette_MH.Rmd')
 # rmarkdown::render('work/test_variance.Rmd')

@@ -6,8 +6,7 @@
 #'
 #' @param burnin
 #' @param coef.burnin
-#' @param scale start value
-#' @param format int or double
+#' @param scale
 #'
 #' @return
 #' @export

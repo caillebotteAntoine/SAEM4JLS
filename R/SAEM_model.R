@@ -1,8 +1,10 @@
 
 SAEM_model <- setClass(
   Class = "SAEM_model",
+  package = 'SAEM4JLS',
   slots = list( Phi.noise = 'function',
                 S.noise = 'function',
+                noise.name = 'character',
                 Phi = 'fct_vector',
                 S = 'fct_vector',
 
@@ -10,12 +12,10 @@ SAEM_model <- setClass(
                 regression.parameter = 'list',
 
                 loglik.fct = 'list'),
-
-  prototype = prototype(latent_vars = list(), regression.parameter = list() )
-
 )
 
-setMethod('initialize', 'SAEM_model', function(.Object, Phi.noise, S.noise, latent_vars, regression.parameter){
+setMethod('initialize', 'SAEM_model', function(.Object, Phi.noise, S.noise, noise.name, latent_vars, regression.parameter){
+  if(missing(regression.parameter)) regression.parameter <- list()
   .Object@regression.parameter <- regression.parameter
 
   .Object@Phi.noise <- Phi.noise
@@ -24,16 +24,25 @@ setMethod('initialize', 'SAEM_model', function(.Object, Phi.noise, S.noise, late
   .Object@S.noise <- S.noise
   .Object@S <- fct_vector(S.noise)
 
+  .Object@noise.name <- noise.name
 
+  #=========================================#
+  # === Construction of loglik function === #
+  #=========================================#
+  variable_linked_in_noise <- formals(S.noise) %>% names %>% { gsub('[[:digit:]]+', '', .) } %>% unique
   loglik.template <- function(x, ..., Phi)
   {
-    sum(Phi %a% id*S$eval(var = x, ..., i = id))
+    sum( Phi %a% c(id) * S$eval(var = x, ..., i = c(id)) )
   }
   environment(loglik.template) <- globalenv()
 
   .Object@loglik.fct <- list()
   last.id <- 1
+
+  if(missing(latent_vars)) latent_vars <- list()
+  names(latent_vars) <- sapply(latent_vars, function(v) v@name)
   .Object@latent_vars <- latent_vars
+
   for(var in .Object@latent_vars)
   {
     l <- get_complet_log_likelihood(var)
@@ -41,9 +50,33 @@ setMethod('initialize', 'SAEM_model', function(.Object, Phi.noise, S.noise, late
     .Object@S <- .Object@S + l$S
 
     id <- paste0(Reduce("c", as.numeric(names(l$S$dimention)) ) + last.id, collapse = ',')
+    if(var@name %in% variable_linked_in_noise)
+    {
+      id <- paste0('1,', id)
+    }
 
-    .Object@loglik.fct[[var@name]] <- rename_fct_expression(loglik.template, list(var = var@name, id = paste0('c(1,', id, ')') ) )
+    # === === #
+    if(var@size == 1)
+    {
+      tmp <- rename_fct_expression(loglik.template, list(id = id) )
+      tmp <- rename_fct_argument(tmp, list(x = var@name))
+      tmp <- gsub_fct_expression(tmp, c('var = x'), c(paste0(var@name, ' = ', var@name)))
 
+    }else{
+      dim <- 1:var@size
+
+      tmp <- rename_fct_expression(loglik.template, list(id = id) )
+      tmp <- rename_fct_argument(tmp, list(x = paste0(var@name, 1)))
+      for(i in 2:var@size)
+        tmp <- add_arguement(tmp, paste0(var@name, i), paste0(var@name, i-1))
+
+      tmp <- gsub_fct_expression(tmp, c('var = x'),
+                                 c(paste0(var@name, dim, ' = ', var@name, dim, collapse = ', ') ))
+    }
+
+    .Object@loglik.fct[[var@name]] <- tmp
+
+    # === Add additional functions === #
     if(length(var@add_on) != 0)
     {
       fct.body <- deparse(body(.Object@loglik.fct[[var@name]]))
@@ -60,109 +93,187 @@ setMethod('initialize', 'SAEM_model', function(.Object, Phi.noise, S.noise, late
       body(.Object@loglik.fct[[var@name]]) <- parse(text = fct.body)
     }
 
-
     last.id <- last.id + l$S$dimention %>% names %>% as.numeric %>% { max(.[[length(.)]]) }
   }
 
+
   for(para in .Object@regression.parameter)
   {
-    .Object@Phi <- .Object@Phi + fct_vector(function(beta, ...) beta)
-    .Object@S <- .Object@S + fct_vector(function(beta, ...) beta)
+    for(var in .Object@latent_vars)
+    {
+      .Object@loglik.fct[[var@name]] <- add_arguement(.Object@loglik.fct[[var@name]], para@name, 'Phi')
+      .Object@loglik.fct[[var@name]] <- gsub_fct_expression(.Object@loglik.fct[[var@name]],
+                                        '...',
+                                        paste0('...,', para@name, '= ', para@name))
+    }
   }
-
 
   return(.Object)
 })
 
 
-
-load.SAEM <- function(model, exclude.simulation = c(), env = globalenv())
+get_maximisation_step <- function(model, exclude = c())
 {
-  assign('Phi', model@Phi$eval, envir = env)
-  assign('S', model@S, envir = env)
 
-  assign('sim', get_simulation_step(model, exclude.simulation), envir = env)
+  maximisation <- function(S, parameter)
+  {
+  }
+  fct.body <- deparse(body(maximisation))
 
-  for(var in names(model@loglik.fct)) assign(paste0('loglik.',var), model@loglik.fct[[var]], envir = env)
+  i = 1
 
+  fct.body[i+1] <- paste0('res <- list(', model@noise.name, ' = S%a%1')
+  k <- 1
+
+  # === Latent variables === #
+  for(var in model@latent_vars)
+  {
+    for(p in names(var@prior))
+    {
+      if(!var@prior[[p]] %in% exclude){
+      #Si on a pas exclue ce paramètre
+
+        if(p != 'variance.hyper'){
+          fct.body[i+1] <- paste0(fct.body[i+1], ',')
+          i <- i + 1
+        }
+
+        if(var@size == 1){
+          if(p == 'mean'){
+            fct.body[i+1] <- paste0(var@prior[[p]], ' = S%a%', k + 1)
+          }else if(p == 'variance'){
+            fct.body[i+1] <- paste0(var@prior[[p]], ' = S%a%', k + 1 + as.numeric('mean' %in%names(var@prior)))
+            if('mean' %in% names(var@prior))
+              fct.body[i+1] <- paste0(fct.body[i+1], ' - (S%a%', k + 1, ')^2')
+          }
+        }else{
+          if(p == 'mean'){
+            fct.body[i+1] <- paste0(var@prior[[p]], ' = S%a%c(', paste0( k - 1 + 2*1:var@size, collapse = ', '), ')')
+          }else if(p == 'variance'){
+            fct.body[i+1] <- paste0(var@prior[[p]], ' = S%a%c(', paste0( k  -1 +as.numeric('mean' %in%names(var@prior))+ 2*1:var@size, collapse = ', '), ')')
+            if('mean' %in% names(var@prior))
+              fct.body[i+1] <- paste0(fct.body[i+1], ' - (S%a%c(', paste0( k - 1 + 2*1:var@size, collapse = ', '), '))^2')
+          }
+        }
+
+      }
+    }
+    k <- k + length(var@prior)*var@size
+  }
+
+  fct.body[i+1] <- paste0(fct.body[i+1], ')')
+
+
+  i <- i + 1
+  # === Regression parameter === #
+  for(para in model@regression.parameter)
+  {
+      # i <- i + 1
+      # fct.body[i] <- paste0('    ',para@name, ' <- parameter$', para@name  )
+    if(!para@name %in% exclude)
+    {
+      #Add Maximization step
+      para.body <- deparse(body(para@maximization.function))
+      para.body[1] <- paste0('    res$', para@name, ' <- ', para.body[1])
+
+      for(j in 1:length(para.body))
+      {
+        i <- i + 1
+        fct.body[i] <- para.body[j]
+      }
+
+    }
+  }
+
+  for(name in exclude)
+  {
+    i <- i + 1
+    fct.body[i] <- paste0('    res$', name, ' <- parameter$', name  )
+  }
+
+  fct.body[i+1] <- 'return(res)'
+  fct.body[i+2] <- '}'
+
+  body(maximisation) <- parse(text = fct.body)
+
+  environment(maximisation) <- globalenv()
+  return(maximisation)
 }
-
-
-
-
-
-
-
-
-
 
 
 
 get_simulation_step <- function(model, exclude = c())
 {
-  fct <- function(niter, h)
-  {
-    args <- list(Phi = Phih)
-  }
-  fct.body <- deparse(body(fct))
-  first.body.line <- '    args <- list('
+  if(length(exclude) != 0 ){
+    id <-
+      names(model@latent_vars) %>% lapply(function(v){
+        if(model@latent_vars[[v]]@size == 1){
+          return(model@latent_vars[[v]]@name)
+        }else{
+          return(paste0(model@latent_vars[[v]]@name, 1:model@latent_vars[[v]]@size))
+        }}) %>% unlist
 
-  k <- 1
-  i <- 2
-  for(var in model@latent_vars)
-  {
-    if(!var@name %in% exclude)
-    {
-      #Add simulation step
-      fct.body[i + 1] <- paste0('    args$',var@name,' <- MH_Gibbs_Sampler_future(niter, args$', var@name,', sd = sd.', var@name, ',')
-      fct.body[i + 2] <- paste0('        loglik.', var@name, ', args[', -k, '], cores = 1, verbatim = verbatim)' )
+    new.id <- paste0('c(', paste0(which(!id %in% exclude), collapse = ','), ')')
 
-      i <- i + 2
+    simulation <- gsub_fct_expression(simulation, '1:length(var)', new.id)
     }
-    #Add arguement
-    args <- c(formals(fct), alist(tmp =))
-    names(args)[length(names(args))] <- var@name
-    formals(fct) <- args
-    first.body.line <- paste0(first.body.line, var@name, ' = ', var@name, '[[1]], ')
-    k <- k + 1
-
-  }
-
-  i <- i + 2
   for(para in model@regression.parameter)
   {
-    if(!para@name %in% exclude)
-    {
-      #Add Maximization step
-      para.body <- deparse(body(para@maximization.function))
-      para.body[1] <- paste0('    args$', para@name, ' <- ', para.body[1])
-
-      for(j in 1:length(para.body))
-      {
-        i <- i + 1
-        fct.body[i] <- gsub('\\.\\.\\.', paste0('args[', -k, ']'), para.body[j])
-
-      }
-    }
-    #Add arguement
-    args <- c(formals(fct), alist(tmp =))
-    names(args)[length(names(args))] <- para@name
-    formals(fct) <- args
-    first.body.line <- paste0(first.body.line, para@name, ' = ', para@name, '[[1]], ')
-    k <- k + 1
+    # simulation <- add_arguement(simulation, para@name, 'Phi')
+    simulation <- gsub_fct_expression(simulation,
+                        'Phi = Phih',
+                        paste0('Phi = Phih', ',', para@name, '= parameter$', para@name))
 
   }
-
-  fct.body[2] <- paste0(first.body.line, 'Phi = Phih)')
-  fct.body[length(fct.body) + 1] <- 'args$Phi <- NULL'
-  fct.body[length(fct.body) + 1] <- '    return( lapply(args, function(var) list(var)) )'
-  fct.body[length(fct.body) + 1] <- "}"
-
-  body(fct) <- parse(text = fct.body)
-  formals(fct) <- c(formals(fct), alist(Phih =, verbatim = F))
-
-  environment(fct) <- globalenv()
-
-  return(fct)
+  return(simulation)
 }
+
+load.SAEM <- function(model, exclude.simulation = c(), exclude.maximisation = c(), env = globalenv())
+{
+  assign('Phi', model@Phi$eval, envir = env)
+  assign('S', model@S, envir = env)
+
+  assign('max', get_maximisation_step(model, c(exclude.simulation, exclude.maximisation)), envir = env)
+  assign('sim', get_simulation_step(model, exclude.simulation), envir = env)
+
+  for(var in names(model@loglik.fct)) assign(paste0('loglik.',var), model@loglik.fct[[var]], envir = env)
+}
+
+init.SAEM <- function(model, x0, sd)
+{
+  var <- list()
+
+  names(names(sd) == names(model@latent_vars))
+  stopifnot(names(sd) == names(x0))
+
+  var.name <- c()
+  for(v in names(x0))
+  {
+    stopifnot(length(x0[[v]]) == length(x0[[v]]))
+    stopifnot(model@latent_vars[[v]]@size == length(x0[[v]]))
+
+    if(length(x0[[v]]) == 1){
+      fct <- rename_fct_expression(function(x, ...) loglik(var = x, ...), list(loglik = paste0('loglik.', v), var = v))
+
+      var <- c(var, list(chain(rep(x0[[v]], model@latent_vars[[v]]@dim), sd = sd[[v]], propto_distrib_fct = fct ) ))
+      var.name <- append(var.name, v)
+    }else{
+      for(i in 1:length(x0[[v]]))
+      {
+        fct <- rename_fct_expression(function(x, ...) loglik(var = x, ...), list(loglik = paste0('loglik.', v), var = paste0(v, i)))
+
+        var <- c(var, list(chain(rep(x0[[v]][i], model@latent_vars[[v]]@dim), sd = sd[[v]][i], propto_distrib_fct = fct ) ))
+      }
+      var.name <- append(var.name, paste0(v, 1:model@latent_vars[[v]]@size))
+    }
+  }
+
+  names(var) <- var.name
+
+  class(var) <- c('list', 'chain')
+  return(var)
+}
+
+
+
 

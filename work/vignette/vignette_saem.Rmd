@@ -1,0 +1,120 @@
+---
+title: "vignette SAEM"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+knitr::knit_hooks$set(time = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      # record the current time before each chunk
+      now <<- Sys.time()
+    } else {
+      # calculate the time difference after a chunk
+      res <- difftime(Sys.time(), now, units = 's')
+      # return a character string to show the time
+      diff_time <- format(as.POSIXct(as.numeric(res), 
+                                     origin = '1970-01-01', tz = 'UTC'), "%Mmin %Ssec")
+      paste("Chunk execution time = ", diff_time)
+    }
+  }
+}))
+
+rm(list = ls())
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.weightedidth = 12,
+               fig.asp = 0.8,
+               out.weightedidth = "100%")
+
+require(SAEM4JLS)
+require(tictoc)
+```
+
+
+
+```{r}
+# Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
+m <- function(t, phi1, phi2, phi3, eta) (phi1 + eta )/(1+exp((phi2-t)/phi3))
+#=======================================#
+param <- list(sigma2 = 6,
+              rho2 = 5,
+              mu = c(90,90,5),
+              omega2 = c(20, 40,1),
+              #Survival data,
+              nu2 = 0.5,
+              a = 90,
+              b = 30,
+              alpha = 0.07,
+              beta = 10)
+
+#=======================================#
+t <- seq(60,120, length.out = 10) #time values
+set.seed(18031997)
+
+G <- 40 ; ng = 20
+
+dt <- create_JLS_data(G, ng, t, m, m, param)
+var.true <- dt$var.true
+survival <- dt$survival
+
+Y <- do.call(get_obs, var.true) + rnorm(n, 0, sqrt(param$sigma2))
+```
+
+```{r data ploting, echo = F}
+
+longitudinal_plot <- data.frame(time, Y, id = rep(1:N, each = length(t)), gen = rep(1:G, each = ng*length(t)) ) %>%
+  ggplot(aes(time, Y, col = factor(gen), group = factor(id) )) +
+  geom_point() + geom_line() +
+  theme(legend.position = 'null')
+
+survival_plot <- survival %>% ggplot(aes(obs, fill = factor(U))) +
+    geom_histogram(col = 'white', position = 'identity', bins = 30)
+
+grid.arrange(longitudinal_plot, survival_plot, nrow = 2)
+```
+
+```{r}
+model <- SAEM_model( 
+  function(sigma2, ...) -n/(2*sigma2),
+  function(phi1, phi2, phi3, eta, ...) mean((Y - get_obs(phi1, phi2, phi3, eta) )^2 ), 'sigma2',
+  latent_vars = list(
+    latent_variable('phi', dim = G, size = 3, prior = list(mean = 'mu', variance = 'omega2') ),
+    latent_variable('eta', dim = N, size = 1, prior = list(variance = 'rho2') )
+  )
+)
+```
+
+```{r saem}
+load.SAEM(model)
+var0 <- init.SAEM(model, 
+                  x0 = list(phi = c(80,80,4), eta = 0), 
+                  sd = list(phi = c(.5, .3, .1), eta = .6) )
+#===================================================================================#
+max(do.call(S$eval, var.true))
+
+param0 <- param[1:4] %>% lapply(function(x) x* runif(1, 1,1.2))
+param0$omega2 <- rep(.1,3)
+
+res <- SAEM(50, 10, param0, var0, Phi, S$eval, max,sim,  verbatim = 3 )
+
+plot(res, true.value = max(do.call(S$eval, var.true)) )
+```
+
+
+
+

@@ -175,7 +175,6 @@ sum(beta - round(as.numeric(res)))
 $$\log f(Y, Z ; \theta) = \langle \Phi(\theta) ; S(Y,Z) \rangle - \psi(\theta)$$
 
 ```{r  stat exhaustive}
-
 model <- SAEM_model(
   function(sigma2, ...) - n*J/(2*sigma2),
   function(Z, beta, ...) mean( (Y - as.vector(beta %*% t(U)) - Z %*% t(time) )^2 ),

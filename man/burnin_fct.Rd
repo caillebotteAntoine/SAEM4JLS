@@ -7,10 +7,9 @@
 burnin_fct(burnin, coef.burnin, scale = 1, format = "double")
 }
 \arguments{
-\item{scale}{}
-}
-\value{
+\item{scale}{start value}
 
+\item{format}{int or double}
 }
 \description{
 Burn-in function for algorithm requiring a step
