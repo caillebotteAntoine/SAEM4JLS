@@ -4,9 +4,7 @@ as_function <- function(f)
   if(is.function(f))return(f)
 
   template <- function(k) return
-  gsub_fct_expression(template,
-                      'return',
-                      deparse(substitute(f)) )
+  gsub_fct_expression(template, 'return', f)
 }
 
 

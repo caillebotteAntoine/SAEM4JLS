@@ -63,7 +63,7 @@ SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisatio
                  burnin = NULL, coef.burnin = 1, eps = NULL, verbatim = F)
 {
   #Initialisation de l'approximation de S
-  Sh <- do.call(exhaustive, var0)
+  Sh <- do.call(exhaustive, c(var0, parameter0))
   Sh[1:length(Sh)] <- 0
 
   #Initialisation des listes des parametres
@@ -108,12 +108,14 @@ SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisatio
                        's, remaining = ', round(step.estimation * (niter+2-h),1), 's' ))
       }
     }
+    parameter = para[h-1]
     # --- Step S : simulation --- #
-    para@Z <- simulation(MH.iter(h), para@Z, Phi, parameter = para[h-1], adptative.sd = sd(h), verbatim = verbatim - 1)
+    para@Z <- simulation(MH.iter(h), para@Z, Phi, parameter = parameter, adptative.sd = sd(h), verbatim = verbatim - 1)
     # --- Step A : approximation --- #
-    Sh <- (1-u(h))*Sh+u(h)*do.call(exhaustive, para@Z)
+
+    Sh <- (1-u(h))*Sh+u(h)*do.call(exhaustive, c(para@Z, parameter))
     # --- Step M : maximisation --- #
-    res <- maximisation(Sh, para[h-1])
+    res <- maximisation(Sh,parameter, para@Z)
     for( i in names(res)) para[[i]][h,] <- res[[i]] #mise à jour de chaque ligne de chaque parametre
 
     cmp <- ifelse(stopCondi(h), cmp + 1, 0) #compteur après convergence des para pour verifier la CV

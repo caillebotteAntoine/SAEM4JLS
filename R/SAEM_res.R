@@ -36,13 +36,41 @@ setMethod('[', 'SAEM_res', definition = function(x, i) lapply(x, function(p) p[i
 
 vline <- function(gg, x, col, size = 1) gg + geom_vline(xintercept = x, size = size, col = col)
 
-plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptation'), exclude, time = T, true.value )
+
+plot_high_dim <- function(res, true.value, name, w = 10, dec = - 1)
+{
+  convergence <- abs(t(res[[name]]) - true.value[[name]]) %>% melt(id = 'null')
+  value <- t(res[[name]]) %>% melt(id = 'null')
+
+  real.component <- data.frame(iteration = nrow(res[[name]])+ 1+w, component = 1:ncol(res[[name]]), value = true.value[[name]])
+
+  gg <- expand.grid(component = 1:ncol(res[[name]]), iteration = 1:nrow(res[[name]])) %>%
+    mutate(convergence = convergence$value, value = value$value) %>%
+    ggplot() +
+    geom_tile(aes(iteration, component, fill = value)) +
+
+    geom_tile(data = real.component, aes(iteration, component, fill = value), width = w) +
+    annotate('text', x = real.component$iteration, y = dec, label = 'real value')  +
+
+    scale_fill_gradient(low = "white", high = "green") +
+    labs(title = paste0('Convergence of vector ', name), subtitle = 'expected value on the right')
+
+
+  gg <- convergence %>% group_by(Var2) %>% summarise(value = sum(value)) %>% ggplot(aes(Var2, value)) + geom_line()
+
+
+}
+
+
+plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptation'), exclude, time = T, true.value, high.dim )
 {
   if(missing(exclude)) exclude <- c()
+  if(missing(high.dim)) high.dim <- c()
+
 
   if('special' %in% var)
   {
-    gg1 <- plot(res, true.value = true.value, exclude = exclude,
+    gg1 <- plot(res, true.value = true.value, exclude = exclude, high.dim = high.dim,
                 var = c('MCMC', 'parameter'), ncol = 2)
 
     return( grid.arrange(gg1, plot(res, var = 'acceptation', exclude = exclude, time = F), nrow = 2) )
@@ -58,8 +86,12 @@ plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptat
 
   }
 
-  dt <-  na.omit(as.data.frame(res))
+  for(p in c(exclude, high.dim)){
+    res[[p]] <- NULL
+    param[[p]] <- NULL
+  }
 
+  dt <-  na.omit(as.data.frame(res))
   if(!missing(true.value) && 'summary' %in% var)
   {
     #Resultat de l'estimations
@@ -101,7 +133,6 @@ plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptat
     }
   }
 
-
   if('MCMC' %in% var)
   {
     gg$plot_MCMC <- plot(res@Z, var = 'chain') + facet_grid(vars(variable), scale = 'free')
@@ -139,37 +170,37 @@ plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptat
 
 
 
-
-
-
-
-setGeneric('plot.fitted.value', function(res, data, ...) standardGeneric("plot.fitted.value" ) )
-setMethod(plot.fitted.value, c('SAEM_res', 'NLME_data'), function(res, data, selected.id = 1:12, burn.in = 20){
-
-  if(length(res@chain) != 0)
-  {
-    Z <- getchain(res) %>% filter(iteration >= max(iteration) - burn.in ) %>%
-      group_by(variable, component, id) %>% summarise(value = mean(value), .groups = 'drop')
-
-    eta <- Z[which(Z$variable == 'eta'),]$value %>% matrix(ncol = 1)
-    phi <- Z[which(Z$variable == 'phi'),]$value %>% matrix(ncol = data@F.)
-  }else{
-    eta <- res@Z$eta[[1]]
-    phi <- res@Z$phi[[1]]
-
-  }
-  data$fitted_value <- get_obs(data, eta = eta, phi = phi)
-
-
-  data[which(data$id %in% selected.id),] %>%
-    ggplot(aes(time, obs, col = gen, group = id)) +
-    geom_point() + geom_line(aes(y = fitted_value)) +
-
-    labs(title = 'Fitted value', y = '') +
-
-    theme(legend.position = 'null') + facet_wrap(vars(id))
-})
-
+#
+#
+#
+#
+# setGeneric('plot.fitted.value', function(res, data, ...) standardGeneric("plot.fitted.value" ) )
+# setMethod(plot.fitted.value, c('SAEM_res', 'NLME_data'), function(res, data, selected.id = 1:12, burn.in = 20){
+#
+#   if(length(res@chain) != 0)
+#   {
+#     Z <- getchain(res) %>% filter(iteration >= max(iteration) - burn.in ) %>%
+#       group_by(variable, component, id) %>% summarise(value = mean(value), .groups = 'drop')
+#
+#     eta <- Z[which(Z$variable == 'eta'),]$value %>% matrix(ncol = 1)
+#     phi <- Z[which(Z$variable == 'phi'),]$value %>% matrix(ncol = data@F.)
+#   }else{
+#     eta <- res@Z$eta[[1]]
+#     phi <- res@Z$phi[[1]]
+#
+#   }
+#   data$fitted_value <- get_obs(data, eta = eta, phi = phi)
+#
+#
+#   data[which(data$id %in% selected.id),] %>%
+#     ggplot(aes(time, obs, col = gen, group = id)) +
+#     geom_point() + geom_line(aes(y = fitted_value)) +
+#
+#     labs(title = 'Fitted value', y = '') +
+#
+#     theme(legend.position = 'null') + facet_wrap(vars(id))
+# })
+#
 
 
 

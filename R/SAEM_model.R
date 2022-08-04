@@ -16,6 +16,7 @@ SAEM_model <- setClass(
 
 setMethod('initialize', 'SAEM_model', function(.Object, Phi.noise, S.noise, noise.name, latent_vars, regression.parameter){
   if(missing(regression.parameter)) regression.parameter <- list()
+  names(regression.parameter) <- sapply(regression.parameter, function(v) v@name)
   .Object@regression.parameter <- regression.parameter
 
   .Object@Phi.noise <- Phi.noise
@@ -112,10 +113,25 @@ setMethod('initialize', 'SAEM_model', function(.Object, Phi.noise, S.noise, nois
 })
 
 
+
+
+
+setMethod('show', "SAEM_model", function(object ){
+  load.SAEM(object)
+
+  print(object@Phi)
+  print(object@S)
+  print('Maximisation step')
+  print(max)
+  print('Simulation step')
+  print(sim)
+})
+
+
 get_maximisation_step <- function(model, exclude = c())
 {
 
-  maximisation <- function(S, parameter)
+  maximisation <- function(S, parameter, Z)
   {
   }
   fct.body <- deparse(body(maximisation))
@@ -173,7 +189,10 @@ get_maximisation_step <- function(model, exclude = c())
     if(!para@name %in% exclude)
     {
       #Add Maximization step
-      para.body <- deparse(body(para@maximization.function))
+      fct <- para@maximization.function %>%
+        gsub_fct_expression(para@name, paste0('parameter$', para@name))
+
+      para.body <- deparse(body(fct))
       para.body[1] <- paste0('    res$', para@name, ' <- ', para.body[1])
 
       for(j in 1:length(para.body))

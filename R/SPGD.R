@@ -1,4 +1,5 @@
 
+
 #' Proximal operator for one component
 #'
 #' @param theta scalar argument
@@ -48,55 +49,95 @@ prox <- function(theta, gamma, alpha, lambda) sapply(theta, proxi, gamma, alpha,
 #' @export
 #'
 #' @examples
-SPGD <- function(niter, m, theta0, step = 1e-6, grad.fi, f, ...)
+SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
 {
-  gamma <- as_function(step)
+  gamma <- SAEM4JLS::as_function(step)
 
   args <- list(...)
   if(length(args) == 1 && is.list(args[[1]])) args <- args[[1]]
 
+
+
   theta.tilde <- theta0
-  n <- length(theta0)
   #matrix for the average computation step
-  theta.t <- matrix( rep(theta0, m+1), nrow = m+1)
+  # theta.t <- matrix( rep(theta0, m+1), nrow = m+1)
   grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
 
-  f.value <- rep(NA, niter+1)
-  f.value[1] <- do.call(f, c(list(theta.tilde), args))
+  f.value <- c()
+  gradf.value <- c()
+  theta.value <- matrix(NA, ncol = length(theta0), nrow = niter)
 
   # --- main loop --- #
   k <- 1
-  while(k < niter  && mean(abs(grad.f.tilde)) > 1e-3)
+  while(k <= niter)#  && mean(abs(grad.f.tilde)) > 1e-3)
   {
-    #Average computation step
-    for(t in 1:m+1)
+    grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args))) %>%
+      as.matrix %>% apply(1, sum)
+    theta.tilde <- prox(theta.tilde - gamma(k)*grad.f.tilde, gamma(k),1,0)
+
+    # print(theta.value)
+    # print(theta.tilde)
+
+    if(verbatim)
     {
-      i <- sample(1:n, 1) #Tirage dans une uniform
-
-      grad.f.hat <- do.call(grad.fi, c(list(theta.t[t-1,], i), args))#approxMCMC()
-
-      #SVRG
-      d <- grad.f.hat - grad.f.tilde[i] + mean(grad.f.tilde)
-      theta.t[t,] <- prox(theta.t[t-1,] - gamma(k)*d, gamma(k), 1, 0)
+      gradf.value[k] <- base::max(abs(grad.f.tilde))
+      f.value[k] <- do.call(f, c(list(theta.tilde), args))
+      theta.value[k,] <- theta.tilde
     }
-    theta.tilde <- apply(theta.t, 2, mean)
-    grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
-
-    # print(mean(grad.f.tilde))
-    # cat('theta = ', theta.tilde)
-    f.value[k+1] <- do.call(f, c(list(theta.tilde), args))
-    # print(cat('f = ', f.value[k+1]))
-    theta.t[1,] <- theta.tilde
 
     k <- k + 1
   }
 
   theta.tilde <- theta.tilde#matrix(theta.tilde, nrow = 1)
-  attr(theta.tilde, 'f.value') <- na.omit(f.value)
-
+  if(verbatim)
+  {
+    attr(theta.tilde, 'f.value') <- f.value
+    attr(theta.tilde, 'gradf.value') <- gradf.value
+    attr(theta.tilde, 'theta.value') <- theta.value
+  }
   return(theta.tilde)
 
 }
+
+
+# # require(SAEM4JLS)
+#
+# #b^2 - 4ac = 49 - 4*13/4 = 6^2
+# # x = (7+-6)/2 =
+#
+# f <- function(x) ( 2*(x^2 - x - 1)^4 - x^2 + x )
+# grad.fi <- function(x,i) ( 8*(2*x - 1)*(x^2-x-1)^3 -2*x + 1 )
+#
+#
+# res1 <- SPGD(35, 1, 1, step = 1e-2, grad.fi, 1, f)
+# res2 <- SPGD(35, 1, 0, step = 1e-2, grad.fi, 1, f)
+#
+# dt1 <- data.frame(f = attr(res1,'f.value'), x = attr(res1, 'theta.value') %>% as.numeric)
+# dt2 <- data.frame(f = attr(res2,'f.value'), x = attr(res2, 'theta.value') %>% as.numeric)
+#
+# data.frame(x = seq(-1.1,2, 0.01)) %>%
+#   mutate( f = f(x), grad = grad.fi(x)) %>% melt(id = 'x')%>%
+#   ggplot(aes(x, value, col = variable)) + geom_line() +
+#   ylim(c(-10,7)) +
+#
+#   geom_hline(yintercept = 0, col = 'green') +
+#
+#   geom_vline(xintercept = res1, col = 'purple') +
+#   geom_point(data = dt1, aes(x,f), col = 'purple')+
+#
+#   geom_vline(xintercept = res2, col = 'orange') +
+#   geom_point(data = dt2, aes(x,f), col = 'orange')
+#
+
+
+
+
+
+
+
+
+
+
 
 
 

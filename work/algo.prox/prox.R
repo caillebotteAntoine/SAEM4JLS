@@ -16,7 +16,7 @@
 #'
 #' \nabla (\beta^T U_i) = U_i
 #'
-#' \nabla f_i = 1\sigma2 * \som j1J (Y_{i,j} - \beta^T U_i - Z_i tj) U_i
+#' \nabla f_i = -1\sigma2 * \som j1J (Y_{i,j} - \beta^T U_i - Z_i tj) U_i
 #'
 #'
 #'
@@ -30,96 +30,26 @@ require(SAEM4JLS)
 
 
 
+# source("D:/SAEM4JLS/R/SPGD.R", echo=TRUE)
 
 
-
-
-
-
-
-proxi <- function(theta, gamma, alpha, lambda)
-{
-  coef <- ifelse(theta > gamma*alpha*lambda, theta-gamma*alpha*lambda,
-                 ifelse(theta < -gamma*alpha*lambda, theta+gamma*alpha*lambda, 0))
-  1/(1+gamma*lambda*(1-alpha)) * coef
-}
-
-prox <- function(theta, gamma, alpha, lambda) sapply(theta, proxi, gamma, alpha, lambda)
-
-SPGD <- function(niter, m, theta0, step = 1e-6, grad.fi, f, ...)
-{
-  gamma <- step
-  if(!is.function(step)) gamma <- function(k) step
-
-
-  args <- list(...)
-  if(length(args) == 1 && is.list(args[[1]])) args <- args[[1]]
-
-  theta.tilde <- theta0
-  theta.t <- matrix( rep(theta0, m+1), nrow = m+1)
-  grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
-
-  f.value <- rep(NA, niter+1)
-  f.value[1] <- do.call(f, c(list(theta.tilde), args))
-
-  k <- 1
-  while(k < niter  && mean(abs(grad.f.tilde)) > 1e-3)
-  {
-    for(t in 1:m+1)
-    {
-      i <- sample(1:n, 1) #Tirage dans une uniform
-
-      grad.f.hat <- do.call(grad.fi, c(list(theta.t[t-1,], i), args))#approxMCMC()
-
-      d <- grad.f.hat+ mean(grad.f.tilde) - grad.f.tilde[i]
-      theta.t[t,] <- prox(theta.t[t-1,] - gamma(k)*d, gamma(k), 1, 0)
-    }
-    theta.tilde <- apply(theta.t, 2, mean)
-    grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
-
-    # print(mean(grad.f.tilde))
-    # cat('theta = ', theta.tilde)
-    f.value[k+1] <- do.call(f, c(list(theta.tilde), args))
-    # print(cat('f = ', f.value[k+1]))
-    theta.t[1,] <- theta.tilde
-
-    k <- k + 1
-  }
-
-  theta.tilde <- matrix(theta.tilde, nrow = 1)
-  attr(theta.tilde, 'f.value') <- na.omit(f.value)
-
-  return(theta.tilde)
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-param <- list(sigma2 = 0.05,
+param <- list(sigma2 = 0.005,
               rho2 = .5,
               mu = 3)
 
 J <- 10
-n <- 100#nrow(x)
-p <- 1#ncol(x)
+n <- 5#nrow(x)
+p <- 10#ncol(x)
 
 time <- seq(-1,1, len = J)
 ttime <- t(time)
-S <- 1#sample(1:p, 5) #c(50, 110, 155, 510, 750, 820)
+S <- 2#sample(1:p, 5) #c(50, 110, 155, 510, 750, 820)
 U <- matrix(runif(n*p), nrow = n, ncol = p)#1e4*as.matrix(x)
+U <- matrix(0.5, nrow = n, ncol = p) ; U[,1:S] <- 1
+
 
 tU <- t(U)
-beta <- matrix(rep(0, p), nrow = 1) ; beta[S] <- 1
+beta <- rep(0,p) ; matrix(rep(0, p), nrow = 1) ; beta[1:S] <- 1
 
 eps <- matrix(rnorm(n*J, sd = sqrt(param$sigma2)), nrow = n)
 Z <- rnorm(n, param$mu, sd = sqrt(param$rho2))
@@ -132,21 +62,39 @@ data.frame(Y) %>% mutate(id = 1:n) %>%
   mutate(variable = rep(time, each = n)) %>% rename(time = variable) %>%
   ggplot(aes(time, Y, col = factor(id))) + geom_line() + theme(legend.position = 'null')
 
+# =============================================================================#
 
 
 
-l <- function(beta, Z, ... ) -1/param$sigma2 * sum( (Y - as.vector(beta %*% tU) - Z %*% ttime )^2 ) /n
-grad.li <- function(beta, i, Z, ...)  1/param$sigma2 * sum(Y[i,] - sum(beta * U[i,]) - Z[i]*time) * U[i,] /n
+l <- function(beta, Z, param, ... ) 1/(2*param$sigma2) * sum( (Y - as.vector(beta %*% tU) - Z %*% ttime )^2 ) /n
+grad.li <- function(beta, i, Z, ...)  -1/param$sigma2 * sum(Y[i,] - sum(beta * U[i,]) - Z[i]*time) * U[i,] /n
 
 
-res <- SPGD(100, 10, theta0 = matrix(rep(0, p), nrow = 1),
-            step = burnin_fct(200, 0.8, 1e-5), grad.li, l, Z)
+x <- seq(-1,4, 0.1)
+plot(x, sapply(x, l, Z), col = 'blue')
+plot(x, sapply(x, grad.li, 3, Z), col = 'red')
+abline(v = beta)
+abline(v = res)
+
+
+l(beta, Z)
+l(beta-0.05, Z)
+
+
+
+res <- SPGD(100, 5, theta0 = matrix(rep(0, p), nrow = 1),
+            step = burnin_fct(200, 0.8, 1e-3), grad.li, n, l, Z)
+
+
 
 as.numeric(beta)
 plot(attr(res,'f.value'))
 as.numeric(res)
 sum(beta - round(as.numeric(res)))
 
+
+grad.li(beta, 1, Z)
+grad.li(res, 1, Z)
 
 
 l(beta, Z)
@@ -160,7 +108,7 @@ l(res, Z)
 
 model <- SAEM_model(
   function(sigma2, ...) - n*J/(2*sigma2),
-  function(Z, beta, ...) mean( (Y - as.vector(beta %*% t(U)) - Z %*% t(time) )^2 ),
+  function(Z, beta, ...) mean( (Y - as.vector(beta %*% tU) - Z %*% ttime )^2 ),
   noise.name = 'sigma2',
 
   # === Variable Latente === #
@@ -172,7 +120,7 @@ model <- SAEM_model(
   regression.parameter = list(
     regression_parameter('beta', p, function(...)SPGD(100, 10, theta0 = beta,
                                                    step = burnin_fct(15, 0.8, 1e-5),
-                                                   grad.li, l, ...) )
+                                                   grad.li, l, Z, parameter) )
     )
   )
 

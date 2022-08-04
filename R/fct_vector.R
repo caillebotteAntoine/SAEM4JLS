@@ -122,7 +122,23 @@ setMethod("+", c("fct_vector", "fct_vector"), function(e1, e2) {
   as.fct_vector(c(e1$fct, e2$fct), dim = dim)
 })
 
+setMethod('print', "fct_vector", function(x){
+  print(x$fct)
 
+
+  print('dimention : ')
+  print(unlist(x$dimention))
+
+})
+
+setMethod('show', "fct_vector", function(object){
+  print(object$fct)
+
+
+  print('dimention : ')
+  print(unlist(object$dimention))
+
+})
 
 
 
