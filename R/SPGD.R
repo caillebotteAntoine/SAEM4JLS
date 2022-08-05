@@ -94,48 +94,56 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
     attr(theta.tilde, 'f.value') <- f.value
     attr(theta.tilde, 'gradf.value') <- gradf.value
     attr(theta.tilde, 'theta.value') <- theta.value
+    class(theta.tilde) <- c(class(theta.tilde) , 'SPGD_res')
   }
   return(theta.tilde)
 
 }
 
 
+plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, ...)
+{
+  args <- list(...)
+  dt <- data.frame(f = attr(res,'f.value'), x = attr(res, 'theta.value')[,i] %>% as.numeric)
+
+  gg1 <- data.frame(x = x,
+                    grad = sapply(x, function(x) do.call(grad.fi, c(list(x, i), args)) )) %>%
+    ggplot(aes(x, grad)) + geom_line(col = 'blue') +
+    geom_hline(yintercept = 0, col = 'green') +
+    theme(legend.position = 'null') + labs(title = 'grad') +
+
+    geom_vline(xintercept = res, col = 'purple')+
+    xlim(c(min(x),max(x)))
+
+  gg2 <- data.frame(x = x,
+                    f = sapply(x, function(x) do.call(f, c(list(x), args)) )  )%>%
+    ggplot() + geom_line(aes(x, f), col = 'red')  +
+    theme(legend.position = 'null') + labs(title = 'function')+
+
+    geom_vline(xintercept = res, col = 'purple') +
+    geom_point(data = dt, aes(x,f), col = 'purple') +
+    xlim(c(min(x),max(x)))
+
+
+  grid.arrange(gg1, gg2, nrow = 2)
+
+
+}
+
 # # require(SAEM4JLS)
 #
-# #b^2 - 4ac = 49 - 4*13/4 = 6^2
-# # x = (7+-6)/2 =
-#
+#b^2 - 4ac = 49 - 4*13/4 = 6^2
+# x = (7+-6)/2 =
+
 # f <- function(x) ( 2*(x^2 - x - 1)^4 - x^2 + x )
 # grad.fi <- function(x,i) ( 8*(2*x - 1)*(x^2-x-1)^3 -2*x + 1 )
 #
+# res1 <- SPGD(35, 1, step = 1e-2, grad.fi, 1, f, verbatim = T)
+# res2 <- SPGD(35, 0, step = 1e-2, grad.fi, 1, f, verbatim = T)
 #
-# res1 <- SPGD(35, 1, 1, step = 1e-2, grad.fi, 1, f)
-# res2 <- SPGD(35, 1, 0, step = 1e-2, grad.fi, 1, f)
+# plot(res1, seq(-1,2, 0.01), f, grad.fi, 1)
+# plot(res2, seq(-1,2, 0.01), f, grad.fi, 1)
 #
-# dt1 <- data.frame(f = attr(res1,'f.value'), x = attr(res1, 'theta.value') %>% as.numeric)
-# dt2 <- data.frame(f = attr(res2,'f.value'), x = attr(res2, 'theta.value') %>% as.numeric)
-#
-# data.frame(x = seq(-1.1,2, 0.01)) %>%
-#   mutate( f = f(x), grad = grad.fi(x)) %>% melt(id = 'x')%>%
-#   ggplot(aes(x, value, col = variable)) + geom_line() +
-#   ylim(c(-10,7)) +
-#
-#   geom_hline(yintercept = 0, col = 'green') +
-#
-#   geom_vline(xintercept = res1, col = 'purple') +
-#   geom_point(data = dt1, aes(x,f), col = 'purple')+
-#
-#   geom_vline(xintercept = res2, col = 'orange') +
-#   geom_point(data = dt2, aes(x,f), col = 'orange')
-#
-
-
-
-
-
-
-
-
 
 
 

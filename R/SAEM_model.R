@@ -252,7 +252,8 @@ load.SAEM <- function(model, exclude.simulation = c(), exclude.maximisation = c(
   assign('Phi', model@Phi$eval, envir = env)
   assign('S', model@S, envir = env)
 
-  assign('max', get_maximisation_step(model, c(exclude.simulation, exclude.maximisation)), envir = env)
+  exclude.maximisation <- c(exclude.maximisation, unlist( sapply(exclude.simulation, function(v) model@latent_vars[[v]]@prior) ) )
+  assign('max', get_maximisation_step(model, exclude.maximisation), envir = env)
   assign('sim', get_simulation_step(model, exclude.simulation), envir = env)
 
   for(var in names(model@loglik.fct)) assign(paste0('loglik.',var), model@loglik.fct[[var]], envir = env)

@@ -15,7 +15,6 @@ create_NLME_data <- function(G, ng, t, m, param)
 
   var.true$a <- param$a
   var.true$b <- param$b
-  var.true$alpha <- param$alpha
   # var.true$eta <- rnorm(N, 0, sqrt(param$rho2))
 
   get_obs <- function(phi1, phi2, phi3, ...){
@@ -43,8 +42,8 @@ create_JLS_data <- function(G, ng, t, m, link, param)
   var.true$gamma <- rnorm(G, 0, sqrt(param$nu2))
 
 
-  a <- param$a
-  b <- param$b
+  a <- param$bara
+  b <- param$barb
   alpha <- param$alpha
   beta <- param$beta
 
@@ -90,8 +89,11 @@ create_JLS_HD_data <- function(G, ng, t, m, link, param)
 {
   var.true <- create_NLME_data(G, ng, t, m, param)
 
-  a <- param$a
-  b <- param$b
+  a <- param$bara
+  var.true$a <- a
+  b <- param$barb
+  var.true$b <- b
+
   alpha <- param$alpha
   beta <- param$beta
   p <- length(beta)
