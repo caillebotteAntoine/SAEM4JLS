@@ -61,7 +61,7 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
   theta.tilde <- theta0
   #matrix for the average computation step
   # theta.t <- matrix( rep(theta0, m+1), nrow = m+1)
-  grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
+  # grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
 
   f.value <- c()
   gradf.value <- c()
@@ -72,7 +72,7 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
   while(k <= niter)#  && mean(abs(grad.f.tilde)) > 1e-3)
   {
     grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args))) %>%
-      as.matrix %>% apply(1, sum)
+      matrix(nrow = n) %>% apply(2, sum)
     theta.tilde <- prox(theta.tilde - gamma(k)*grad.f.tilde, gamma(k),1,0)
 
     # print(theta.value)
@@ -103,24 +103,28 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
 
 plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, ...)
 {
+  x0 <- attr(res, 'theta.value')[1,]
   args <- list(...)
   dt <- data.frame(f = attr(res,'f.value'), x = attr(res, 'theta.value')[,i] %>% as.numeric)
 
+
+  x.tmp <- matrix(rep(x0, length(x)), ncol = length(x)) ; x.tmp[i,] <- x
+
   gg1 <- data.frame(x = x,
-                    grad = sapply(x, function(x) do.call(grad.fi, c(list(x, i), args)) )) %>%
+                    grad = sapply(1:ncol(x.tmp), function(k) do.call(grad.fi, c(list(x.tmp[,k], i), args)) ) ) %>%
     ggplot(aes(x, grad)) + geom_line(col = 'blue') +
     geom_hline(yintercept = 0, col = 'green') +
     theme(legend.position = 'null') + labs(title = 'grad') +
 
-    geom_vline(xintercept = res, col = 'purple')+
+    geom_vline(xintercept = res[i], col = 'purple')+
     xlim(c(min(x),max(x)))
 
   gg2 <- data.frame(x = x,
-                    f = sapply(x, function(x) do.call(f, c(list(x), args)) )  )%>%
+                    f =  sapply(1:ncol(x.tmp), function(k) do.call(f, c(list(x.tmp[,k]), args)) )  )%>%
     ggplot() + geom_line(aes(x, f), col = 'red')  +
     theme(legend.position = 'null') + labs(title = 'function')+
 
-    geom_vline(xintercept = res, col = 'purple') +
+    geom_vline(xintercept = res[i], col = 'purple') +
     geom_point(data = dt, aes(x,f), col = 'purple') +
     xlim(c(min(x),max(x)))
 

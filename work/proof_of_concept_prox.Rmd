@@ -91,7 +91,9 @@ grad.li <- function(beta, i, slope, ...) -1/param$sigma2 * sum(Y[i,] - sum(beta 
 
 res <- SPGD(200, theta0 = param$beta + 0.8*runif(p,-1,1),
             step = 1e-3,
-            grad.li, n, l, Z, param, verbatim = T)
+            grad.li, n, l, slope, param, verbatim = T)
+
+# plot(res, seq(0.5,1.5, by = 0.1), l, grad.li, 1, slope, param)
 
 as.numeric(res)
 
