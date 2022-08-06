@@ -29,7 +29,11 @@ proxi <- function(theta, gamma, alpha, lambda)
 #'
 prox <- function(theta, gamma, alpha, lambda) sapply(theta, proxi, gamma, alpha, lambda)
 
-
+grad <- function(grad.fi, theta, mini.batch, args = list())
+{
+  sapply(mini.batch, function(i) do.call(grad.fi, c(list(theta, i), args))) %>%
+    matrix(ncol = length(theta)) %>% apply(2, mean)
+}
 
 
 
@@ -49,8 +53,9 @@ prox <- function(theta, gamma, alpha, lambda) sapply(theta, proxi, gamma, alpha,
 #' @export
 #'
 #' @examples
-SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
+SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., mini.batch.size = NULL, verbatim = F)
 {
+  if(is.null(mini.batch.size)) mini.batch.size <- n
   gamma <- SAEM4JLS::as_function(step)
 
   args <- list(...)
@@ -61,18 +66,20 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
   theta.tilde <- theta0
   #matrix for the average computation step
   # theta.t <- matrix( rep(theta0, m+1), nrow = m+1)
-  # grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args)))
+  # grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args))) %>%
+  #   matrix(nrow = n) %>% apply(2, mean)
 
   f.value <- c()
-  gradf.value <- c()
+  gradf.value <- matrix(NA, ncol = length(theta0), nrow = niter)
   theta.value <- matrix(NA, ncol = length(theta0), nrow = niter)
 
   # --- main loop --- #
   k <- 1
   while(k <= niter)#  && mean(abs(grad.f.tilde)) > 1e-3)
   {
-    grad.f.tilde <- sapply(1:n, function(i) do.call(grad.fi, c(list(theta.tilde, i), args))) %>%
-      matrix(nrow = n) %>% apply(2, sum)
+    mini.batch <- sort(sample(1:n, mini.batch.size, replace = F))
+    grad.f.tilde <- grad(grad.fi, theta.tilde, mini.batch, args)
+
     theta.tilde <- prox(theta.tilde - gamma(k)*grad.f.tilde, gamma(k),1,0)
 
     # print(theta.value)
@@ -80,9 +87,9 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
 
     if(verbatim)
     {
-      gradf.value[k] <- base::max(abs(grad.f.tilde))
       f.value[k] <- do.call(f, c(list(theta.tilde), args))
       theta.value[k,] <- theta.tilde
+      gradf.value[k,] <- grad.f.tilde
     }
 
     k <- k + 1
@@ -101,7 +108,7 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., verbatim = F)
 }
 
 
-plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, ...)
+plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, n,...)
 {
   x0 <- attr(res, 'theta.value')[1,]
   args <- list(...)
@@ -110,8 +117,13 @@ plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, ...)
 
   x.tmp <- matrix(rep(x0, length(x)), ncol = length(x)) ; x.tmp[i,] <- x
 
+
+
+
   gg1 <- data.frame(x = x,
-                    grad = sapply(1:ncol(x.tmp), function(k) do.call(grad.fi, c(list(x.tmp[,k], i), args)) ) ) %>%
+                    grad = sapply(1:ncol(x.tmp), function(k) do.call(grad, list(grad.fi, x.tmp[,k], 1:n, args)) ) %>%
+                      matrix(ncol = length(x)) %>% { .[i,]} ) %>%
+
     ggplot(aes(x, grad)) + geom_line(col = 'blue') +
     geom_hline(yintercept = 0, col = 'green') +
     theme(legend.position = 'null') + labs(title = 'grad') +
@@ -138,7 +150,7 @@ plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, ...)
 #
 #b^2 - 4ac = 49 - 4*13/4 = 6^2
 # x = (7+-6)/2 =
-
+#
 # f <- function(x) ( 2*(x^2 - x - 1)^4 - x^2 + x )
 # grad.fi <- function(x,i) ( 8*(2*x - 1)*(x^2-x-1)^3 -2*x + 1 )
 #
@@ -148,7 +160,7 @@ plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, ...)
 # plot(res1, seq(-1,2, 0.01), f, grad.fi, 1)
 # plot(res2, seq(-1,2, 0.01), f, grad.fi, 1)
 #
-
+#
 
 
 

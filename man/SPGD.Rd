@@ -4,7 +4,17 @@
 \alias{SPGD}
 \title{Stochastic Proximal Gradient Descent}
 \usage{
-SPGD(niter, theta0, step = 1e-06, grad.fi, n, f, ..., verbatim = F)
+SPGD(
+  niter,
+  theta0,
+  step = 1e-06,
+  grad.fi,
+  n,
+  f,
+  ...,
+  mini.batch.size = NULL,
+  verbatim = F
+)
 }
 \arguments{
 \item{niter}{number iteration of the gradient descent}
@@ -20,6 +30,9 @@ SPGD(niter, theta0, step = 1e-06, grad.fi, n, f, ..., verbatim = F)
 \item{...}{additional argument for the grad function (and f)}
 
 \item{m}{number of iteration for the average computation of theta}
+}
+\value{
+
 }
 \description{
 compute a minimization of : f(theta) + pen(theta) where pen is the elastic net

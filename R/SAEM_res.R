@@ -55,7 +55,7 @@ plot_high_dim <- function(res, true.value, name, w = 10, dec = - 1)
     scale_fill_gradient(low = "white", high = "green") +
     labs(title = paste0('Convergence of vector ', name), subtitle = 'expected value on the right')
 
-
+  return(gg)
   gg <- convergence %>% group_by(Var2) %>% summarise(value = sum(value)) %>% ggplot(aes(Var2, value)) + geom_line()
 
 
