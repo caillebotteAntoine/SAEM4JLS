@@ -11,9 +11,6 @@ burnin_fct(burnin, coef.burnin, scale = 1, format = "double")
 
 \item{format}{int or double}
 }
-\value{
-
-}
 \description{
 Burn-in function for algorithm requiring a step
 }

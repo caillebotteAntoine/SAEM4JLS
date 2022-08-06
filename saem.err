@@ -1,489 +1,97 @@
 INFO : Large data should be stored in your work/ folder. 
- INFO : Large data should be stored in your work/ folder. 
  
 
 
-
-processing file: JLS.Rmd
-
-
 processing file: JLS.Rmd
 --- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 12, remaining = 88, times elasped = 5.1s, estimated time : for one step = 0.5s, remaining = 41.1s
-step = 12, remaining = 88, times elasped = 5.2s, estimated time : for one step = 0.5s, remaining = 42.2s
-step = 24, remaining = 76, times elasped = 10.3s, estimated time : for one step = 0.4s, remaining = 34.6s
-step = 24, remaining = 76, times elasped = 10.6s, estimated time : for one step = 0.5s, remaining = 35.5s
-step = 36, remaining = 64, times elasped = 15.6s, estimated time : for one step = 0.4s, remaining = 29s
-step = 36, remaining = 64, times elasped = 16s, estimated time : for one step = 0.5s, remaining = 29.6s
-step = 48, remaining = 52, times elasped = 20.9s, estimated time : for one step = 0.4s, remaining = 23.6s
-step = 48, remaining = 52, times elasped = 21.4s, estimated time : for one step = 0.5s, remaining = 24.1s
-step = 60, remaining = 40, times elasped = 26.1s, estimated time : for one step = 0.4s, remaining = 18.2s
-step = 60, remaining = 40, times elasped = 26.8s, estimated time : for one step = 0.5s, remaining = 18.6s
-step = 72, remaining = 28, times elasped = 31.4s, estimated time : for one step = 0.4s, remaining = 12.8s
-step = 72, remaining = 28, times elasped = 32.2s, estimated time : for one step = 0.5s, remaining = 13.2s
-step = 84, remaining = 16, times elasped = 36.7s, estimated time : for one step = 0.4s, remaining = 7.5s
-step = 84, remaining = 16, times elasped = 37.6s, estimated time : for one step = 0.5s, remaining = 7.7s
-step = 96, remaining = 4, times elasped = 42s, estimated time : for one step = 0.4s, remaining = 2.2s
-step = 95, remaining = 5, times elasped = 42.7s, estimated time : for one step = 0.5s, remaining = 2.7s
---- SAEM ended ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 5, remaining = 195, times elasped = 5.8s, estimated time : for one step = 1.4s, remaining = 283.7s
+step = 10, remaining = 190, times elasped = 11.7s, estimated time : for one step = 1.3s, remaining = 247.2s
+step = 15, remaining = 185, times elasped = 17.4s, estimated time : for one step = 1.2s, remaining = 231.4s
+step = 20, remaining = 180, times elasped = 23.3s, estimated time : for one step = 1.2s, remaining = 222s
+step = 25, remaining = 175, times elasped = 29s, estimated time : for one step = 1.2s, remaining = 213s
+step = 30, remaining = 170, times elasped = 34.9s, estimated time : for one step = 1.2s, remaining = 206s
+step = 35, remaining = 165, times elasped = 40.8s, estimated time : for one step = 1.2s, remaining = 199.1s
+step = 40, remaining = 160, times elasped = 46.5s, estimated time : for one step = 1.2s, remaining = 192.1s
+step = 45, remaining = 155, times elasped = 52.4s, estimated time : for one step = 1.2s, remaining = 185.7s
+step = 50, remaining = 150, times elasped = 58.1s, estimated time : for one step = 1.2s, remaining = 179.1s
+step = 55, remaining = 145, times elasped = 64s, estimated time : for one step = 1.2s, remaining = 173s
+step = 60, remaining = 140, times elasped = 69.7s, estimated time : for one step = 1.2s, remaining = 166.7s
+step = 65, remaining = 135, times elasped = 75.6s, estimated time : for one step = 1.2s, remaining = 160.6s
+step = 70, remaining = 130, times elasped = 81.4s, estimated time : for one step = 1.2s, remaining = 154.5s
+step = 75, remaining = 125, times elasped = 87.2s, estimated time : for one step = 1.2s, remaining = 148.5s
+step = 80, remaining = 120, times elasped = 93s, estimated time : for one step = 1.2s, remaining = 142.5s
+step = 85, remaining = 115, times elasped = 98.8s, estimated time : for one step = 1.2s, remaining = 136.5s
+step = 90, remaining = 110, times elasped = 104.6s, estimated time : for one step = 1.2s, remaining = 130.5s
+step = 95, remaining = 105, times elasped = 110.5s, estimated time : for one step = 1.2s, remaining = 124.6s
+step = 100, remaining = 100, times elasped = 116.3s, estimated time : for one step = 1.2s, remaining = 118.6s
+step = 105, remaining = 95, times elasped = 122.1s, estimated time : for one step = 1.2s, remaining = 112.7s
+step = 110, remaining = 90, times elasped = 127.9s, estimated time : for one step = 1.2s, remaining = 106.7s
+step = 115, remaining = 85, times elasped = 133.7s, estimated time : for one step = 1.2s, remaining = 100.9s
+step = 120, remaining = 80, times elasped = 139.6s, estimated time : for one step = 1.2s, remaining = 95s
+step = 125, remaining = 75, times elasped = 145.3s, estimated time : for one step = 1.2s, remaining = 89.1s
+step = 130, remaining = 70, times elasped = 151.2s, estimated time : for one step = 1.2s, remaining = 83.2s
+step = 135, remaining = 65, times elasped = 157s, estimated time : for one step = 1.2s, remaining = 77.3s
+step = 140, remaining = 60, times elasped = 162.8s, estimated time : for one step = 1.2s, remaining = 71.4s
+step = 145, remaining = 55, times elasped = 168.7s, estimated time : for one step = 1.2s, remaining = 65.6s
+step = 150, remaining = 50, times elasped = 174.4s, estimated time : for one step = 1.2s, remaining = 59.7s
+step = 155, remaining = 45, times elasped = 180.3s, estimated time : for one step = 1.2s, remaining = 53.9s
+step = 160, remaining = 40, times elasped = 186.1s, estimated time : for one step = 1.2s, remaining = 48s
+step = 165, remaining = 35, times elasped = 191.9s, estimated time : for one step = 1.2s, remaining = 42.1s
+step = 170, remaining = 30, times elasped = 197.8s, estimated time : for one step = 1.2s, remaining = 36.3s
+step = 175, remaining = 25, times elasped = 203.6s, estimated time : for one step = 1.2s, remaining = 30.4s
+step = 180, remaining = 20, times elasped = 209.4s, estimated time : for one step = 1.2s, remaining = 24.6s
+step = 185, remaining = 15, times elasped = 215.2s, estimated time : for one step = 1.2s, remaining = 18.7s
+step = 190, remaining = 10, times elasped = 221.1s, estimated time : for one step = 1.2s, remaining = 12.9s
+step = 195, remaining = 5, times elasped = 227s, estimated time : for one step = 1.2s, remaining = 7s
+step = 200, remaining = 0, times elasped = 232.7s, estimated time : for one step = 1.2s, remaining = 1.2s
 --- SAEM ended ! ---
 output file: JLS.knit.md
 
 
-Output created: 2022_07_27_09_32_46.html
+Output created: 2022_08_06_09_03_53.html
 Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-output file: JLS.knit.md
+INFO : Large data should be stored in your work/ folder. 
+ 
 
-File 2022_07_27_09_32_46_files/figure-html/data ploting-1.png not found in resource path
-Erreur : pandoc document conversion failed with error 99
+
+processing file: JLS.Rmd
+Quitting from lines 222-234 (JLS.Rmd) 
+Erreur dans load.SAEM(model, exclude.sim, exclude.max) : 
+  objet 'exclude.max' introuvable
+Appels : <Anonymous> ... eval_with_user_handlers -> eval -> eval -> load.SAEM
+Exécution arrêtée
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: JLS.Rmd
+Quitting from lines 222-234 (JLS.Rmd) 
+Erreur dans (function (b, ...)  : 
+  argument formel "b" correspondant à plusieurs arguments fournis
+Appels : <Anonymous> ... <Anonymous> -> <Anonymous> -> unlist -> lapply -> FUN -> do.call
+Exécution arrêtée
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: JLS.Rmd
+Quitting from lines 222-234 (JLS.Rmd) 
+Erreur dans (function (b, ...)  : 
+  argument formel "b" correspondant à plusieurs arguments fournis
+Appels : <Anonymous> ... <Anonymous> -> <Anonymous> -> unlist -> lapply -> FUN -> do.call
+Exécution arrêtée
+INFO : Large data should be stored in your work/ folder. 
+ 
+
+
+processing file: JLS.Rmd
+--- SAEM started ! ---
+step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
+step = 6, remaining = 194, times elasped = 6s, estimated time : for one step = 1.2s, remaining = 234.4s
+Quitting from lines 222-234 (JLS.Rmd) 
+Erreur dans if (x_new_eval > x_eval || log(runif(1)) < x_new_eval - x_eval) { : 
+  valeur manquante là où TRUE / FALSE est requis
+Appels : <Anonymous> ... eval -> SAEM -> simulation -> do.call -> <Anonymous>
 De plus : Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
 Exécution arrêtée
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, 
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 12, remaining = 88, times elasped = 5.3s, estimated time : for one step = 0.5s, remaining = 43s
-step = 23, remaining = 77, times elasped = 10.4s, estimated time : for one step = 0.5s, remaining = 36.8s
-step = 34, remaining = 66, times elasped = 15.4s, estimated time : for one step = 0.5s, remaining = 31.3s
-step = 45, remaining = 55, times elasped = 20.5s, estimated time : for one step = 0.5s, remaining = 26.1s
-time : for one step = 0.4s, remaining = 18.1s
-step = 72, remaining = 28, times elasped = 31.3s, estimated time : for one step = 0.4s, remaining = 12.8s
-step = 67, remaining = 33, times elasped = 30.6s, estimated time : for one step = 0.5s, remaining = 15.8s
-tep = 96, remaining = 4, times elasped = 41.8s, estimated time : for one step = 0.4s, remaining = 2.2s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_09_34_46.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-step = 79, remaining = 21, times elasped = 36.1s, estimated time : for one step = 0.5s, remaining = 10.2s
-step = 90, remaining = 10, times elasped = 41.1s, estimated time : for one step = 0.5s, remaining = 5.1s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_09_35_01.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 3, remaining = 97, times elasped = 7.6s, estimated time : for one step = 3.8s, remaining = 370.9s
-step = 5, remaining = 95, times elasped = 14.9s, estimated time : for one step = 3.7s, remaining = 357.8s
-step = 7, remaining = 93, times elasped = 22.1s, estimated time : for one step = 3.7s, remaining = 346.9s
-step = 9, remaining = 91, times elasped = 29.4s, estimated time : for one step = 3.7s, remaining = 338.4s
-step = 11, remaining = 89, times elasped = 36.8s, estimated time : for one step = 3.7s, remaining = 330.8s
-step = 13, remaining = 87, times elasped = 44.1s, estimated time : for one step = 3.7s, remaining = 323.1s
-step = 15, remaining = 85, times elasped = 51.3s, estimated time : for one step = 3.7s, remaining = 315.1s
-step = 17, remaining = 83, times elasped = 58.6s, estimated time : for one step = 3.7s, remaining = 307.5s
-step = 19, remaining = 81, times elasped = 65.9s, estimated time : for one step = 3.7s, remaining = 300.2s
-step = 21, remaining = 79, times elasped = 73.1s, estimated time : for one step = 3.7s, remaining = 292.4s
-step = 23, remaining = 77, times elasped = 80.4s, estimated time : for one step = 3.7s, remaining = 284.9s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_09_36_01.html
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
-Quitting from lines 184-193 (JLS.Rmd) 
-Erreur dans get_simulation_step(model, exclude.simulation) : 
-  objet 'exclude' introuvable
-Appels : <Anonymous> ... eval -> eval -> load.SAEM -> assign -> get_simulation_step
-Exécution arrêtée
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
-Quitting from lines 184-193 (JLS.Rmd) 
-Erreur dans eval(expr, envir, enclos) : objet 'exclude' introuvable
-Appels : <Anonymous> ... withVisible -> eval_with_user_handlers -> eval -> eval
-Exécution arrêtée
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 3, remaining = 97, times elasped = 7.8s, estimated time : for one step = 3.9s, remaining = 381.7s
-step = 5, remaining = 95, times elasped = 15.4s, estimated time : for one step = 3.8s, remaining = 368.6s
-step = 7, remaining = 93, times elasped = 22.8s, estimated time : for one step = 3.8s, remaining = 357.8s
-step = 9, remaining = 91, times elasped = 30.4s, estimated time : for one step = 3.8s, remaining = 349.3s
-step = 11, remaining = 89, times elasped = 37.9s, estimated time : for one step = 3.8s, remaining = 341.4s
-step = 13, remaining = 87, times elasped = 45.5s, estimated time : for one step = 3.8s, remaining = 333.3s
-step = 15, remaining = 85, times elasped = 52.9s, estimated time : for one step = 3.8s, remaining = 325.1s
-step = 17, remaining = 83, times elasped = 60.4s, estimated time : for one step = 3.8s, remaining = 317.2s
-step = 19, remaining = 81, times elasped = 68s, estimated time : for one step = 3.8s, remaining = 309.7s
-step = 21, remaining = 79, times elasped = 75.5s, estimated time : for one step = 3.8s, remaining = 302.1s
-step = 23, remaining = 77, times elasped = 83s, estimated time : for one step = 3.8s, remaining = 294.1s
-step = 25, remaining = 75, times elasped = 90.5s, estimated time : for one step = 3.8s, remaining = 286.6s
-step = 27, remaining = 73, times elasped = 98s, estimated time : for one step = 3.8s, remaining = 279s
-step = 29, remaining = 71, times elasped = 105.4s, estimated time : for one step = 3.8s, remaining = 271.2s
-step = 31, remaining = 69, times elasped = 113s, estimated time : for one step = 3.8s, remaining = 263.6s
-step = 33, remaining = 67, times elasped = 120.5s, estimated time : for one step = 3.8s, remaining = 256s
-step = 35, remaining = 65, times elasped = 128s, estimated time : for one step = 3.8s, remaining = 248.5s
-step = 37, remaining = 63, times elasped = 135.4s, estimated time : for one step = 3.8s, remaining = 240.8s
-step = 39, remaining = 61, times elasped = 142.9s, estimated time : for one step = 3.8s, remaining = 233.2s
-step = 41, remaining = 59, times elasped = 150.5s, estimated time : for one step = 3.8s, remaining = 225.7s
-step = 43, remaining = 57, times elasped = 158s, estimated time : for one step = 3.8s, remaining = 218.2s
-step = 45, remaining = 55, times elasped = 165.4s, estimated time : for one step = 3.8s, remaining = 210.6s
-step = 47, remaining = 53, times elasped = 172.9s, estimated time : for one step = 3.8s, remaining = 203s
-step = 49, remaining = 51, times elasped = 180.4s, estimated time : for one step = 3.8s, remaining = 195.5s
-step = 51, remaining = 49, times elasped = 188s, estimated time : for one step = 3.8s, remaining = 188s
-step = 53, remaining = 47, times elasped = 195.4s, estimated time : for one step = 3.8s, remaining = 180.4s
-step = 55, remaining = 45, times elasped = 202.9s, estimated time : for one step = 3.8s, remaining = 172.9s
-step = 57, remaining = 43, times elasped = 210.4s, estimated time : for one step = 3.8s, remaining = 165.4s
-step = 59, remaining = 41, times elasped = 217.9s, estimated time : for one step = 3.8s, remaining = 157.8s
-step = 61, remaining = 39, times elasped = 225.4s, estimated time : for one step = 3.8s, remaining = 150.3s
-step = 63, remaining = 37, times elasped = 232.9s, estimated time : for one step = 3.8s, remaining = 142.8s
-step = 65, remaining = 35, times elasped = 240.4s, estimated time : for one step = 3.8s, remaining = 135.2s
-step = 67, remaining = 33, times elasped = 247.9s, estimated time : for one step = 3.8s, remaining = 127.7s
-step = 69, remaining = 31, times elasped = 255.4s, estimated time : for one step = 3.8s, remaining = 120.2s
-step = 71, remaining = 29, times elasped = 263s, estimated time : for one step = 3.8s, remaining = 112.7s
-step = 73, remaining = 27, times elasped = 270.5s, estimated time : for one step = 3.8s, remaining = 105.2s
-step = 75, remaining = 25, times elasped = 277.9s, estimated time : for one step = 3.8s, remaining = 97.6s
-step = 77, remaining = 23, times elasped = 285.4s, estimated time : for one step = 3.8s, remaining = 90.1s
-step = 79, remaining = 21, times elasped = 292.9s, estimated time : for one step = 3.8s, remaining = 82.6s
-step = 81, remaining = 19, times elasped = 300.5s, estimated time : for one step = 3.8s, remaining = 75.1s
-step = 83, remaining = 17, times elasped = 307.9s, estimated time : for one step = 3.8s, remaining = 67.6s
-step = 85, remaining = 15, times elasped = 315.4s, estimated time : for one step = 3.8s, remaining = 60.1s
-step = 87, remaining = 13, times elasped = 323s, estimated time : for one step = 3.8s, remaining = 52.6s
-step = 89, remaining = 11, times elasped = 330.4s, estimated time : for one step = 3.8s, remaining = 45.1s
-step = 91, remaining = 9, times elasped = 337.9s, estimated time : for one step = 3.8s, remaining = 37.5s
-step = 93, remaining = 7, times elasped = 345.4s, estimated time : for one step = 3.8s, remaining = 30s
-step = 95, remaining = 5, times elasped = 353s, estimated time : for one step = 3.8s, remaining = 22.5s
-step = 97, remaining = 3, times elasped = 360.4s, estimated time : for one step = 3.8s, remaining = 15s
-step = 99, remaining = 1, times elasped = 367.9s, estimated time : for one step = 3.8s, remaining = 7.5s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_14_02.html
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_30_32.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_30_48.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 3, remaining = 97, times elasped = 8.9s, estimated time : for one step = 4.4s, remaining = 435.1s
-step = 5, remaining = 95, times elasped = 17.5s, estimated time : for one step = 4.4s, remaining = 420.7s
-step = 7, remaining = 93, times elasped = 26.1s, estimated time : for one step = 4.4s, remaining = 409.1s
-step = 9, remaining = 91, times elasped = 34.7s, estimated time : for one step = 4.3s, remaining = 399.3s
-step = 11, remaining = 89, times elasped = 43.3s, estimated time : for one step = 4.3s, remaining = 390.1s
-step = 13, remaining = 87, times elasped = 52s, estimated time : for one step = 4.3s, remaining = 381.3s
-step = 15, remaining = 85, times elasped = 60.6s, estimated time : for one step = 4.3s, remaining = 372.1s
-step = 17, remaining = 83, times elasped = 69.2s, estimated time : for one step = 4.3s, remaining = 363.2s
-step = 19, remaining = 81, times elasped = 77.9s, estimated time : for one step = 4.3s, remaining = 354.7s
-step = 21, remaining = 79, times elasped = 86.6s, estimated time : for one step = 4.3s, remaining = 346.2s
-step = 23, remaining = 77, times elasped = 95.2s, estimated time : for one step = 4.3s, remaining = 337.5s
-step = 25, remaining = 75, times elasped = 103.8s, estimated
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step step = 29, remaining = 71, times elasped = 121.2s, estimated time : for one step = 4.3s, remaining = 311.8s
-, remaining = 17, times elasped = 10.2s, estimated time : for one step = 0.1s, remaining = 2.2s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_33_17.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-step = 31, remaining = 69, times elasped = 129.9s, estimated time : for one step = 4.3s--- SAEM started ! --step = 33, remaining = 67, times elasped = 138.6s, estimated time : for one step = 4.3s, remaining = 29step step = 35, remaining = 65, times elasped = 147.2s, estimated time : for one step = 4.3s, remaining =step = 3step = 37, remaining = 63, times elasped = 155.9s, estimated time : for one step = 4.3s, remainingstep = 4, remaining = 96, times elasped = 24.4s, estimated t
-
-processing file: JLS.Rmd
-remaining = 788.3s
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 26, remaining = 74, times elasped = 5s, estimated time : for one step = 0.2s, remaining = 15.1s
-step = 50, remaining = 50, times elasped = 10.2s, estimated time : for one step = 0.2s, rstep = 8, remaining = 92, times elasped = 56.6s, estimated time : for one step = 8.1s, remaining = 752s
- remaining = 5.4s
-step = 99, remaining = 1, times elasped = 20.4s, estimated time : for one step = 0.2s, remaining = 0.4s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_34_17.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-step = 45, remaining = 55, times elasped = 190.7s, estimated time : for one step = 4.3s, remaining = 242.7s
-step = 9, remaining = 91, times elasped = 64.7s, estimated time : for one step = 8.1s, remaining = 744.2s
-ststep = 49, remaining = 51, times elasped = 208s, estimated time : for one step = 4.3s, remaining = 225.3ssstep = 51, remaining = 49, times elasped = 216.7s, estimated time : for one step = 4.3s, remaining = 216.7s
-step = 53, remaining = 47, times elasped = 225.3s, estimated time : for one step = 4.3s, remaining = 208ssstep = 55, remaining = 45, times elasped = 234s, estimated time : for one step = 4.3s, remaining = 199.3s
-step = 57, remaining = 43, times elasped = 242.6s, estimated time : for one step = 4.3s, remaining = 190.6s
-step = 59, remaining = 41, times elasped = 251.3s, estimated time : for one step = 4.3s, remaining = 182s
-step = 61, remaining = 39, times elasped = 260s, estimated time : for one step = 4.3s, remaining = 173.3s
-step = 63, remaining = 37, times elasped = 268.6s, estimated time : for one step = 4.3s, remaining = 164.7ststep = 65, remaining = 35, times elasped = 277.3s, estimated time : for one step = 4.3s, remaining = 156s
-step = 67, remaining = 33, times elasped = 286s, estimated time : for one step = 4.3s, remaining = 147.4s
-s
-step = 20, remaining = 80, times elasped = 153.1s, estimated time : for one step = 8.1s, remaining = 652.9s
-step = 21, remaining = 79, times elasped = 161.2s, estimated time : for one step = 8.1s, remaining = 644.9s
-step = 22, remaining = 78, times elasped = 169.2s, estimated time : for one step = 8.1s, remaining = 636.5s
-step = 23, remaining = 77, times elasped = 177.2s, estimated
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated step = 75, remaining = 25, times elasped = 320.8s, estimated time : for one step = 4.3s, remaining = 112.7s
-step = 25, remaining = 75, times elaspedstep = 77, remaining = 23, times elasped = 329.4s, estimated time step = 26, remaining = 74, times elaspedstep = 79, remaining = 21, times elasped = 338.1s, estimated time : for one step = 4.3s, remaining = 95.4s
- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_36_47.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-step = 81, remaining = 19, times elasped = 346.8s, estimated time : for one step = 4.3s, remaining = 86.7ssstep = 83, remaining = 17, times elasped = 355.5s, estimated time : for one step = 4.3s, remaining = 78s
-s
-step = 85, remaining = 15, times elasped = 364.1s, estimated time : for one step = 4.3s, remaining = 69.4ssstep = 87, remaining = 13, times elasped = 372.8s, estimated time : for one step = 4.3s, remaining = 60.7ststep = 89, remaining = 11, times elasped = 381.5s, estimated time : for one step = 4.3s, remaining = 52ssstep = 91, remaining = 9, times elasped = 390.2s, estimated time : for one step = 4.3s, remaining = 43.4ssstep = 93, remaining = 7, times elasped = 398.9s, estimated time : for one step = 4.3s, remaining = 34.7ssstep = 95, remaining = 5, times elasped = 407.6s, estimated time : for one step = 4.3s, remaining = 26ssstep = 97, remaining = 3, times elasped = 416.2s, estimated time : for one step = 4.3s, remaining = 17.3ssstep = 99, remaining = 1, times elasped = 425s, estimated time : for one step = 4.3s, remaining = 8.7s
-step = 37, remaining = 63, times elasped = 289.6s, estimated time : for one step = 8s, remaining = 514.8s
-step = 38, remaining = 62, times elasped = 297.6s, estimated time : for one step = 8s, remaining = 506.7s
- ou plus (utilisez warnings() pour voir les 50 premiers)
-step = 39, remaining = 61, times elasped = 305.6s, estimated time : for one step = 8s, remaining = 498.7s
-step = 40, remaining = 60, times elasped = 313.6s, estimated time : for one step = 8s, remaining = 490.5s
-step = 41, remaining = 59, times elasped = 321.6s, estimated time : for one step = 8s, remaining = 482.5s
-step = 42, remaining = 58, times elasped = 329.7s, estimated time : for one step = 8s, remaining = 474.5s
-step = 43, remaining = 57, times elasped = 337.7s, estimated time : for one step = 8s, remaining = 466.3s
-step = 44, remaining = 56, times elasped = 345.7s, estimated time : for one step = 8s, remaining = 458.3s
-step = 45, remaining = 55, times elasped = 353.8s, estimated time : for one step = 8s, remaining = 450.3s
-step = 46, remaining = 54, times elasped = 361.8s, estimated time : for one step = 8s, remaining = 442.2s
-step = 47, remaining = 53, times elasped = 369.8s, estimated time : for one step = 8s, remaining = 434.1s
-step = 48, remaining = 52, times elasped = 377.9s, estimated time : for one step = 8s, remaining = 426.2s
-step = 49, remaining = 51, times elasped = 385.9s, estimated time : for one step = 8s, remaining = 418.1s
-step = 50, remaining = 50, times elasped = 393.9s, estimated time : for one step = 8s, remaining = 410s
-step = 51, remaining = 49, times elasped = 402s, estimated time : for one step = 8s, remaining = 402s
-step = 52, remaining = 48, times elasped = 410s, estimated time : for one step = 8s, remaining = 393.9s
-step = 53, remaining = 47, times elasped = 418s, estimated time : for one step = 8s, remaining = 385.8s
-step = 54, remaining = 46, times elasped = 426.1s, estimated time : for one step = 8s, remaining = 377.8s
-step = 55, remaining = 45, times elasped = 434s, estimated time : for one step = 8s, remaining = 369.7s
-step = 56, remaining = 44, times elasped = 442.1s, estimated time : for one step = 8s, remaining = 361.7s
-step = 57, remaining = 43, times elasped = 450.2s, estimated time : for one step = 8s, remaining = 353.7s
-step = 58, remaining = 42, times elasped = 458.1s, estimated time : for one step = 8s, remaining = 345.6s
-step = 59, remaining = 41, times elasped = 466.2s, estimated time : for one step = 8s, remaining = 337.6s
-step = 60, remaining = 40, times elasped = 474.2s, estimated time : for one step = 8s, remaining = 329.5s
-step = 61, remaining = 39, times elasped = 482.2s, estimated time : for one step = 8s, remaining = 321.5s
-step = 62, remaining = 38, times elasped = 490.2s, estimated time : for one step = 8s, remaining = 313.4s
-step = 63, remaining = 37, times elasped = 498.3s, estimated time : for one step = 8s, remaining = 305.4s
-step = 64, remaining = 36, times elasped = 506.3s, estimated time : for one step = 8s, remaining = 297.3s
-step = 65, remaining = 35, times elasped = 514.3s, estimated time : for one step = 8s, remaining = 289.3s
-step = 66, remaining = 34, times elasped = 522.4s, estimated time : for one step = 8s, remaining = 281.3s
-step = 67, remaining = 33, times elasped = 530.3s, estimated time : for one step = 8s, remaining = 273.2s
-step = 68, remaining = 32, times elasped = 538.3s, estimated time : for one step = 8s, remaining = 265.1s
-step = 69, remaining = 31, times elasped = 546.4s, estimated time : for one step = 8s, remaining = 257.1s
-step = 70, remaining = 30, times elasped = 554.3s, estimated time : for one step = 8s, remaining = 249.1s
-step = 71, remaining = 29, times elasped = 562.4s, estimated time : for one step = 8s, remaining = 241s
-step = 72, remaining = 28, times elasped = 570.5s, estimated time : for one step = 8s, remaining = 233s
-step = 73, remaining = 27, times elasped = 578.5s, estimated time : for one step = 8s, remaining = 225s
-step = 74, remaining = 26, times elasped = 586.5s, estimated time : for one step = 8s, remaining = 216.9s
-step = 75, remaining = 25, times elasped = 594.6s, estimated time : for one step = 8s, remaining = 208.9s
-step = 76, remaining = 24, times elasped = 602.5s, estimated time : for one step = 8s, remaining = 200.8s
-step = 77, remaining = 23, times elasped = 610.6s, estimated time : for one step = 8s, remaining = 192.8s
-step = 78, remaining = 22, times elasped = 618.7s, estimated time : for one step = 8s, remaining = 184.8s
-step = 79, remaining = 21, times elasped = 626.7s, estimated time : for one step = 8s, remaining = 176.8s
-step = 80, remaining = 20, times elasped = 634.7s, estimated time : for one step = 8s, remaining = 168.7s
-step = 81, remaining = 19, times elasped = 642.8s, estimated time : for one step = 8s, remaining = 160.7s
-step = 82, remaining = 18, times elasped = 650.7s, estimated time : for one step = 8s, remaining = 152.6s
-step = 83, remaining = 17, times elasped = 658.8s, estimated time : for one step = 8s, remaining = 144.6s
-step = 84, remaining = 16, times elasped = 666.9s, estimated time : for one step = 8s, remaining = 136.6s
-step = 85, remaining = 15, times elasped = 674.9s, estimated time : for one step = 8s, remaining = 128.5s
-step = 86, remaining = 14, times elasped = 682.9s, estimated time : for one step = 8s, remaining = 120.5s
-step = 87, remaining = 13, times elasped = 692.2s, estimated time : for one step = 8s, remaining = 112.7s
-step = 88, remaining = 12, times elasped = 701s, estimated time : for one step = 8.1s, remaining = 104.7s
-step = 89, remaining = 11, times elasped = 709.8s, estimated time : for one step = 8.1s, remaining = 96.8s
-step = 90, remaining = 10, times elasped = 718.6s, estimated time : for one step = 8.1s, remaining = 88.8s
-step = 91, remaining = 9, times elasped = 727.4s, estimated time : for one step = 8.1s, remaining = 80.8s
-step = 92, remaining = 8, times elasped = 736.3s, estimated time : for one step = 8.1s, remaining = 72.8s
-step = 93, remaining = 7, times elasped = 745.1s, estimated time : for one step = 8.1s, remaining = 64.8s
-step = 94, remaining = 6, times elasped = 753.8s, estimated time : for one step = 8.1s, remaining = 56.7s
-step = 95, remaining = 5, times elasped = 762.5s, estimated time : for one step = 8.1s, remaining = 48.7s
-step = 96, remaining = 4, times elasped = 771.3s, estimated time : for one step = 8.1s, remaining = 40.6s
-step = 97, remaining = 3, times elasped = 779.9s, estimated time : for one step = 8.1s, remaining = 32.5s
-step = 98, remaining = 2, times elasped = 788.7s, estimated time : for one step = 8.1s, remaining = 24.4s
-step = 99, remaining = 1, times elasped = 797.5s, estimated time : for one step = 8.1s, remaining = 16.3s
-step = 100, remaining = 0, times elasped = 806.2s, estimated time : for one step = 8.1s, remaining = 8.1s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_33_47.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 19, remaining = 81, times elasped = 5.2s, estimated time : for one step = 0.3s, remaining = 23.8s
-step = 39, remaining = 61, times elasped = 10.4s, estimated time : for one step = 0.3s, remaining = 17s
-step = 58, remaining = 42, times elasped = 15.4s, estimated time : for one step = 0.3s, remaining = 11.6s
-step = 78, remaining = 22, times elasped = 20.6s, estimated time : for one step = 0.3s, remaining = 6.2s
-step = 98, remaining = 2, times elasped = 25.8s, estimated time : for one step = 0.3s, remaining = 0.8s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_10_55_17.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 99, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 54, remaining = 46, times elasped = 5.1s, estimated time : for one step = 0.1s, remaining = 4.5s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_11_04_17.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS.Rmd
---- SAEM started ! ---
-step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 58, remaining = 142, times elasped = 5.1s, estimated time : for one step = 0.1s, remaining = 12.7s
-step = 118, remaining = 82, times elasped = 10.1s, estimated time : for one step = 0.1s, remaining = 7.2s
-step = 178, remaining = 22, times elasped = 15.2s, estimated time : for one step = 0.1s, remaining = 2s
---- SAEM ended ! ---
-output file: JLS.knit.md
-
-
-Output created: 2022_07_27_11_10_17.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS_bis.Rmd
---- SAEM started ! ---
-step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 30, remaining = 170, times elasped = 5.2s, estimated time : for one step = 0.2s, remaining = 30.4s
-step = 60, remaining = 140, times elasped = 10.2s, estimated time : for one step = 0.2s, remaining = 24.4s
-step = 90, remaining = 110, times elasped = 15.3s, estimated time : for one step = 0.2s, remaining = 19.1s
-step = 120, remaining = 80, times elasped = 20.4s, estimated time : for one step = 0.2s, remaining = 13.9s
-step = 150, remaining = 50, times elasped = 25.5s, estimated time : for one step = 0.2s, remaining = 8.7s
-step = 179, remaining = 21, times elasped = 30.6s, estimated time : for one step = 0.2s, remaining = 3.8s
---- SAEM ended ! ---
-output file: JLS_bis.knit.md
-
-
-Output created: 2022_07_27_11_13_17.html
-Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS_bis.Rmd
---- SAEM started ! ---
-step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
---- SAEM ended ! ---
-output file: JLS_bis.knit.md
-
-
-Output created: 2022_07_27_11_37_47.html
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS_bis.Rmd
---- SAEM started ! ---
-step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
---- SAEM ended ! ---
-output file: JLS_bis.knit.md
-
-
-Output created: 2022_07_27_11_40_02.html
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS_bis.Rmd
---- SAEM started ! ---
-step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 12, remaining = 188, times elasped = 5.3s, estimated time : for one step = 0.5s, remaining = 91.6s
-step = 24, remaining = 176, times elasped = 10.8s, estimated time : for one step = 0.5s, remaining = 82.8s
-step = 35, remaining = 165, times elasped = 15.8s, estimated time : for one step = 0.5s, remaining = 77s
-step = 46, remaining = 154, times elasped = 20.9s, estimated time : for one step = 0.5s, remaining = 71.8s
-step = 58, remaining = 142, times elasped = 26.2s, estimated time : for one step = 0.5s, remaining = 65.9s
-step = 69, remaining = 131, times elasped = 31.2s, estimated time : for one step = 0.5s, remaining = 60.7s
---- SAEM ended ! ---
-output file: JLS_bis.knit.md
-
-
-Output created: 2022_07_27_11_41_47.html
-INFO : Large data should be stored in your work/ folder. 
- 
-
-
-processing file: JLS_bis.Rmd
---- SAEM started ! ---
-step = 1, remaining = 199, times elasped = 0s, estimated time : for one step = NaNs, remaining = NaNs
-step = 5, remaining = 195, times elasped = 5.5s, estimated time : for one step = 1.4s, remaining = 268.5s
-step = 9, remaining = 191, times elasped = 10.7s, estimated time : for one step = 1.3s, remaining = 255.8s
-step = 13, remaining = 187, times elasped = 15.9s, estimated time : for one step = 1.3s, remaining = 249.9s
-step = 17, remaining = 183, times elasped = 21.1s, estimated time : for one step = 1.3s, remaining = 243.1s
-step = 21, remaining = 179, times elasped = 26.4s, estimated time : for one step = 1.3s, remaining = 237.2s
-step = 25, remaining = 175, times elasped = 31.6s, estimated time : for one step = 1.3s, remaining = 231.5s
-step = 29, remaining = 171, times elasped = 36.8s, estimated time : for one step = 1.3s, remaining = 226s
-step = 33, remaining = 167, times elasped = 42s, estimated time : for one step = 1.3s, remaining = 220.6s
-step = 37, remaining = 163, times elasped = 47.2s, estimated time : for one step = 1.3s, remaining = 215.1s
-step = 41, remaining = 159, times elasped = 52.5s, estimated time : for one step = 1.3s, remaining = 210s
-step = 45, remaining = 155, times elasped = 57.7s, estimated time : for one step = 1.3s, remaining = 204.5s
-step = 49, remaining = 151, times elasped = 62.9s, estimated time : for one step = 1.3s, remaining = 199.2s
-step = 53, remaining = 147, times elasped = 68.1s, estimated time : for one step = 1.3s, remaining = 193.9s
-step = 57, remaining = 143, times elasped = 73.4s, estimated time : for one step = 1.3s, remaining = 188.7s
-step = 61, remaining = 139, times elasped = 78.5s, estimated time : for one step = 1.3s, remaining = 183.3s
-step = 65, remaining = 135, times elasped = 83.7s, estimated time : for one step = 1.3s, remaining = 177.9s
-step = 69, remaining = 131, times elasped = 89s, estimated time : for one step = 1.3s, remaining = 172.8s
---- SAEM ended ! ---
-output file: JLS_bis.knit.md
-
-
-Output created: 2022_07_27_11_42_32.html

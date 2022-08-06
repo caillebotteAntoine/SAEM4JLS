@@ -1,24 +1,11 @@
   |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
    inline R code fragments
 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-  |                                                                                 |........                                                              |  12%inline R code fragments
-
-
-label:  |                                                                               |........                                                              |  12%setup
- (with options) 
+  |                                                                              |........                                                              |  12%
 label: setup (with options) 
 List of 1
- $ include:List of 1
- logi  FALSE$ 
-include
-: logi FALSE
+ $ include: logi FALSE
 
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
   |                                                                              |............                                                          |  18%
   ordinary text without R code
 
@@ -29,16 +16,9 @@ label: unnamed-chunk-1
 
   |                                                                              |.........................                                             |  35%
 label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
+List of 2
+ $ eval   : logi FALSE
+ $ include: logi FALSE
 
   |                                                                              |.............................                                         |  41%
   ordinary text without R code
@@ -57,45 +37,12 @@ label: unnamed-chunk-3
   ordinary text without R code
 
   |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
+label: saem load
   |                                                                              |......................................................                |  76%
   ordinary text without R code
 
   |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
 label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
   |                                                                              |..............................................................        |  88%
   ordinary text without R code
 
@@ -110,12 +57,7 @@ List of 3
   ordinary text without R code
 
 
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_09_32_46.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549653.1.short.q/RtmpYY8mNM/rmarkdown-str38f8c016fbdfa6.html 
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_09_32_46.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549652.1.short.q/Rtmp67RzCH/rmarkdown-str38f8bf5b27acfa.html 
+/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_08_06_09_03_53.html --lua-filter /usr/local/public/R-4.2.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.2.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.2.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1559492.1.short.q/RtmpRDlyNZ/rmarkdown-str307ab953a6b670.html 
   |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
    inline R code fragments
 
@@ -134,83 +76,10 @@ label: unnamed-chunk-1
 
   |                                                                              |.........................                                             |  35%
 label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_09_34_46.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549654.1.short.q/RtmpYuq9Ui/rmarkdown-str2d4f534f8345ec.html 
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_09_35_01.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549655.1.short.q/RtmpYgzNaG/rmarkdown-str234a9a4fd7f9e3.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
+List of 2
+ $ eval   : logi FALSE
  $ include: logi FALSE
 
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
   |                                                                              |.............................                                         |  41%
   ordinary text without R code
 
@@ -228,71 +97,12 @@ label: unnamed-chunk-3
   ordinary text without R code
 
   |                                                                              |.................................................                     |  71%
-label: saem
+label: saem load
   |                                                                              |......................................................                |  76%
   ordinary text without R code
 
   |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_09_36_01.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549656.1.short.q/Rtmp2u54R3/rmarkdown-str1b161814414224.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
 label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
 
   |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
    inline R code fragments
@@ -312,8 +122,9 @@ label: unnamed-chunk-1
 
   |                                                                              |.........................                                             |  35%
 label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
+List of 2
+ $ eval   : logi FALSE
+ $ include: logi FALSE
 
   |                                                                              |.............................                                         |  41%
   ordinary text without R code
@@ -332,12 +143,12 @@ label: unnamed-chunk-3
   ordinary text without R code
 
   |                                                                              |.................................................                     |  71%
-label: saem
+label: saem load
   |                                                                              |......................................................                |  76%
   ordinary text without R code
 
   |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
+label: saem
 
   |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
    inline R code fragments
@@ -357,8 +168,9 @@ label: unnamed-chunk-1
 
   |                                                                              |.........................                                             |  35%
 label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
+List of 2
+ $ eval   : logi FALSE
+ $ include: logi FALSE
 
   |                                                                              |.............................                                         |  41%
   ordinary text without R code
@@ -377,27 +189,13 @@ label: unnamed-chunk-3
   ordinary text without R code
 
   |                                                                              |.................................................                     |  71%
-label: saem
+label: saem load
   |                                                                              |......................................................                |  76%
   ordinary text without R code
 
   |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
+label: saem
 
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_14_02.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549669.1.short.q/Rtmpc4tfqq/rmarkdown-str234b9f25099c4b.html 
   |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
    inline R code fragments
 
@@ -416,8 +214,9 @@ label: unnamed-chunk-1
 
   |                                                                              |.........................                                             |  35%
 label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
+List of 2
+ $ eval   : logi FALSE
+ $ include: logi FALSE
 
   |                                                                              |.............................                                         |  41%
   ordinary text without R code
@@ -436,835 +235,10 @@ label: unnamed-chunk-3
   ordinary text without R code
 
   |                                                                              |.................................................                     |  71%
-label: saem
+label: saem load
   |                                                                              |......................................................                |  76%
   ordinary text without R code
 
   |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_30_32.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549673.1.short.q/RtmpWNR0n2/rmarkdown-str28efd92878ff24.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
 label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
 
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_30_48.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549674.1.short.q/RtmpFe35ie/rmarkdown-str6ad0e45a62a54.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_33_17.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549677.1.short.q/RtmpNc1EHd/rmarkdown-str234c141cab0366.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_34_17.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549679.1.short.q/RtmpKzGhlW/rmarkdown-str3568594da6b3c2.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_36_47.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549680.1.short.q/RtmpsrdlFF/rmarkdown-str3568bf1c99523c.html 
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_31_32.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549675.1.short.q/RtmpbQLpip/rmarkdown-str28f03a6ce2649e.html 
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_33_47.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549678.1.short.q/RtmpdXEyPL/rmarkdown-str234c7712fcb983.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_10_55_17.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549681.1.short.q/Rtmp13ZVIQ/rmarkdown-str184f4d4b311f4.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_11_04_17.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549683.1.short.q/Rtmpsod1GV/rmarkdown-str29e4596305c884.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |........                                                              |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |............                                                          |  18%
-  ordinary text without R code
-
-  |                                                                              |................                                                      |  24%
-label: unnamed-chunk-1
-  |                                                                              |.....................                                                 |  29%
-  ordinary text without R code
-
-  |                                                                              |.........................                                             |  35%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.............................                                         |  41%
-  ordinary text without R code
-
-  |                                                                              |.................................                                     |  47%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.....................................                                 |  53%
-  ordinary text without R code
-
-  |                                                                              |.........................................                             |  59%
-label: unnamed-chunk-3
-  |                                                                              |.............................................                         |  65%
-  ordinary text without R code
-
-  |                                                                              |.................................................                     |  71%
-label: saem
-  |                                                                              |......................................................                |  76%
-  ordinary text without R code
-
-  |                                                                              |..........................................................            |  82%
-label: saem sans a b et alpha
-  |                                                                              |..............................................................        |  88%
-  ordinary text without R code
-
-  |                                                                              |..................................................................    |  94%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-  |                                                                              |......................................................................| 100%
-  ordinary text without R code
-
-
-/bin/pandoc +RTS -K512m -RTS JLS.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_11_10_17.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549684.1.short.q/RtmpypIRd6/rmarkdown-str14a1685223cb9f.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |.........                                                             |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |.............                                                         |  19%
-  ordinary text without R code
-
-  |                                                                              |..................                                                    |  25%
-label: unnamed-chunk-1
-  |                                                                              |......................                                                |  31%
-  ordinary text without R code
-
-  |                                                                              |..........................                                            |  38%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...............................                                       |  44%
-  ordinary text without R code
-
-  |                                                                              |...................................                                   |  50%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.......................................                               |  56%
-  ordinary text without R code
-
-  |                                                                              |............................................                          |  62%
-label: unnamed-chunk-3
-  |                                                                              |................................................                      |  69%
-  ordinary text without R code
-
-  |                                                                              |....................................................                  |  75%
-label: saem
-  |                                                                              |.........................................................             |  81%
-  ordinary text without R code
-
-  |                                                                              |.............................................................         |  88%
-label: saem sans a b et alpha
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |......................................................................| 100%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-
-/bin/pandoc +RTS -K512m -RTS JLS_bis.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_11_13_17.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549685.1.short.q/Rtmp0vSdR3/rmarkdown-str39a89d2bfc6337.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |.........                                                             |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |.............                                                         |  19%
-  ordinary text without R code
-
-  |                                                                              |..................                                                    |  25%
-label: unnamed-chunk-1
-  |                                                                              |......................                                                |  31%
-  ordinary text without R code
-
-  |                                                                              |..........................                                            |  38%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...............................                                       |  44%
-  ordinary text without R code
-
-  |                                                                              |...................................                                   |  50%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.......................................                               |  56%
-  ordinary text without R code
-
-  |                                                                              |............................................                          |  62%
-label: unnamed-chunk-3
-  |                                                                              |................................................                      |  69%
-  ordinary text without R code
-
-  |                                                                              |....................................................                  |  75%
-label: saem
-  |                                                                              |.........................................................             |  81%
-  ordinary text without R code
-
-  |                                                                              |.............................................................         |  88%
-label: saem sans a b et alpha
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |......................................................................| 100%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-
-/bin/pandoc +RTS -K512m -RTS JLS_bis.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_11_37_47.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549687.1.short.q/RtmpdT3JEJ/rmarkdown-str29e4e75a1c4a30.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |.........                                                             |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |.............                                                         |  19%
-  ordinary text without R code
-
-  |                                                                              |..................                                                    |  25%
-label: unnamed-chunk-1
-  |                                                                              |......................                                                |  31%
-  ordinary text without R code
-
-  |                                                                              |..........................                                            |  38%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...............................                                       |  44%
-  ordinary text without R code
-
-  |                                                                              |...................................                                   |  50%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.......................................                               |  56%
-  ordinary text without R code
-
-  |                                                                              |............................................                          |  62%
-label: unnamed-chunk-3
-  |                                                                              |................................................                      |  69%
-  ordinary text without R code
-
-  |                                                                              |....................................................                  |  75%
-label: saem
-  |                                                                              |.........................................................             |  81%
-  ordinary text without R code
-
-  |                                                                              |.............................................................         |  88%
-label: saem sans a b et alpha
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |......................................................................| 100%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-
-/bin/pandoc +RTS -K512m -RTS JLS_bis.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_11_40_02.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549688.1.short.q/RtmpPUSD6w/rmarkdown-str14a3a66a9db7be.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |.........                                                             |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |.............                                                         |  19%
-  ordinary text without R code
-
-  |                                                                              |..................                                                    |  25%
-label: unnamed-chunk-1
-  |                                                                              |......................                                                |  31%
-  ordinary text without R code
-
-  |                                                                              |..........................                                            |  38%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...............................                                       |  44%
-  ordinary text without R code
-
-  |                                                                              |...................................                                   |  50%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.......................................                               |  56%
-  ordinary text without R code
-
-  |                                                                              |............................................                          |  62%
-label: unnamed-chunk-3
-  |                                                                              |................................................                      |  69%
-  ordinary text without R code
-
-  |                                                                              |....................................................                  |  75%
-label: saem
-  |                                                                              |.........................................................             |  81%
-  ordinary text without R code
-
-  |                                                                              |.............................................................         |  88%
-label: saem sans a b et alpha
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |......................................................................| 100%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-
-/bin/pandoc +RTS -K512m -RTS JLS_bis.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_11_41_47.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549690.1.short.q/RtmpeAoxpE/rmarkdown-str39a91ccea8693.html 
-  |                                                                              |                                                                      |   0%  |                                                                              |....                                                                  |   6%
-   inline R code fragments
-
-  |                                                                              |.........                                                             |  12%
-label: setup (with options) 
-List of 1
- $ include: logi FALSE
-
-  |                                                                              |.............                                                         |  19%
-  ordinary text without R code
-
-  |                                                                              |..................                                                    |  25%
-label: unnamed-chunk-1
-  |                                                                              |......................                                                |  31%
-  ordinary text without R code
-
-  |                                                                              |..........................                                            |  38%
-label: data ploting (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |...............................                                       |  44%
-  ordinary text without R code
-
-  |                                                                              |...................................                                   |  50%
-label: unnamed-chunk-2 (with options) 
-List of 1
- $ echo: logi FALSE
-
-  |                                                                              |.......................................                               |  56%
-  ordinary text without R code
-
-  |                                                                              |............................................                          |  62%
-label: unnamed-chunk-3
-  |                                                                              |................................................                      |  69%
-  ordinary text without R code
-
-  |                                                                              |....................................................                  |  75%
-label: saem
-  |                                                                              |.........................................................             |  81%
-  ordinary text without R code
-
-  |                                                                              |.............................................................         |  88%
-label: saem sans a b et alpha
-  |                                                                              |..................................................................    |  94%
-  ordinary text without R code
-
-  |                                                                              |......................................................................| 100%
-label: plot (with options) 
-List of 3
- $ echo     : logi FALSE
- $ fig.asp  : num 0.8
- $ fig.width: num 8
-
-
-/bin/pandoc +RTS -K512m -RTS JLS_bis.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2022_07_27_11_42_32.html --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmarkdown/lua/latex-div.lua --self-contained --variable bs3=TRUE --standalone --section-divs --template /usr/local/public/R-4.1.1/lib/R/library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/1549691.1.short.q/RtmpZygZsu/rmarkdown-str1b17d21ec84981.html 
