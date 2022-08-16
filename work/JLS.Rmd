@@ -219,7 +219,7 @@ oracle %>% unlist
 ```
 # saem
 ```{r saem}
-exclude.sim = c() ; exclude.max = c()#c('alpha', 'beta')
+exclude.sim = c('phi', 'a', 'b') ; exclude.max = c()#c('alpha', 'beta')
 load.SAEM(model, exclude.sim, exclude.max)
 var1 <- var0
 var1[c(exclude.sim)] <- var.true[c(exclude.sim)]
@@ -227,7 +227,7 @@ var1[c(exclude.sim)] <- var.true[c(exclude.sim)]
 
 # sim(50, var1, Phi, param, verbatim = 2) %>% plot(nrow = 2)
 
-res <- SAEM(200, 5, param0, var1, Phi, S$eval, max, sim,  eps = 1e-3,
+res <- SAEM(3, 5, param0, var1, Phi, S$eval, max, sim,  eps = 1e-3,
             burnin = 150, 
             adptative.sd = 0.6, verbatim = 3 )
 
