@@ -60,7 +60,7 @@ simulation <- function(niter, var, Phi, parameter, adptative.sd = NULL, verbatim
 #' @examples
 SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisation, simulation,
                  adptative.sd = NULL,
-                 burnin = NULL, coef.burnin = 1, eps = NULL, verbatim = F)
+                 burnin = NULL, coef.burnin = 1, eps = NULL, verbatim = F, RDS = F)
 {
   #Initialisation de l'approximation de S
   Sh <- do.call(exhaustive, c(var0, parameter0))
@@ -96,6 +96,7 @@ SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisatio
 
   while(h <= niter+1 && cmp < step.before.stop ) #  for(h in 1:niter+1)
   {
+    parameter = para[h-1]
     if(verbatim != 0)
     {
       if(Sys.time() - last.msg > 5){
@@ -108,7 +109,6 @@ SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisatio
                        's, remaining = ', round(step.estimation * (niter+2-h),1), 's' ))
       }
     }
-    parameter = para[h-1]
     # --- Step S : simulation --- #
     para@Z <- simulation(MH.iter(h), para@Z, Phi, parameter = parameter, adptative.sd = sd(h), verbatim = verbatim - 1)
     # --- Step A : approximation --- #
@@ -120,6 +120,8 @@ SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisatio
 
     cmp <- ifelse(stopCondi(h), cmp + 1, 0) #compteur après convergence des para pour verifier la CV
     h <- h + 1
+
+    if(RDS) saveRDS(para, "SAEM_res.rds")
   }
 
   if(verbatim != 0) message('--- SAEM ended ! ---')

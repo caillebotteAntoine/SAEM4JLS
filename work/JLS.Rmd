@@ -58,14 +58,14 @@ param <- list(sigma2 = .05^2,
               #S.data data,
               bara = 90,
               barb = 30,
-              alpha = 0.5,
+              baralpha = 0.5,
               beta = 10)
 
 #=======================================#
 t <- seq(60,120, length.out = 10) #time values
 set.seed(123)
 
-G <- 40 ; ng = 1
+G <- 40 ; ng = 4
 link = function(t,phi1, phi2, phi3) phi2#/phi3
 
 dt <- create_JLS_HD_data(G, ng, t, m, link, param)
@@ -92,7 +92,7 @@ grid.arrange(longitudinal_plot, S.data_plot, nrow = 2)
 ```
 
 ```{r, echo = F}
-sigma2_a <- sigma2_b <- 0.1
+sigma2_a <- sigma2_b <- sigma2_alpha <- 0.1
 
 zeta <- function(alpha, beta, phi1, phi2, phi3, a,b)
 {
@@ -140,24 +140,24 @@ zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, a, b)
 }
 
 h <- fct_vector(function(a,b, ...) N*log(b*a^-b),
-                function(b, ...) (b-1)*S.data.time.log.sum
-                # function(phi1, phi2, phi3, ...) sum(link(S.data.time, rep(phi1, ng), rep(phi2, ng), rep(phi3, ng) )) 
+                function(b, ...) (b-1)*S.data.time.log.sum,
+                function(phi1, phi2, phi3, ...) sum(link(S.data.time, rep(phi1, ng), rep(phi2, ng), rep(phi3, ng) )) 
                 )
 
-res <- SPGD(200, theta0 = 0.4,
-      step = 1e-3, #mini.batch.size = 4,
-      zeta.der.A, N, zeta.A,
-      param$beta,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b, verbatim = T)
-
-plot(res, seq(0.4,0.52, by = 0.001), zeta.A, zeta.der.A, 1, N, param$beta,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b)
-
-
-res <- SPGD(250, theta0 = 5,
-      step = 5e-2,
-      zeta.der.B, N, zeta.B,
-      param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b, verbatim = T)
-
-plot(res, seq(5,11, by = 0.01), zeta.B, zeta.der.B, 1, N, param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b)
+# res <- SPGD(200, theta0 = 0.4,
+#       step = 1e-3, #mini.batch.size = 4,
+#       zeta.der.A, N, zeta.A,
+#       param$beta,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b, verbatim = T)
+# 
+# plot(res, seq(0.4,0.52, by = 0.001), zeta.A, zeta.der.A, 1, N, param$beta,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b)
+# 
+# 
+# res <- SPGD(250, theta0 = 5,
+#       step = 5e-2,
+#       zeta.der.B, N, zeta.B,
+#       param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b, verbatim = T)
+# 
+# plot(res, seq(5,11, by = 0.01), zeta.B, zeta.der.B, 1, N, param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b)
 ```
 
 
@@ -178,23 +178,23 @@ model <- SAEM_model(
                                'h$eval(a = a, ..., i = 1)')),
     latent_variable('b', prior = list(mean = 'barb', variance.hyper = 'sigma2_b'),
                     add_on = c('zeta(b = b, ...) +',
-                               'sum(h$eval(b = b, ..., i = c(1,2)))' ))
-    # latent_variable('alpha', prior = list(mean = 'alpha', variance.hyper = 'sigma2_alpha'),
-    #                 add_on = c('zeta(alpha = alpha, ...) +',
-    #                            'alpha*h$eval(..., i = 4)'))
+                               'sum(h$eval(b = b, ..., i = c(1,2)))' )),
+    latent_variable('alpha', prior = list(mean = 'baralpha', variance.hyper = 'sigma2_alpha'),
+                    add_on = c('zeta(alpha = alpha, ...) +',
+                               'alpha*h$eval(alpha = alpha,..., i = 3)'))
   ),
 
   # === Paramètre de regression === #
   regression.parameter = list(
-    regression_parameter('alpha', 1, function(...) SPGD(1, theta0 = alpha,
-                                                      step = 1e-3,
-                                                      zeta.der.A, N, zeta.A, 
-                                                      parameter$beta,  Z$phi1, Z$phi2, Z$phi3, Z$a,Z$b) ),
+    # regression_parameter('alpha', 1, function(...) SPGD(1, theta0 = alpha,
+    #                                                   step = 1e-3,
+    #                                                   zeta.der.A, N, zeta.A, 
+    #                                                   parameter$beta,  Z$phi1, Z$phi2, Z$phi3, Z$a,Z$b) ),
     
     regression_parameter('beta', 1, function(...) SPGD(1, theta0 = beta,
                                                       step = 5e-2,
                                                       zeta.der.B, N, zeta.B, 
-                                                      res$alpha,  Z$phi1, Z$phi2, Z$phi3, Z$a,Z$b) )
+                                                      Z$alpha,  Z$phi1, Z$phi2, Z$phi3, Z$a,Z$b) )
   )
 )
 ```
@@ -205,13 +205,15 @@ param0 <- param %>% sapply(function(x) x* runif(1, 1.1,1.4))
 #param0$rho2 = 0.2 ; param0$omega2 <- rep(.1,3)
 param0$bara <- 80 ; param0$barb <- 10
 param0$sigma2 <- 1
+param0$beta <- 9
+param0$baralpha <- 0.1
 #===============================================#
-load.SAEM(model, exclude.maximisation = c('alpha','beta'))
+load.SAEM(model, exclude.maximisation = c('beta'))
 var0 <- init.SAEM(model, 
                   x0 = list(phi = c(1,80,4), 
-                            a = param0$bara, b = param0$barb), 
+                            a = param0$bara, b = param0$barb, alpha = param0$baralpha), 
                   sd = list(phi = c(.05, 1.5, .5),
-                            a = 2, b = 2) )
+                            a = 2, b = 2, alpha = .05) )
 #===================================================================================#
 S.tmp <- do.call(S$eval, var.true)
 oracle <- max(do.call(S$eval, var.true), param, var.true)
@@ -219,17 +221,17 @@ oracle %>% unlist
 ```
 # saem
 ```{r saem}
-exclude.sim = c('phi', 'a', 'b') ; exclude.max = c()#c('alpha', 'beta')
+exclude.sim = c() ; exclude.max = c()#c('alpha', 'beta')
 load.SAEM(model, exclude.sim, exclude.max)
 var1 <- var0
-var1[c(exclude.sim)] <- var.true[c(exclude.sim)]
+# var1[c(exclude.sim)] <- var.true[c(exclude.sim)]
 # param0[exclude.max] <- param[exclude.max]
 
 # sim(50, var1, Phi, param, verbatim = 2) %>% plot(nrow = 2)
 
-res <- SAEM(3, 5, param0, var1, Phi, S$eval, max, sim,  eps = 1e-3,
+res <- SAEM(200, 5, param0, var1, Phi, S$eval, max, sim,  eps = 1e-3,
             burnin = 150, 
-            adptative.sd = 0.6, verbatim = 3 )
+            adptative.sd = 0.6, verbatim = 3, RDS = F )
 
 ```
 

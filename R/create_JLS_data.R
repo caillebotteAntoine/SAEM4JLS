@@ -93,8 +93,9 @@ create_JLS_HD_data <- function(G, ng, t, m, link, param)
   var.true$a <- a
   b <- param$barb
   var.true$b <- b
+  alpha <- param$baralpha
+  var.true$alpha <- alpha
 
-  alpha <- param$alpha
   beta <- param$beta
   p <- length(beta)
 

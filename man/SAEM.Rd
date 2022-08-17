@@ -17,7 +17,8 @@ SAEM(
   burnin = NULL,
   coef.burnin = 1,
   eps = NULL,
-  verbatim = F
+  verbatim = F,
+  RDS = F
 )
 }
 \arguments{
@@ -40,9 +41,6 @@ SAEM(
 \item{eps}{Stop criterion}
 
 \item{verbatim}{1 = message only, 2 add MCMC, 3 add full MCMC}
-}
-\value{
-
 }
 \description{
 SAEM algorithm perform parameter estimation for nonlinear mixed effects
