@@ -13,6 +13,7 @@ SPGD(
   f,
   ...,
   mini.batch.size = NULL,
+  normalized.grad = F,
   verbatim = F
 )
 }

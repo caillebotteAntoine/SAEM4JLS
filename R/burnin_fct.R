@@ -14,19 +14,48 @@
 #'
 #' @examples
 #'
-#'u <- burnin_fct(10, 0.1)
-#'plot(1:20, u(1:20))
+#'u <- burnin_fct(10, 2)
+#'plot(u)
 #'
 #'v <- burnin_fct(10, 3/4, 0.5)
-#'plot(1:20, u(1:20))
-#'plot(1:20, v(1:20))
+#'plot(v)
 burnin_fct <- function(burnin, coef.burnin, scale = 1, format = "double")
 {
   if(format == 'double')
-    return( function(k) scale * ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin )) )
+  {
+    f <- function(k) scale * ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin ))
+    class(f) <- c('burnin_fct', class(f))
+    return(f)
+  }
 
   if(format == 'int')
-    return( function(k) round(scale * ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin )) ))
+  {
+    f <- function(k) round(scale * ifelse(k<burnin, 1, 1/((k+1-burnin)^coef.burnin )) )
+    class(f) <- c('burnin_fct', class(f))
+    return(f)
+  }
 }
+
+plot.burnin_fct <- function(f, eps = 0.05)
+{
+  e <- environment(f)
+
+  burnin <- e[['burnin']]
+  scale <- e[['scale']]
+
+  upper <- burnin
+  while( (f(upper) - f(upper+1))/scale > scale*eps) upper <- upper+1
+
+  lower <- burnin - ceiling((upper - burnin)*0.1)
+
+  x <- seq(lower, upper, by = 0.1)
+  plot(x, f(x))
+
+}
+
+
+
+
+
 
 

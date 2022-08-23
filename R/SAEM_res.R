@@ -37,7 +37,7 @@ setMethod('[', 'SAEM_res', definition = function(x, i) lapply(x, function(p) p[i
 vline <- function(gg, x, col, size = 1) gg + geom_vline(xintercept = x, size = size, col = col)
 
 
-plot_high_dim <- function(res, true.value, name, w = 10, dec = - 1)
+plot_high_dim <- function(res, true.value, name, f, ..., w = 10, dec = - 1)
 {
   convergence <- abs(t(res[[name]]) - true.value[[name]]) %>% melt(id = 'null')
   value <- t(res[[name]]) %>% melt(id = 'null')
@@ -52,15 +52,25 @@ plot_high_dim <- function(res, true.value, name, w = 10, dec = - 1)
     geom_tile(data = real.component, aes(iteration, component, fill = value), width = w) +
     annotate('text', x = real.component$iteration, y = dec, label = 'real value')  +
 
-    scale_fill_gradient(low = "white", high = "green") +
+    scale_fill_gradientn(colours = c('red','white','green'), values = c(0,0.5,1)) +
+
     labs(title = paste0('Convergence of vector ', name), subtitle = 'expected value on the right')
 
-  return(gg)
-  gg <- convergence %>% group_by(Var2) %>% summarise(value = sum(value)) %>% ggplot(aes(Var2, value)) + geom_line()
+  gg2 <- convergence %>% group_by(Var2) %>% summarise(value = sum(value)) %>%
+    ggplot(aes(Var2, value)) + geom_line() +
+    labs(title = paste(name, 'prediction error'), subtitle = 'norm 1')
+
+  gg3 <- apply(res[[name]], 1, f, ...) %>%
+    {data.frame(f = .)} %>% mutate(iteration = 1:nrow(.)) %>%
+    ggplot(aes(iteration, log(abs(f)))) + geom_line() +
+    geom_hline(yintercept = log(abs(do.call(f, c(list(true.value[[name]]), list(...))) ) ),
+               col = 'green') +
+
+    labs(title = 'Value of the function to optimize', subtitle = 'green : expected value with the theoretical optimum', y = 'log(|function value|)')
 
 
+  return(list(gg, gg2, gg3))
 }
-
 
 plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptation'), exclude, time = T, true.value, high.dim )
 {
@@ -88,7 +98,6 @@ plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptat
 
   for(p in c(exclude, high.dim)){
     res[[p]] <- NULL
-    param[[p]] <- NULL
   }
 
   dt <-  na.omit(as.data.frame(res))

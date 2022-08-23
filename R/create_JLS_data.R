@@ -33,58 +33,6 @@ create_NLME_data <- function(G, ng, t, m, param)
 
 
 
-
-
-create_JLS_data <- function(G, ng, t, m, link, param)
-{
-  var.true <- create_NLME_data(G, ng, t, m, param)
-
-  var.true$gamma <- rnorm(G, 0, sqrt(param$nu2))
-
-
-  a <- param$bara
-  b <- param$barb
-  alpha <- param$alpha
-  beta <- param$beta
-
-  survival <- data.frame(id = 1:(G*ng), gen = rep(1:G, each = ng) ) %>%
-    mutate(U = gen %% 2)
-
-  survival_fct <- function(i)
-  {
-    g <- survival$gen[i]
-    phi1 <- var.true$phi1[g]
-    phi2 <- var.true$phi2[g]
-    phi3 <- var.true$phi3[g]
-    # eta <- var.true$eta[i]
-    u <- survival$U[i]
-
-
-    lbd <- function(t) t^{b-1} * exp(beta*u + alpha * link(t, phi1, phi2, phi3) + var.true$gamma[g])
-
-    # LBD <- function(t) b*a^-b * lbd(t) *exp(b*a^-b *integrate(lbd, 0, t)$value )
-    #U = F(T) <=> F^-1 (U) = T ou chercher T
-    #U = 1-S(T)
-    #log(1-U) = log(S(t))= - int(\lambda(t))
-
-
-    uni <- runif(1)
-    uniroot(function(t) b*a^-b *integrate(lbd, 0, t)$value + log(1-uni) , lower = 0, upper = 2*a)$root
-  }
-
-  survival$obs = sapply(1:nrow(survival), survival_fct)
-  return(list(var.true = var.true, survival = survival))
-}
-
-
-
-
-
-
-
-
-
-
 create_JLS_HD_data <- function(G, ng, t, m, link, param)
 {
   var.true <- create_NLME_data(G, ng, t, m, param)
@@ -93,8 +41,15 @@ create_JLS_HD_data <- function(G, ng, t, m, link, param)
   var.true$a <- a
   b <- param$barb
   var.true$b <- b
-  alpha <- param$baralpha
-  var.true$alpha <- alpha
+
+  if('baralpha' %in% names(param))
+  {
+    alpha <- param$baralpha
+    var.true$alpha <- alpha
+  }else if('alpha' %in% names(param))
+  {
+    alpha <- param$alpha
+  }
 
   beta <- param$beta
   p <- length(beta)

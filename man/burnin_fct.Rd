@@ -16,10 +16,9 @@ Burn-in function for algorithm requiring a step
 }
 \examples{
 
-u <- burnin_fct(10, 0.1)
-plot(1:20, u(1:20))
+u <- burnin_fct(10, 2)
+plot(u)
 
 v <- burnin_fct(10, 3/4, 0.5)
-plot(1:20, u(1:20))
-plot(1:20, v(1:20))
+plot(v)
 }

@@ -18,7 +18,7 @@ SAEM(
   coef.burnin = 1,
   eps = NULL,
   verbatim = F,
-  RDS = F
+  RDS = NULL
 )
 }
 \arguments{

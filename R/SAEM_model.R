@@ -131,7 +131,7 @@ setMethod('show', "SAEM_model", function(object ){
 get_maximisation_step <- function(model, exclude = c())
 {
 
-  maximisation <- function(S, parameter, Z)
+  maximisation <- function(h, S, parameter, Z)
   {
   }
   fct.body <- deparse(body(maximisation))
@@ -253,8 +253,8 @@ load.SAEM <- function(model, exclude.simulation = c(), exclude.maximisation = c(
   assign('S', model@S, envir = env)
 
   exclude.maximisation <- c(exclude.maximisation, unlist( sapply(exclude.simulation, function(v) model@latent_vars[[v]]@prior) ) )
-  assign('max', get_maximisation_step(model, exclude.maximisation), envir = env)
-  assign('sim', get_simulation_step(model, exclude.simulation), envir = env)
+  assign('maximisation', get_maximisation_step(model, exclude.maximisation), envir = env)
+  assign('simulation', get_simulation_step(model, exclude.simulation), envir = env)
 
   for(var in names(model@loglik.fct)) assign(paste0('loglik.',var), model@loglik.fct[[var]], envir = env)
 }

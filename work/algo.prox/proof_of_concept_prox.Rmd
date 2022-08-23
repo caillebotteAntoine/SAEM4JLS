@@ -48,11 +48,11 @@ require(tictoc)
 
 
 ```{r}
-param <- list(sigma2 = 0.5,
+parameter <- list(sigma2 = 0.5,
               rho2 = .5,
               mu = 3)
 
-J <- 10 ; n <- 50 ; p <- 2
+J <- 10 ; n <- 50 ; p <- 200
 
 time <- seq(-1,1, len = J)
 ttime <- t(time)
@@ -64,13 +64,13 @@ expand.grid(n = 1:n, p = 1:p) %>% mutate(U = as.numeric(U)) %>%
 
 
 tU <- t(U)
-param$beta <- rep(0,p)
-param$beta[1:1] <- 1
+parameter$beta <- rep(0,p)
+parameter$beta[1:4] <- c(1,2,-1,-2)*1
 
-eps <- matrix(rnorm(n*J, sd = sqrt(param$sigma2)), nrow = n)
-slope <- rnorm(n, param$mu, sd = sqrt(param$rho2))
+eps <- matrix(rnorm(n*J, sd = sqrt(parameter$sigma2)), nrow = n)
+slope <- rnorm(n, parameter$mu, sd = sqrt(parameter$rho2))
 
-Y <- as.vector(param$beta %*% tU) + slope %*% ttime + eps
+Y <- as.vector(parameter$beta %*% tU) + slope %*% ttime + eps
 ```
 
 ```{r data ploting, echo = F}
@@ -82,43 +82,41 @@ data.frame(Y) %>% mutate(id = 1:n) %>%
 
 
 ```{r SPGD res}
-l <- function(beta, slope, param, ... ) 1/(2*param$sigma2) * sum( (Y - as.vector(beta %*% tU) - slope %*% ttime )^2 ) 
-grad.li <- function(beta, i, slope, ...) -1/param$sigma2 * sum(Y[i,] - sum(beta * U[i,]) - slope[i]*time) * U[i,]
+l <- function(beta, slope, parameter, ... ) 1/(2*parameter$sigma2) * sum( (Y - as.vector(beta %*% tU) - slope %*% ttime )^2 ) 
+grad.li <- function(beta, i, slope, ...) -1/parameter$sigma2 * sum(Y[i,] - sum(beta * U[i,]) - slope[i]*time) * U[i,]
 ```
 
 
-```{r SPGD test, eval=FALSE, include=FALSE}
+```{r SPGD test}
 
-res <- SPGD(500, theta0 = c(0,0),
-            step = 5e-3,# mini.batch.size = n/2,
-            grad.li, n, l, slope, param, verbatim = T)
-
-res
-# plot(res, seq(0.5,1.5, by = 0.1), l, grad.li, 1, slope, param)
-
-as.numeric(res)
+res <- SPGD(400, theta0 =  runif(p, min = -1, max = 1),
+            normalized.grad = T,
+            step = burnin_fct(390, coef.burnin = 0.5, scale = 0.5 ),
+            grad.li, n, l, slope, parameter, verbatim = T)
 
 
-i = 2
-x <- seq(-0.5,1.5, len = 100)
-theta0 = c(1,1)
-iteration <- length(x)
-theta <- matrix(rep(theta0, iteration), ncol = length(theta0))
-beta[,i] <- x
-
-plot(beta[,1], sapply(1:100, function(i) l(beta[i,], slope, param)))
+plot(as.numeric(res))
 
 plot(attr(res, 'f.value'))
-plot(attr(res, 'gradf.value')[,1])
-plot(attr(res, 'gradf.value')[,2])
+matplot(attr(res, 'gradf.value') )
 
-l(param$beta, slope, param)
-l(res, slope, param)
+
+plot(res, seq(-0.5,1.5, len = 100), l, grad.li, 1, n, slope, parameter)
+plot(res, seq(-0.5,1.5, len = 100), l, grad.li, 2, n, slope, parameter)
+plot(res, seq(-0.5,1.5, len = 100), l, grad.li, 3, n, slope, parameter)
+plot(res, seq(-0.5,1.5, len = 100), l, grad.li, 4, n, slope, parameter)
+plot(res, seq(-0.5,1.5, len = 100), l, grad.li, 5, n, slope, parameter)
+
+l(parameter$beta, slope, parameter)
+l(res, slope, parameter)
 
 sapply(1:n,function(i) grad.li(res, i, slope)) %>% apply(1, mean)
 
-mean(abs(as.numeric(res) %*% tU - param$beta%*% tU)/param$beta%*% tU)
-mean(abs(as.numeric(res) - param$beta))
+mean(abs(as.numeric(res) %*% tU - parameter$beta%*% tU)/parameter$beta%*% tU)
+mean(abs(as.numeric(res) - parameter$beta))
+
+
+
 ```
 
 ```{r SAEM model}
@@ -135,7 +133,7 @@ model <- SAEM_model(
   # === Paramètre de regression === #
   regression.parameter = list(
     regression_parameter('beta', p, function(...) SPGD(1, theta0 = beta,
-                                                      step = 1e-2,
+                                                      step = 1e-2, mini.batch.size = 1,
                                                       grad.li, n, l, Z$slope, parameter) )
   )
 )
@@ -154,15 +152,15 @@ var0 <- init.SAEM(model,
                   sd = list(slope = .3))
 
 
-param0 <- list(sigma2 = 0.1, rho2 = 0.4, mu = 2.8, beta = rep(0, p))
-oracle <- max(S = do.call(S$eval, c(param, list(slope=slope)) ), parameter = param, Z = list(slope=slope))
+parameter0 <- list(sigma2 = 0.1, rho2 = 0.4, mu = 2.8, beta = rep(0, p))
+oracle <- max(S = do.call(S$eval, c(parameter, list(slope=slope)) ), parameter = parameter, Z = list(slope=slope))
 
-sim(200, var0, Phi, param, verbatim = 2) %>% plot(nrow = 2)
+sim(200, var0, Phi, parameter, verbatim = 2) %>% plot(nrow = 2)
 
 
 
 res <- SAEM(200, 10,
-            param0, var0, Phi, S$eval, max, sim,
+            parameter0, var0, Phi, S$eval, max, sim,
             adptative.sd = 0.6,
             burnin = 150,
             verbatim = 3)
@@ -173,11 +171,7 @@ plot_high_dim(res, oracle, 'beta', dec = 0)
 
 plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
 
-res$beta - param$beta
-
-
-
-
+res[200]$beta
 ```
 
 

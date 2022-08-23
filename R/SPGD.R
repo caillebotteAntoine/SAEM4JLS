@@ -29,10 +29,24 @@ proxi <- function(theta, gamma, alpha, lambda)
 #'
 prox <- function(theta, gamma, alpha, lambda) sapply(theta, proxi, gamma, alpha, lambda)
 
-grad <- function(grad.fi, theta, mini.batch, args = list())
+#' Calculation of the averaged gradient
+#'
+#' Compute grad(f)(theta) = sum(grad(f_i)(theta))
+#' where the support of the sum can be chosen
+#'
+#' @param grad.fi
+#' @param theta
+#' @param mini.batch support of the sum
+#' @param args additional argument
+grad <- function(grad.fi, theta, mini.batch, normalized.grad, args = list())
 {
-  sapply(mini.batch, function(i) do.call(grad.fi, c(list(theta, i), args))) %>%
-    matrix(ncol = length(theta)) %>% apply(2, mean)
+  # Computes for all i in mini.batch of grad(f_i)(theta, args)
+  res <- sapply(mini.batch, function(i) do.call(grad.fi, c(list(theta, i), args))) %>%
+    # make sure the form is the right one and average over the lines (for all i in mini.batch)
+    matrix(nrow = length(theta)) %>% apply(1, mean)
+
+  if(normalized.grad) return(res/sqrt(sum(res^2)))
+  return(res)
 }
 
 
@@ -53,7 +67,7 @@ grad <- function(grad.fi, theta, mini.batch, args = list())
 #' @export
 #'
 #' @examples
-SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., mini.batch.size = NULL, verbatim = F)
+SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., mini.batch.size = NULL, normalized.grad = F, verbatim = F)
 {
   if(is.null(mini.batch.size)) mini.batch.size <- n
   gamma <- SAEM4JLS::as_function(step)
@@ -78,7 +92,7 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., mini.batch.size
   while(k <= niter)#  && mean(abs(grad.f.tilde)) > 1e-3)
   {
     mini.batch <- sort(sample(1:n, mini.batch.size, replace = F))
-    grad.f.tilde <- grad(grad.fi, theta.tilde, mini.batch, args)
+    grad.f.tilde <- grad(grad.fi, theta.tilde, mini.batch, normalized.grad, args)
 
     theta.tilde <- prox(theta.tilde - gamma(k)*grad.f.tilde, gamma(k),1,0)
 
@@ -108,16 +122,15 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, ..., mini.batch.size
 }
 
 
-plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, n,...)
+plot.SPGD_res <- function(res, x, f, grad.fi, i, n, theta.real = NULL, ...)
 {
-  x0 <- attr(res, 'theta.value')[1,]
+  x0 <- if(is.null(theta.real)) attr(res, 'theta.value')[1,] else theta.real
+
   args <- list(...)
   dt <- data.frame(f = attr(res,'f.value'), x = attr(res, 'theta.value')[,i] %>% as.numeric)
 
 
   x.tmp <- matrix(rep(x0, length(x)), ncol = length(x)) ; x.tmp[i,] <- x
-
-
 
 
   gg1 <- data.frame(x = x,
@@ -147,22 +160,42 @@ plot.SPGD_res <- function(res, x, f, grad.fi, i = 1, n,...)
 }
 
 # # require(SAEM4JLS)
-#
-#b^2 - 4ac = 49 - 4*13/4 = 6^2
-# x = (7+-6)/2 =
-#
 # f <- function(x) ( 2*(x^2 - x - 1)^4 - x^2 + x )
 # grad.fi <- function(x,i) ( 8*(2*x - 1)*(x^2-x-1)^3 -2*x + 1 )
 #
 # res1 <- SPGD(35, 1, step = 1e-2, grad.fi, 1, f, verbatim = T)
 # res2 <- SPGD(35, 0, step = 1e-2, grad.fi, 1, f, verbatim = T)
 #
-# plot(res1, seq(-1,2, 0.01), f, grad.fi, 1)
-# plot(res2, seq(-1,2, 0.01), f, grad.fi, 1)
+# plot(res1, seq(-1,2, 0.01), f, grad.fi, 1, n = 1)
+# plot(res2, seq(-1,2, 0.01), f, grad.fi, 1, n = 1)
 #
 #
-
-
+#
+#
+# library(plotly)
+# f <- function(x) ( 2*(x[1]^2 - x[1] - 1)^4 - x[1]^2 + x[1] ) * ( 2*(x[2]^2 - x[2] - 1)^4 - x[2]^2 + x[2] )
+# grad.fi <- function(x,i) c( ( 8*(2*x[1] - 1)*(x[1]^2-x[1]-1)^3 -2*x[1] + 1 ) * ( 2*(x[2]^2 - x[2] - 1)^4 - x[2]^2 + x[2] ),
+#                             ( 2*(x[1]^2 - x[1] - 1)^4 - x[1]^2 + x[1] ) * ( 8*(2*x[2] - 1)*(x[2]^2-x[2]-1)^3 -2*x[2] + 1 ) )
+#
+# x <- seq(-1.2,1.3, len = 200)
+# y <- seq(-1.2,1.3, len = 200)
+#
+# dt <- data.frame(x,y)
+# z <- outer(dt$x, dt$y, Vectorize(function(x,y)f(c(x,y))))
+# plot_ly(dt, x = ~x, y = ~y, z = ~z) %>%
+#   add_surface()
+#
+#
+# res1 <- SPGD(100, c(0,0.4), step = 1e-2, grad.fi, 1, f, verbatim = T)
+# plot(res1, seq(-1,2, 0.01), f, grad.fi, 1, n = 1)
+# plot(res1, seq(-1,2, 0.01), f, grad.fi, 2, n = 1)
+#
+#
+# res2 <- SPGD(100, c(0.7,-0.2), step = 1e-2, grad.fi, 1, f, verbatim = T)
+# plot(res2, seq(-1,2, 0.01), f, grad.fi, 1, n = 1)
+# plot(res2, seq(-1,2, 0.01), f, grad.fi, 2, n = 1)
+#
+#
 
 
 

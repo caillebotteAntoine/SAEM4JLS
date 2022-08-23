@@ -1,10 +1,8 @@
 ---
-title: "JLS SAEM"
+title: "JLS - one dim - SAEM"
 author: "Antoine caillebotte"
 date: "`r Sys.time()`"
 output: html_document
-params:
-  rds_filename: 'res'
 ---
 
 <style type="text/css">
@@ -36,8 +34,7 @@ knitr::knit_hooks$set(time = local({
   }
 }))
 
-rm(list=setdiff(ls(), "params"))
-
+rm(list = ls())
 
 opts_chunk$set(echo = T, message = F, warning = F,
                fig.width = 10,
@@ -48,21 +45,23 @@ require(SAEM4JLS)
 require(tictoc)
 ```
 
+
+
 ```{r}
 # Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
 m <- function(t, phi1, phi2, phi3) (phi1  )/(1+exp((phi2-t)/phi3))
 #=======================================#
-p <- 100
-parameter <- list(sigma2 = .05^2,
-                  #rho2 = 5,
-                  mu = c(0.9,90,5),
-                  omega2 = c(0.005, 40, 1),
-                  #S.data data,
-                  bara = 90,
-                  barb = 30,
-                  baralpha = 0.5,
-                  beta = rep(0,p))
-parameter$beta[1:4] <- c(1,2,-1,-2)*10
+p <- 1
+param <- list(sigma2 = .05^2,
+              #rho2 = 5,
+              mu = c(0.9,90,5),
+              omega2 = c(0.005, 40, 1),
+              #S.data data,
+              bara = 90,
+              barb = 30,
+              baralpha = 0.5,
+              beta = 10)
+
 #=======================================#
 t <- seq(60,120, length.out = 10) #time values
 set.seed(123)
@@ -70,14 +69,13 @@ set.seed(123)
 G <- 40 ; ng = 4
 link = function(t,phi1, phi2, phi3) phi2#/phi3
 
-dt <- create_JLS_HD_data(G, ng, t, m, link, parameter)
+dt <- create_JLS_HD_data(G, ng, t, m, link, param)
 
-var.true <- dt$var.true
-a <- var.true$a ; var.true$a <- NULL #a fixé (et retiré des variables latentes)
+var.true <- dt$var.true 
 S.data <- dt$survival
 U <- dt$U
 
-Y <- do.call(get_obs, var.true) + rnorm(n, 0, sqrt(parameter$sigma2))
+Y <- do.call(get_obs, var.true) + rnorm(n, 0, sqrt(param$sigma2))
 S.data.time <- S.data$obs
 S.data.time.log.sum <- sum(log(S.data.time))
 ```
@@ -95,16 +93,17 @@ grid.arrange(longitudinal_plot, S.data_plot, nrow = 2)
 ```
 
 ```{r, echo = F}
-sigma2_b <- sigma2_alpha <- 0.1
+sigma2_a <- sigma2_b <- sigma2_alpha <- 0.1
 
-h <- fct_vector(function(b, ...) N*log(b*a^-b),
+h <- fct_vector(function(a,b, ...) N*log(b*a^-b),
                 function(b, ...) (b-1)*S.data.time.log.sum,
                 function(phi1, phi2, phi3, ...) sum(link(S.data.time, rep(phi1, ng), rep(phi2, ng), rep(phi3, ng) )) 
                 )
 
-zeta <- function(beta, alpha, phi1, phi2, phi3,b)
+zeta <- function(beta, alpha, phi1, phi2, phi3, a,b)
 {
   link.fct <- function(t,g) link(t, phi1[g], phi2[g], phi3[g])
+  link.value <- sapply(1:nrow(S.data), function(i) link.fct(S.data$obs[i], S.data$gen[i]) )
   
   P1 <- as.vector(exp(beta %*% t(U)))
   
@@ -114,10 +113,11 @@ zeta <- function(beta, alpha, phi1, phi2, phi3,b)
                  0, S.data$obs[i])$value
                )
   
-  sum(beta%*%t(U) - b*a^-b * P2*P1)
+  sum(beta%*%t(U) + alpha*link.value - b*a^-b * P2*P1)
 }
 
-zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, b)
+zeta.B <-  function(beta, alpha, phi1, phi2, phi3, a,b) - zeta(beta, alpha, phi1, phi2, phi3, a,b)/N
+zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, a, b)
 {
   g <- S.data$gen[i]
   link.fct <- function(t) link(t, phi1[g], phi2[g], phi3[g])
@@ -132,28 +132,18 @@ zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, b)
 ```
 
 ```{r eval=FALSE, include=FALSE}
+res <- SPGD(4*200, theta0 = rep(0,p),
+      step = burnin_fct(150, coef.burnin = 0.1, scale = 1e-2 ),
+      mini.batch.size = 5,
+      zeta.der.B, N, zeta.B,
+      param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b, verbatim = T)
 
-res <- SPGD(400, theta0 =  runif(p, min = -1, max = 1),
-      step = burnin_fct(390, coef.burnin = 0.5, scale = 0.5 ),
-      normalized.grad = T,
-      #mini.batch.size = 1,
-      zeta.der.B, N, zeta,
-      var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b, verbatim = T)
+as.numeric(res)
+zeta(as.numeric(res), param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b)
+zeta(param$beta, param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b)
 
-plot(log(abs(attr(res, 'f.value'))))
-
-plot(attr(res, 'f.value')[150:200])
-
-plot(as.numeric(res))
-
-zeta(attr(res, 'theta.value')[200,], var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
-
-zeta()
-zeta(as.numeric(res), var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
-zeta(parameter$beta, var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
-
+zeta.der.B(param$beta, 3, param$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$a,var.true$b)
 ```
-
 
 ```{r}
 model <- SAEM_model( 
@@ -167,6 +157,9 @@ model <- SAEM_model(
                     add_on = c('zeta(phi1 = phi1, phi2 = phi2, phi3 = phi3, ...)' )),
     
     # === S.data model === #
+    latent_variable('a', prior = list(mean = 'bara', variance.hyper = 'sigma2_a'),
+                    add_on = c('zeta(a = a, ...) +',
+                               'h$eval(a = a, ..., i = 1)')),
     latent_variable('b', prior = list(mean = 'barb', variance.hyper = 'sigma2_b'),
                     add_on = c('zeta(b = b, ...) +',
                                'sum(h$eval(b = b, ..., i = c(1,2)))' )),
@@ -177,50 +170,48 @@ model <- SAEM_model(
 
   # === Paramètre de regression === #
   regression.parameter = list(
-    regression_parameter('beta', 1, function(...) SPGD(1, theta0 = beta,
-                                                      step = burnin_fct(190, coef.burnin = 0.75, scale = 0.5 ),
-                                                      normalized.grad = T,
+    regression_parameter('beta', 1, function(...) SPGD(10, theta0 = beta,
+                                                      step = burnin_fct(150, coef.burnin = 0.1, scale = 1e-2 ),
+                                                      mini.batch.size = 5,
                                                       zeta.der.B, N, zeta.B, 
-                                                      Z$alpha,  Z$phi1, Z$phi2, Z$phi3,Z$b) )
+                                                      Z$alpha,  Z$phi1, Z$phi2, Z$phi3, Z$a,Z$b) )
   )
 )
 ```
 
 ```{r saem load}
 # ---  Initialisation des paramètres --- #
-parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.1,1.4))
-
-parameter0$barb <- 10
-parameter0$sigma2 <- 1
-parameter0$beta <- runif(p, min = -1, max = 1)
-parameter0$baralpha <- 0.1
+param0 <- param %>% sapply(function(x) x* runif(1, 1.1,1.4))
+#param0$rho2 = 0.2 ; param0$omega2 <- rep(.1,3)
+param0$bara <- 80 ; param0$barb <- 10
+param0$sigma2 <- 1
+param0$beta <- rep(0.5,p)
+param0$baralpha <- 0.1
 #===============================================#
-load.SAEM(model)
+load.SAEM(model)#, exclude.maximisation = c('beta'))
 var0 <- init.SAEM(model, 
                   x0 = list(phi = c(1,80,4), 
-                            b = parameter0$barb, alpha = parameter0$baralpha), 
+                            a = param0$bara, b = param0$barb, alpha = param0$baralpha), 
                   sd = list(phi = c(.05, 1.5, .5),
-                            b = 1, alpha = .1) )
+                            a = 2, b = 1, alpha = .1) )
 #===================================================================================#
 S.tmp <- do.call(S$eval, var.true)
-oracle <- maximisation(1, do.call(S$eval, var.true), parameter, var.true)
-oracle
+oracle <- maximisation(1, do.call(S$eval, var.true), param, var.true)
+oracle %>% unlist
 ```
 # saem
 ```{r saem}
-load.SAEM(model)
+load.SAEM(model)#, exclude.maximisation = 'beta')
+# sim(50, var1, Phi, param, verbatim = 2) %>% plot(nrow = 2)
 
-res <- SAEM(200, 5, parameter0, var0, Phi, S$eval, maximisation, simulation,
-            burnin = 150, 
-            adptative.sd = 0.6, verbatim = 3, RDS = params$rds_filename )
+res <- SAEM(200, 5, param0, var0, Phi, S$eval, maximisation, simulation,  eps = 1e-3,
+            burnin = 450, 
+            adptative.sd = 0.6, verbatim = 3, RDS = T )
 ```
 
 ```{r plot, echo = F, fig.asp=0.8, fig.width=8}
 plot(res, true.value = oracle, exclude = 'beta')
-
-plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
-              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
-
+plot_high_dim(res, oracle, 'beta', dec = 0)
 plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
 ```
 

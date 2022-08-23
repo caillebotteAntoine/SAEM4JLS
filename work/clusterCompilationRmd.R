@@ -4,7 +4,8 @@
 
 # rmarkdown::render('work/vignette/vignette_SAEM.Rmd')
 filename <- gsub(' ','_',  gsub('-','_', gsub(':','_', Sys.time()) ))
-rmarkdown::render('work/JLS.Rmd', output_file = filename)
+rmarkdown::render('work/JLS.Rmd', output_file = filename, params = list(rds_filename = paste0('res', filename)))
+
 
 
 

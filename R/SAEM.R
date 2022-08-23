@@ -60,13 +60,15 @@ simulation <- function(niter, var, Phi, parameter, adptative.sd = NULL, verbatim
 #' @examples
 SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisation, simulation,
                  adptative.sd = NULL,
-                 burnin = NULL, coef.burnin = 1, eps = NULL, verbatim = F, RDS = F)
+                 burnin = NULL, coef.burnin = 1, eps = NULL, verbatim = F, RDS = NULL)
 {
   #Initialisation de l'approximation de S
   Sh <- do.call(exhaustive, c(var0, parameter0))
   Sh[1:length(Sh)] <- 0
 
   #Initialisation des listes des parametres
+  #keeping  only the parameter that the maximisation step return
+  parameter0 <- parameter0[names( maximisation(1, Sh, parameter0, var0) )]
   para <- SAEM4JLS::SAEM_res(param = parameter0, niter = niter, Z = var0)
 
   #Burn-in
@@ -74,7 +76,6 @@ SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisatio
 
   MH.iter <- ifelse(is.function(sim.iter), sim.iter, function(k) sim.iter)
   sd <- ifelse(is.function(adptative.sd), adptative.sd, function(k) adptative.sd)
-
 
   h <- 2
   step.before.stop <- 20
@@ -115,13 +116,13 @@ SAEM <- function(niter, sim.iter, parameter0, var0, Phi, exhaustive, maximisatio
 
     Sh <- (1-u(h))*Sh+u(h)*do.call(exhaustive, c(para@Z, parameter))
     # --- Step M : maximisation --- #
-    res <- maximisation(Sh,parameter, para@Z)
+    res <- maximisation(h, Sh,parameter, para@Z)
     for( i in names(res)) para[[i]][h,] <- res[[i]] #mise à jour de chaque ligne de chaque parametre
 
     cmp <- ifelse(stopCondi(h), cmp + 1, 0) #compteur après convergence des para pour verifier la CV
     h <- h + 1
 
-    if(RDS) saveRDS(para, "SAEM_res.rds")
+    if(is.character(RDS)) saveRDS(para, paste0(RDS, ".rds"))
   }
 
   if(verbatim != 0) message('--- SAEM ended ! ---')
