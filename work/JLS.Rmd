@@ -52,7 +52,7 @@ require(tictoc)
 # Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
 m <- function(t, phi1, phi2, phi3) (phi1  )/(1+exp((phi2-t)/phi3))
 #=======================================#
-p <- 100
+p <- 1000
 parameter <- list(sigma2 = .05^2,
                   #rho2 = 5,
                   mu = c(0.9,90,5),
@@ -133,8 +133,8 @@ zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, b)
 
 ```{r eval=FALSE, include=FALSE}
 
-res <- SPGD(400, theta0 =  runif(p, min = -1, max = 1),
-      step = burnin_fct(390, coef.burnin = 0.5, scale = 0.5 ),
+res <- SPGD(800, theta0 =  runif(p, min = -1, max = 1),
+      step = burnin_fct(790, coef.burnin = 0.5, scale = 0.05 ),
       normalized.grad = T,
       #mini.batch.size = 1,
       zeta.der.B, N, zeta,
@@ -142,13 +142,15 @@ res <- SPGD(400, theta0 =  runif(p, min = -1, max = 1),
 
 plot(log(abs(attr(res, 'f.value'))))
 
-plot(attr(res, 'f.value')[150:200])
+plot_high_dim_tile(attr(res, 'theta.value'), parameter.)
+
 
 plot(as.numeric(res))
 
+
+
 zeta(attr(res, 'theta.value')[200,], var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
 
-zeta()
 zeta(as.numeric(res), var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
 zeta(parameter$beta, var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
 
@@ -208,7 +210,10 @@ oracle
 ```
 # saem
 ```{r saem}
-load.SAEM(model)
+exclude.maximisation = c('mu', 'omega2', 'barb','baralpha', 'sigma2')
+load.SAEM(model, exclude.maximisation = exclude.maximisation)
+
+parameter0[exclude.maximisation] <- parameter[exclude.maximisation]
 
 res <- SAEM(200, 5, parameter0, var0, Phi, S$eval, maximisation, simulation,
             burnin = 150, 

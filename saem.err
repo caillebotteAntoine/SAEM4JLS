@@ -409,3 +409,29 @@ step = 177, remaining = 23, times elasped = 1000.5s, estimated time : for one st
 step = 178, remaining = 22, times elasped = 1006.3s, estimated time : for one step = 5.7s, remaining = 130.8s
 step = 179, remaining = 21, times elasped = 1012s, estimated time : for one step = 5.7s, remaining = 125.1s
 step = 180, remaining = 20, times elasped = 1017.8s, estimated time : for one step = 5.7s, remaining = 119.4s
+step = 181, remaining = 19, times elasped = 1023.5s, estimated time : for one step = 5.7s, remaining = 113.7s
+step = 182, remaining = 18, times elasped = 1029.2s, estimated time : for one step = 5.7s, remaining = 108s
+step = 183, remaining = 17, times elasped = 1034.9s, estimated time : for one step = 5.7s, remaining = 102.4s
+step = 184, remaining = 16, times elasped = 1040.6s, estimated time : for one step = 5.7s, remaining = 96.7s
+step = 185, remaining = 15, times elasped = 1046.3s, estimated time : for one step = 5.7s, remaining = 91s
+step = 186, remaining = 14, times elasped = 1052.1s, estimated time : for one step = 5.7s, remaining = 85.3s
+step = 187, remaining = 13, times elasped = 1057.8s, estimated time : for one step = 5.7s, remaining = 79.6s
+step = 188, remaining = 12, times elasped = 1063.6s, estimated time : for one step = 5.7s, remaining = 73.9s
+step = 189, remaining = 11, times elasped = 1069.3s, estimated time : for one step = 5.7s, remaining = 68.3s
+step = 190, remaining = 10, times elasped = 1075s, estimated time : for one step = 5.7s, remaining = 62.6s
+step = 191, remaining = 9, times elasped = 1080.7s, estimated time : for one step = 5.7s, remaining = 56.9s
+step = 192, remaining = 8, times elasped = 1086.4s, estimated time : for one step = 5.7s, remaining = 51.2s
+step = 193, remaining = 7, times elasped = 1092.2s, estimated time : for one step = 5.7s, remaining = 45.5s
+step = 194, remaining = 6, times elasped = 1097.8s, estimated time : for one step = 5.7s, remaining = 39.8s
+step = 195, remaining = 5, times elasped = 1103.5s, estimated time : for one step = 5.7s, remaining = 34.1s
+step = 196, remaining = 4, times elasped = 1109.3s, estimated time : for one step = 5.7s, remaining = 28.4s
+step = 197, remaining = 3, times elasped = 1115s, estimated time : for one step = 5.7s, remaining = 22.8s
+step = 198, remaining = 2, times elasped = 1120.8s, estimated time : for one step = 5.7s, remaining = 17.1s
+step = 199, remaining = 1, times elasped = 1126.5s, estimated time : for one step = 5.7s, remaining = 11.4s
+step = 200, remaining = 0, times elasped = 1132.2s, estimated time : for one step = 5.7s, remaining = 5.7s
+--- SAEM ended ! ---
+output file: JLS.knit.md
+
+
+Output created: 2022_08_23_13_44_55.html
+Il y a eu 50 avis ou plus (utilisez warnings() pour voir les 50 premiers)

@@ -37,22 +37,31 @@ setMethod('[', 'SAEM_res', definition = function(x, i) lapply(x, function(p) p[i
 vline <- function(gg, x, col, size = 1) gg + geom_vline(xintercept = x, size = size, col = col)
 
 
-plot_high_dim <- function(res, true.value, name, f, ..., w = 10, dec = - 1)
+
+plot_high_dim_tile <- function(x, true.value, w = 10, dec = -1)
 {
-  convergence <- abs(t(res[[name]]) - true.value[[name]]) %>% melt(id = 'null')
-  value <- t(res[[name]]) %>% melt(id = 'null')
+  dt <- t(x) %>% melt(id = 'null')
 
-  real.component <- data.frame(iteration = nrow(res[[name]])+ 1+w, component = 1:ncol(res[[name]]), value = true.value[[name]])
+  real.component <- data.frame(iteration = nrow(x)+ 1+w, component = 1:ncol(x), value = true.value)
 
-  gg <- expand.grid(component = 1:ncol(res[[name]]), iteration = 1:nrow(res[[name]])) %>%
-    mutate(convergence = convergence$value, value = value$value) %>%
+  expand.grid(component = 1:ncol(x), iteration = 1:nrow(x)) %>%
+    mutate(value = dt$value) %>%
     ggplot() +
     geom_tile(aes(iteration, component, fill = value)) +
 
     geom_tile(data = real.component, aes(iteration, component, fill = value), width = w) +
     annotate('text', x = real.component$iteration, y = dec, label = 'real value')  +
 
-    scale_fill_gradientn(colours = c('red','white','green'), values = c(0,0.5,1)) +
+    scale_fill_gradientn(colours = c('red','white','green'), values = c(0,0.5,1))
+}
+
+
+plot_high_dim <- function(res, true.value, name, f, ..., w = 10, dec = - 1)
+{
+  convergence <- abs(t(res[[name]]) - true.value[[name]]) %>% melt(id = 'null')
+  value <- t(res[[name]]) %>% melt(id = 'null')
+
+  gg <- plot_high_dim_tile(res[[name]], true.value = true.value[[name]], w = w, dec = dec) +
 
     labs(title = paste0('Convergence of vector ', name), subtitle = 'expected value on the right')
 
