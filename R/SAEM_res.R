@@ -58,6 +58,8 @@ plot_high_dim_tile <- function(x, true.value, w = 10, dec = -1)
 
 plot_high_dim <- function(res, true.value, name, f, ..., w = 10, dec = - 1)
 {
+  true.value[[name]] <- true.value[[name]][1:length(res[[name]][1,])]
+
   convergence <- abs(t(res[[name]]) - true.value[[name]]) %>% melt(id = 'null')
   value <- t(res[[name]]) %>% melt(id = 'null')
 
@@ -65,9 +67,9 @@ plot_high_dim <- function(res, true.value, name, f, ..., w = 10, dec = - 1)
 
     labs(title = paste0('Convergence of vector ', name), subtitle = 'expected value on the right')
 
-  gg2 <- convergence %>% group_by(Var2) %>% summarise(value = sum(value)) %>%
+  gg2 <- convergence %>% group_by(Var2) %>% summarise(value = sqrt(sum(value^2)) )%>%
     ggplot(aes(Var2, value)) + geom_line() +
-    labs(title = paste(name, 'prediction error'), subtitle = 'norm 1')
+    labs(title = paste(name, 'prediction error'), subtitle = 'norm 2')
 
   gg3 <- apply(res[[name]], 1, f, ...) %>%
     {data.frame(f = .)} %>% mutate(iteration = 1:nrow(.)) %>%
@@ -99,7 +101,7 @@ plot.SAEM_res <- function(res, nrow,ncol, var = c('parameter', 'MCMC', 'acceptat
 
   if(time){
     diff_time <- format(as.POSIXct(as.numeric(res@times_elasped),
-                                   origin = '1970-01-01', tz = 'UTC'), "%Mmin %Ssec")
+                                   origin = '1970-01-01', tz = 'UTC'), "%Hh %Mmin %Ssec")
 
     print(paste0('SAEM execution time = ', diff_time))
 

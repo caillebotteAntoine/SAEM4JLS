@@ -33,7 +33,7 @@ create_NLME_data <- function(G, ng, t, m, param)
 
 
 
-create_JLS_HD_data <- function(G, ng, t, m, link, param)
+create_JLS_HD_data <- function(G, ng, t, m, link, param, U = NULL)
 {
   var.true <- create_NLME_data(G, ng, t, m, param)
 
@@ -56,7 +56,12 @@ create_JLS_HD_data <- function(G, ng, t, m, link, param)
 
   survival <- data.frame(id = 1:(G*ng), gen = rep(1:G, each = ng) )
 
-  U <- matrix(runif(G*ng*p, min  = -1, max = 1), ncol = p)
+  if(is.null(U) || (ncol(U) < p & nrow(U) != G*ng))
+  {
+    U <- matrix(runif(G*ng*p, min  = -1, max = 1), ncol = p)
+  }else{
+    U <- U[,1:p]
+  }
 
   survival_fct <- function(i)
   {
@@ -75,7 +80,7 @@ create_JLS_HD_data <- function(G, ng, t, m, link, param)
 
 
     uni <- runif(1)
-    uniroot(function(t) b*a^-b *integrate(lbd, 0, t)$value + log(1-uni) , lower = 0, upper = 2*a)$root
+    uniroot(function(t) b*a^-b *integrate(lbd, 0, t)$value + log(1-uni) , lower = 0, upper = 10*a)$root
   }
 
   survival$obs = sapply(1:nrow(survival), survival_fct)

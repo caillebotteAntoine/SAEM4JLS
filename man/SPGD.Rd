@@ -11,6 +11,7 @@ SPGD(
   grad.fi,
   n,
   f,
+  lambda,
   ...,
   mini.batch.size = NULL,
   normalized.grad = F,

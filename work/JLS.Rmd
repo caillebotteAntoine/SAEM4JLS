@@ -52,7 +52,7 @@ require(tictoc)
 # Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
 m <- function(t, phi1, phi2, phi3) (phi1  )/(1+exp((phi2-t)/phi3))
 #=======================================#
-p <- 1000
+p <- 100
 parameter <- list(sigma2 = .05^2,
                   #rho2 = 5,
                   mu = c(0.9,90,5),
@@ -60,7 +60,7 @@ parameter <- list(sigma2 = .05^2,
                   #S.data data,
                   bara = 90,
                   barb = 30,
-                  baralpha = 0.5,
+                  baralpha = 0.5,#45,
                   beta = rep(0,p))
 parameter$beta[1:4] <- c(1,2,-1,-2)*10
 #=======================================#
@@ -69,6 +69,7 @@ set.seed(123)
 
 G <- 40 ; ng = 4
 link = function(t,phi1, phi2, phi3) phi2#/phi3
+# link = m
 
 dt <- create_JLS_HD_data(G, ng, t, m, link, parameter)
 
@@ -82,7 +83,7 @@ S.data.time <- S.data$obs
 S.data.time.log.sum <- sum(log(S.data.time))
 ```
 
-```{r data ploting, eval=FALSE, include=FALSE}
+```{r data ploting}
 longitudinal_plot <- data.frame(time, Y, id = rep(1:N, each = length(t)), gen = rep(1:G, each = ng*length(t)) ) %>%
   ggplot(aes(time, Y, col = factor(gen), group = factor(id) )) +
   geom_point() + geom_line() +
@@ -133,9 +134,10 @@ zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, b)
 
 ```{r eval=FALSE, include=FALSE}
 
-res <- SPGD(800, theta0 =  runif(p, min = -1, max = 1),
-      step = burnin_fct(790, coef.burnin = 0.5, scale = 0.05 ),
+res <- SPGD(600, theta0 =  runif(p, min = -1, max = 1),
+      step = 0.05,
       normalized.grad = T,
+      lambda = 1/sqrt(N),
       #mini.batch.size = 1,
       zeta.der.B, N, zeta,
       var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b, verbatim = T)
@@ -153,7 +155,6 @@ zeta(attr(res, 'theta.value')[200,], var.true$alpha,  var.true$phi1, var.true$ph
 
 zeta(as.numeric(res), var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
 zeta(parameter$beta, var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
-
 ```
 
 
@@ -180,7 +181,7 @@ model <- SAEM_model(
   # === Paramètre de regression === #
   regression.parameter = list(
     regression_parameter('beta', 1, function(...) SPGD(1, theta0 = beta,
-                                                      step = burnin_fct(190, coef.burnin = 0.75, scale = 0.5 ),
+                                                      step = 0.05, lambda = 1/sqrt(N),
                                                       normalized.grad = T,
                                                       zeta.der.B, N, zeta.B, 
                                                       Z$alpha,  Z$phi1, Z$phi2, Z$phi3,Z$b) )
@@ -191,33 +192,30 @@ model <- SAEM_model(
 ```{r saem load}
 # ---  Initialisation des paramètres --- #
 parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.1,1.4))
-
-parameter0$barb <- 10
-parameter0$sigma2 <- 1
 parameter0$beta <- runif(p, min = -1, max = 1)
-parameter0$baralpha <- 0.1
 #===============================================#
 load.SAEM(model)
-var0 <- init.SAEM(model, 
-                  x0 = list(phi = c(1,80,4), 
-                            b = parameter0$barb, alpha = parameter0$baralpha), 
-                  sd = list(phi = c(.05, 1.5, .5),
-                            b = 1, alpha = .1) )
-#===================================================================================#
 S.tmp <- do.call(S$eval, var.true)
 oracle <- maximisation(1, do.call(S$eval, var.true), parameter, var.true)
-oracle
+#==============================================================================#
+
+init.options <- list(x0 = list(phi = c(1,80,4), b = parameter0$barb, alpha = parameter0$baralpha), 
+                     sd = list(phi = c(.05, 1.5, .5), b = 1, alpha = .1) )
+
+SAEM.options <- list(niter = 300, sim.iter = 5, burnin = 290, 
+                adptative.sd = 0.6)
 ```
 # saem
 ```{r saem}
-exclude.maximisation = c('mu', 'omega2', 'barb','baralpha', 'sigma2')
+exclude.maximisation = c('baralpha')
 load.SAEM(model, exclude.maximisation = exclude.maximisation)
 
 parameter0[exclude.maximisation] <- parameter[exclude.maximisation]
 
-res <- SAEM(200, 5, parameter0, var0, Phi, S$eval, maximisation, simulation,
-            burnin = 150, 
-            adptative.sd = 0.6, verbatim = 3, RDS = params$rds_filename )
+SAEM.options$RDS <- paste0(params$rds_filename, '_', p)
+res <- run(model, parameter0, init.options, SAEM.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+
 ```
 
 ```{r plot, echo = F, fig.asp=0.8, fig.width=8}

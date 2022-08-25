@@ -1,0 +1,274 @@
+---
+title: "JLS SAEM"
+author: "Antoine caillebotte"
+date: "`r Sys.time()`"
+output: html_document
+params:
+  rds_filename: 'res'
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+  
+```{r setup, include = F}
+library(knitr)
+library(kableExtra)
+
+rm(list=setdiff(ls(), "params"))
+
+opts_chunk$set(echo = T, message = F, warning = F,
+               fig.width = 10,
+               fig.asp = 0.8,
+               out.width = "100%")
+
+require(SAEM4JLS)
+require(tictoc)
+
+# names(data) <- c('get_obs', 'link', 'm', 'Y', 'time', 't', 'a', 'G', 'n', 'N', 'ng', 'var.true', 'U', 'S.data', 'parameter')
+# data <- list(get_obs, link, m, Y, time, t, a, G, n, N, ng, var.true, U, S.data, parameter)
+# saveRDS(data, 'data_sim_p_1000.rds')
+
+```
+
+```{r}
+
+data <- readRDS('data_sim_p_1000.rds')
+for(x in names(data)) assign(x, data[[x]], envir = globalenv())
+U_full <- data$U
+rm(data)
+
+S.data.time <- S.data$obs
+S.data.time.log.sum <- sum(log(S.data.time))
+```
+
+```{r data ploting, eval=FALSE, include=FALSE}
+longitudinal_plot <- data.frame(time, Y, id = rep(1:N, each = length(t)), gen = rep(1:G, each = ng*length(t)) ) %>%
+  ggplot(aes(time, Y, col = factor(gen), group = factor(id) )) +
+  geom_point() + geom_line() +
+  theme(legend.position = 'null')
+
+S.data_plot <- S.data %>% ggplot(aes(obs)) +#, fill = U))) +
+    geom_histogram(col = 'white', position = 'identity', bins = 30) + theme(legend.position = 'null')
+
+grid.arrange(longitudinal_plot, S.data_plot, nrow = 2)
+```
+
+```{r, echo = F}
+sigma2_b <- sigma2_alpha <- 0.1
+
+h <- fct_vector(function(b, ...) N*log(b*a^-b),
+                function(b, ...) (b-1)*S.data.time.log.sum,
+                function(phi1, phi2, phi3, ...) sum(link(S.data.time, rep(phi1, ng), rep(phi2, ng), rep(phi3, ng) )) 
+                )
+
+zeta <- function(beta, alpha, phi1, phi2, phi3,b)
+{
+  link.fct <- function(t,g) link(t, phi1[g], phi2[g], phi3[g])
+  
+  P1 <- as.vector(exp(beta %*% t(U)))
+  
+  P2 <- sapply(1:nrow(S.data), 
+               function(i)integrate(
+                 function(t) t^(b-1)*exp(alpha*link.fct(t, S.data$gen[i])),
+                 0, S.data$obs[i])$value
+               )
+  
+  sum(beta%*%t(U) - b*a^-b * P2*P1)
+}
+
+zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, b)
+{
+  g <- S.data$gen[i]
+  link.fct <- function(t) link(t, phi1[g], phi2[g], phi3[g])
+  
+  P1 <- U[i,] * exp(sum(beta * U[i,]))
+  
+  P2 <- integrate(function(t) t^(b-1)*exp(alpha*link.fct(t) ),
+                  0, S.data$obs[i])$value
+  
+  -(U[i,] - b*a^-b * P1*P2)
+}
+```
+
+
+```{r}
+model <- SAEM_model( 
+  function(sigma2, ...) -n/(2*sigma2),
+  function(phi1, phi2, phi3, ...) mean((Y - get_obs(phi1, phi2, phi3) )^2 ), 'sigma2',
+  
+  # === Variable Latente === #
+  latent_vars = list(
+    # === Non linear model === #
+    latent_variable('phi', dim = G, size = 3, prior = list(mean = 'mu', variance = 'omega2'),
+                    add_on = c('zeta(phi1 = phi1, phi2 = phi2, phi3 = phi3, ...)' )),
+    
+    # === S.data model === #
+    latent_variable('b', prior = list(mean = 'barb', variance.hyper = 'sigma2_b'),
+                    add_on = c('zeta(b = b, ...) +',
+                               'sum(h$eval(b = b, ..., i = c(1,2)))' )),
+    latent_variable('alpha', prior = list(mean = 'baralpha', variance.hyper = 'sigma2_alpha'),
+                    add_on = c('zeta(alpha = alpha, ...) +',
+                               'alpha*h$eval(alpha = alpha,..., i = 3)'))
+  ),
+
+  # === Paramètre de regression === #
+  regression.parameter = list(
+    regression_parameter('beta', 1, function(...) SPGD(5, theta0 = beta,
+                                                      step = 0.05, lambda = 1/sqrt(N),
+                                                      normalized.grad = T,
+                                                      zeta.der.B, N, zeta.B, 
+                                                      Z$alpha,  Z$phi1, Z$phi2, Z$phi3,Z$b) )
+  )
+)
+```
+
+```{r saem load}
+# ---  Initialisation des paramètres --- #
+parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.1,1.4))
+#===============================================#
+load.SAEM(model)
+oracle <- maximisation(1, do.call(S$eval, var.true), parameter, var.true)
+#==============================================================================#
+
+init.options <- list(x0 = list(phi = c(1,80,4), b = parameter0$barb, alpha = parameter0$baralpha), 
+                     sd = list(phi = c(.05, 1.5, .5), b = 1, alpha = .1) )
+
+SAEM.options <- list(niter = 300, sim.iter = 5, burnin = 190, 
+                adptative.sd = 0.6)
+
+```
+# saem
+```{r}
+p <- 4
+U <- U_full[,1:p] #Mise à jours des cov
+parameter$beta <- parameter$beta[1:p] #Mise à jours de beta
+parameter0$beta <- runif(p, min = -1, max = 1) #initialisation de beta
+
+res <- run(model, parameter0, init.options, SAEM.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+```
+
+```{r, echo = F, fig.asp=0.8, fig.width=8}
+plot(res, true.value = oracle, exclude = 'beta')
+
+plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
+              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
+
+plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
+```
+
+
+
+
+
+
+
+
+
+
+```{r}
+p <- 20
+U <- U_full[,1:p] #Mise à jours des cov
+parameter$beta <- parameter$beta[1:p] #Mise à jours de beta
+parameter0$beta <- runif(p, min = -1, max = 1) #initialisation de beta
+
+res <- run(model, parameter0, init.options, SAEM.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+```
+
+```{r, echo = F, fig.asp=0.8, fig.width=8}
+plot(res, true.value = oracle, exclude = 'beta')
+
+plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
+              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
+
+plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+p <- 100
+U <- U_full[,1:p] #Mise à jours des cov
+parameter$beta <- parameter$beta[1:p] #Mise à jours de beta
+parameter0$beta <- runif(p, min = -1, max = 1) #initialisation de beta
+
+res <- run(model, parameter0, init.options, SAEM.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+```
+
+```{r, echo = F, fig.asp=0.8, fig.width=8}
+plot(res, true.value = oracle, exclude = 'beta')
+
+plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
+              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
+
+plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
+```
+
+
+
+
+
+
+
+
+```{r}
+p <- 500
+U <- U_full[,1:p] #Mise à jours des cov
+parameter$beta <- parameter$beta[1:p] #Mise à jours de beta
+parameter0$beta <- runif(p, min = -1, max = 1) #initialisation de beta
+
+res <- run(model, parameter0, init.options, SAEM.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+```
+
+```{r, echo = F, fig.asp=0.8, fig.width=8}
+plot(res, true.value = oracle, exclude = 'beta')
+
+plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
+              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
+
+plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
+```
+
+
+
+
+
+
+
+```{r}
+p <- 1000
+U <- U_full[,1:p] #Mise à jours des cov
+parameter$beta <- parameter$beta[1:p] #Mise à jours de beta
+parameter0$beta <- runif(p, min = -1, max = 1) #initialisation de beta
+
+res <- run(model, parameter0, init.options, SAEM.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+```
+
+```{r, echo = F, fig.asp=0.8, fig.width=8}
+plot(res, true.value = oracle, exclude = 'beta')
+
+plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
+              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
+
+plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
+```

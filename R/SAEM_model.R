@@ -294,6 +294,19 @@ init.SAEM <- function(model, x0, sd)
   return(var)
 }
 
+run <- function(model, parameter0, init.options, SAEM.options, verbatim = 3)
+{
+  var0 <- init.SAEM(model, x0 = init.options$x0, sd = init.options$sd)
 
+  load.SAEM(model, env = environment())
+
+
+  res <- do.call(SAEM, c(SAEM.options,list(parameter0 = parameter0, var0 = var0,
+                                           Phi = Phi, exhaustive = S$eval,
+                                           maximisation = maximisation, simulation = simulation,
+                                           verbatim = verbatim)))
+
+  return(res)
+}
 
 
