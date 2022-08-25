@@ -60,16 +60,16 @@ parameter <- list(sigma2 = .05^2,
                   #S.data data,
                   bara = 90,
                   barb = 30,
-                  baralpha = 0.5,#45,
+                  baralpha = 0.5,
                   beta = rep(0,p))
-parameter$beta[1:4] <- c(1,2,-1,-2)*10
+parameter$beta[1:4] <- c(-.8, -.2 , .3 , .9)
 #=======================================#
 t <- seq(60,120, length.out = 10) #time values
 set.seed(123)
 
 G <- 40 ; ng = 4
-link = function(t,phi1, phi2, phi3) phi2#/phi3
-# link = m
+# link = function(t,phi1, phi2, phi3) phi2#/phi3
+link = m
 
 dt <- create_JLS_HD_data(G, ng, t, m, link, parameter)
 
@@ -133,7 +133,6 @@ zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, b)
 ```
 
 ```{r eval=FALSE, include=FALSE}
-
 res <- SPGD(600, theta0 =  runif(p, min = -1, max = 1),
       step = 0.05,
       normalized.grad = T,
@@ -146,10 +145,7 @@ plot(log(abs(attr(res, 'f.value'))))
 
 plot_high_dim_tile(attr(res, 'theta.value'), parameter.)
 
-
 plot(as.numeric(res))
-
-
 
 zeta(attr(res, 'theta.value')[200,], var.true$alpha,  var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
 
@@ -193,6 +189,7 @@ model <- SAEM_model(
 # ---  Initialisation des paramètres --- #
 parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.1,1.4))
 parameter0$beta <- runif(p, min = -1, max = 1)
+
 #===============================================#
 load.SAEM(model)
 S.tmp <- do.call(S$eval, var.true)
@@ -202,23 +199,51 @@ oracle <- maximisation(1, do.call(S$eval, var.true), parameter, var.true)
 init.options <- list(x0 = list(phi = c(1,80,4), b = parameter0$barb, alpha = parameter0$baralpha), 
                      sd = list(phi = c(.05, 1.5, .5), b = 1, alpha = .1) )
 
-SAEM.options <- list(niter = 300, sim.iter = 5, burnin = 290, 
+SAEM.options <- list(niter = 200, sim.iter = 5, burnin = 190, 
                 adptative.sd = 0.6)
 ```
 # saem
-```{r saem}
-exclude.maximisation = c('baralpha')
-load.SAEM(model, exclude.maximisation = exclude.maximisation)
-
-parameter0[exclude.maximisation] <- parameter[exclude.maximisation]
-
-SAEM.options$RDS <- paste0(params$rds_filename, '_', p)
+```{r}
 res <- run(model, parameter0, init.options, SAEM.options, verbatim = 3)
 saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
 
+# = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
+
+plot(res, true.value = oracle, exclude = 'beta')
+
+plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
+              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
+
+plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
+```
+# saem
+```{r}
+load.options <- list(exclude.maximisation = c('baralpha') )
+parameter0[load.options$exclude.maximisation] <- parameter[load.options$exclude.maximisation]
+
+res <- run(model, parameter0, init.options, SAEM.options,load.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+
+# = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
+
+plot(res, true.value = oracle, exclude = 'beta')
+
+plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 
+              var.true$alpha, var.true$phi1, var.true$phi2, var.true$phi3, var.true$b)
+
+plot(res, true.value = oracle, var = 'summary', exclude = 'beta', time = F)
 ```
 
-```{r plot, echo = F, fig.asp=0.8, fig.width=8}
+# saem
+```{r}
+load.options <- list(exclude.maximisation = c('baralpha', 'barb') )
+parameter0[load.options$exclude.maximisation] <- parameter[load.options$exclude.maximisation]
+
+res <- run(model, parameter0, init.options, SAEM.options,load.options, verbatim = 3)
+saveRDS(res, paste0(params$rds_filename, '_', p, '.rds'))
+
+# = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = # = = = = = = = = = #
+
 plot(res, true.value = oracle, exclude = 'beta')
 
 plot_high_dim(res, oracle, 'beta', zeta, dec = 0, 

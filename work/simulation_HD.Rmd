@@ -36,15 +36,48 @@ require(tictoc)
 ```
 
 ```{r}
+# 
+# data <- readRDS('data_sim_p_1000.rds')
+# for(x in names(data)) assign(x, data[[x]], envir = globalenv())
+# U_full <- data$U
+# rm(data)
+# 
+# S.data.time <- S.data$obs
+# S.data.time.log.sum <- sum(log(S.data.time))
+```
 
-data <- readRDS('data_sim_p_1000.rds')
-for(x in names(data)) assign(x, data[[x]], envir = globalenv())
-U_full <- data$U
-rm(data)
+```{r}
+# Exemple d'optimalité entre les 3 fct MH, MH_high_dim et MH_high_dim_para sur le modèle non lineaire mixte
+m <- function(t, phi1, phi2, phi3) (phi1  )/(1+exp((phi2-t)/phi3))
+#=======================================#
+p <- 1000
+parameter <- list(sigma2 = .05^2,
+                  mu = c(0.9,90,5),
+                  omega2 = c(0.005, 40, 1),
+                  bara = 90,
+                  barb = 30,
+                  baralpha = 0.5,
+                  beta = rep(0,p))
+parameter$beta[1:4] <- c(1,2,-1,-2)
+#=======================================#
+t <- seq(60,120, length.out = 10) #time values
+set.seed(123)
 
+G <- 40 ; ng = 4
+link = m
+
+dt <- create_JLS_HD_data(G, ng, t, m, link, parameter)
+
+var.true <- dt$var.true
+a <- var.true$a ; var.true$a <- NULL #a fixé (et retiré des variables latentes)
+S.data <- dt$survival
+U_full <- dt$U
+
+Y <- do.call(get_obs, var.true) + rnorm(n, 0, sqrt(parameter$sigma2))
 S.data.time <- S.data$obs
 S.data.time.log.sum <- sum(log(S.data.time))
 ```
+
 
 ```{r data ploting, eval=FALSE, include=FALSE}
 longitudinal_plot <- data.frame(time, Y, id = rep(1:N, each = length(t)), gen = rep(1:G, each = ng*length(t)) ) %>%

@@ -87,7 +87,7 @@ names(dt) <- sapply(names(data), function(v) names(data[[v]])) %>% unlist
 
 
 oracle <- multi_run_data$oracle
-oracle$beta <- oracle$beta[,1:4]
+oracle$beta <- oracle$beta[1:4]
 
 
 gg <- dt %>% melt(id = NULL) %>%
@@ -113,6 +113,25 @@ for(v in names(oracle))
 
 
 gg
+
+
+
+
+
+
+data$beta %>% apply(1, function(x) sqrt(sum((x - oracle$beta)^2 ))) %>% mean
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
