@@ -67,7 +67,7 @@ grad <- function(grad.fi, theta, mini.batch, normalized.grad, args = list())
 #' @export
 #'
 #' @examples
-SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, lambda, ..., mini.batch.size = NULL, normalized.grad = F, verbatim = F)
+SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, lambda, alpha,..., mini.batch.size = NULL, normalized.grad = F, verbatim = F)
 {
   if(is.null(mini.batch.size)) mini.batch.size <- n
   gamma <- SAEM4JLS::as_function(step)
@@ -94,7 +94,7 @@ SPGD <- function(niter, theta0, step = 1e-6, grad.fi, n, f, lambda, ..., mini.ba
     mini.batch <- sort(sample(1:n, mini.batch.size, replace = F))
     grad.f.tilde <- grad(grad.fi, theta.tilde, mini.batch, normalized.grad, args)
 
-    theta.tilde <- prox(theta.tilde - gamma(k)*grad.f.tilde, gamma(k),1,lambda)
+    theta.tilde <- prox(theta.tilde - gamma(k)*grad.f.tilde, gamma(k),alpha,lambda)
 
     # print(theta.value)
     # print(theta.tilde)

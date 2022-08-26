@@ -2,59 +2,12 @@
 
 rm(list = ls())
 
-
-
-
-#=============PLOT =====================#
-folder <- 'data'
-
-files <- dir(folder)
-data <- readRDS(paste0(folder, '/', files[1]))
-
-for(v in names(data))
-{
-  data[[v]] <- as_tibble(data[[v]])
-  names(data[[v]]) <- paste0(v, 1:ncol(data[[v]]))
-  data[[v]] <- data[[v]] %>% mutate(run_id = 1)
-}
-
-
-
-
-
-for(i in 2:length(files))
-{
-  res <- readRDS(paste0(folder, '/', files[i]))
-  for(v in names(res))
-  {
-    res[[v]] <- as_tibble(res[[v]] )
-    names(res[[v]]) <- paste0(v, 1:ncol(res[[v]]))
-    res[[v]] <- res[[v]] %>% mutate(run_id = i)
-
-    data[[v]] <- rbind(data[[v]], res[[v]])
-  }
-
-  data[[v]] <- rbind(data[[v]], res[[v]])
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 #============================================================================#
 require(SAEM4JLS)
 setwd('work')
 getwd()
 
-folder <- 'data'
+folder <- 'data_3'
 
 
 files <- dir(folder)
@@ -119,7 +72,7 @@ gg
 
 
 
-data$beta %>% apply(1, function(x) sqrt(sum((x - oracle$beta)^2 ))) %>% mean
+data$beta %>% apply(1, function(x) sqrt(sum((x - multi_run_data$parameter$beta)^2 ))) %>% mean
 
 
 
@@ -131,8 +84,45 @@ data$beta %>% apply(1, function(x) sqrt(sum((x - oracle$beta)^2 ))) %>% mean
 
 
 
+data$beta %>% mutate(id = 1:nrow(.)) %>% melt(id = 'id') %>% mutate(variable = rep(1:1000, each = 30)) %>%
+  ggplot(aes(variable, value, group = as.factor(id))) +
+  geom_jitter()
 
 
+
+
+
+
+data$beta %>%
+  mutate(id = 1:nrow(.)) %>%
+  melt(id = 'id') %>%
+  mutate(variable = rep(1:1000, each = 30) %>% variable ) %>%
+  { .[.$value != 0,]}%>%
+  ggplot(aes(x = variable, xend = variable,
+             y = min(value), yend = max(value), col = factor(variable)))  +
+
+  geom_segment()
+
+
+
+
+dt %>%
+
+  ggplot(aes(x = support, xend = support,
+             y = down, yend = up,
+             col = support)) +
+
+  geom_segment()+
+  geom_point(aes(y = down), size = 3)+
+  geom_point(aes(y = up), size = 3)
+
+
+
+
+dt <- data.frame(up = data$beta %>% apply(2, max),
+           down = data$beta %>% apply(2, min),
+           support = 1:nrow(data$beta) %>% factor) %>%
+  { .[which(.$up != 0 & .$down != 0),]}
 
 
 
