@@ -99,17 +99,17 @@ gg <- dt %>% melt(id = NULL) %>%
 
   facet_wrap( vars(variable), scales = 'free')
 
-for(v in names(oracle))
-{
-  if(length(oracle[[v]]) == 1){
-    gg <- gg + geom_vline(data = data.frame(variable = v, value = oracle[[v]] ), aes(xintercept = value))
-  }else{
-    for(i in 1:length(oracle[[v]]))
-    {
-      gg <- gg + geom_vline(data = data.frame(variable = paste0(v,i), value = oracle[[v]][i] ), aes(xintercept = value))
-    }
-  }
-}
+# for(v in names(oracle))
+# {
+#   if(length(oracle[[v]]) == 1){
+#     gg <- gg + geom_vline(data = data.frame(variable = v, value = oracle[[v]] ), aes(xintercept = value))
+#   }else{
+#     for(i in 1:length(oracle[[v]]))
+#     {
+#       gg <- gg + geom_vline(data = data.frame(variable = paste0(v,i), value = oracle[[v]][i] ), aes(xintercept = value))
+#     }
+#   }
+# }
 
 
 gg

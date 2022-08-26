@@ -58,7 +58,7 @@ parameter <- list(sigma2 = .05^2,
                   barb = 30,
                   baralpha = 0.5,
                   beta = rep(0,p))
-parameter$beta[1:4] <- c(1,2,-1,-2)
+parameter$beta[1:4] <- c(-.8, -.2 , .3 , .9)
 #=======================================#
 t <- seq(60,120, length.out = 10) #time values
 set.seed(123)
@@ -165,6 +165,7 @@ model <- SAEM_model(
 parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.1,1.4))
 #===============================================#
 load.SAEM(model)
+U <-  U_full
 oracle <- maximisation(1, do.call(S$eval, var.true), parameter, var.true)
 #==============================================================================#
 

@@ -21,9 +21,9 @@ parameter <- list(sigma2 = .05^2,
                   omega2 = c(0.005, 40, 1),
                   bara = 90,
                   barb = 30,
-                  baralpha = 45,
+                  baralpha = 0.5,
                   beta = rep(0,p))
-parameter$beta[1:4] <- c(1,2,-1,-2)*10
+parameter$beta[1:4] <-  c(-.8, -.2 , .3 , .9)
 #=======================================#
 t <- seq(60,120, length.out = 10) #time values
 set.seed(123)
@@ -116,7 +116,7 @@ model <- SAEM_model(
 #==============================================================================#
 
 #===============================================#
-init.options <- list(x0 = list(phi = c(1,80,4), b = 20, alpha = 35),
+init.options <- list(x0 = list(phi = c(1,80,4), b = 20, alpha = 0.1),
                      sd = list(phi = c(.05, 1.5, .5), b = 1, alpha = .1) )
 
 load.SAEM(model)
@@ -136,7 +136,7 @@ saveRDS(list(oracle = oracle, parameter = parameter, data = dt, G = G, ng = ng, 
 f <- function(i)
 {
   # ---  Initialisation des paramètres --- #
-  parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.1,1.4))
+  parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.2,1.4))
 
 
 
