@@ -54,7 +54,7 @@ require(SAEM4JLS)
 setwd('work')
 getwd()
 
-folder <- 'data'
+folder <- 'data_3'
 
 
 files <- dir(folder)

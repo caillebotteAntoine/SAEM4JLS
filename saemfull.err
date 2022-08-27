@@ -1,0 +1,144 @@
+INFO : Large data should be stored in your work/ folder. 
+ 
+Le chargement a nécessité le package : future
+Le chargement a nécessité le package : furrr
+Le chargement a nécessité le package : SAEM4JLS
+Le chargement a nécessité le package : ggplot2
+Le chargement a nécessité le package : gridExtra
+Le chargement a nécessité le package : reshape2
+Le chargement a nécessité le package : dplyr
+
+Attachement du package : ‘dplyr’
+
+L'objet suivant est masqué depuis ‘package:gridExtra’:
+
+    combine
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Le chargement a nécessité le package : tidyr
+
+Attachement du package : ‘tidyr’
+
+L'objet suivant est masqué depuis ‘package:reshape2’:
+
+    smiths
+
+Le chargement a nécessité le package : purrr
+
+Attachement du package : ‘SAEM4JLS’
+
+L'objet suivant est masqué depuis ‘package:purrr’:
+
+    as_function
+
+L'objet suivant est masqué depuis ‘package:future’:
+
+    run
+
+Erreur dans (function (beta, i, alpha, phi1, phi2, phi3, b)  : 
+  argument inutilisé (30)
+Appels : maximisation ... apply -> matrix -> sapply -> lapply -> FUN -> do.call
+Exécution arrêtée
+INFO : Large data should be stored in your work/ folder. 
+ 
+Le chargement a nécessité le package : future
+Le chargement a nécessité le package : furrr
+Le chargement a nécessité le package : SAEM4JLS
+Le chargement a nécessité le package : ggplot2
+Le chargement a nécessité le package : gridExtra
+Le chargement a nécessité le package : reshape2
+Le chargement a nécessité le package : dplyr
+
+Attachement du package : ‘dplyr’
+
+L'objet suivant est masqué depuis ‘package:gridExtra’:
+
+    combine
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Le chargement a nécessité le package : tidyr
+
+Attachement du package : ‘tidyr’
+
+L'objet suivant est masqué depuis ‘package:reshape2’:
+
+    smiths
+
+Le chargement a nécessité le package : purrr
+
+Attachement du package : ‘SAEM4JLS’
+
+L'objet suivant est masqué depuis ‘package:purrr’:
+
+    as_function
+
+L'objet suivant est masqué depuis ‘package:future’:
+
+    run
+
+Erreur dans (function (beta, i, alpha, phi1, phi2, phi3, b)  : 
+  argument inutilisé (30)
+Appels : maximisation ... apply -> matrix -> sapply -> lapply -> FUN -> do.call
+Exécution arrêtée
+INFO : Large data should be stored in your work/ folder. 
+ 
+Le chargement a nécessité le package : future
+Le chargement a nécessité le package : furrr
+Le chargement a nécessité le package : SAEM4JLS
+Le chargement a nécessité le package : ggplot2
+Le chargement a nécessité le package : gridExtra
+Le chargement a nécessité le package : reshape2
+Le chargement a nécessité le package : dplyr
+
+Attachement du package : ‘dplyr’
+
+L'objet suivant est masqué depuis ‘package:gridExtra’:
+
+    combine
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Le chargement a nécessité le package : tidyr
+
+Attachement du package : ‘tidyr’
+
+L'objet suivant est masqué depuis ‘package:reshape2’:
+
+    smiths
+
+Le chargement a nécessité le package : purrr
+
+Attachement du package : ‘SAEM4JLS’
+
+L'objet suivant est masqué depuis ‘package:purrr’:
+
+    as_function
+
+L'objet suivant est masqué depuis ‘package:future’:
+
+    run
+
+Erreur dans (function (beta, i, alpha, phi1, phi2, phi3, b)  : 
+  argument inutilisé (30)
+Appels : maximisation ... apply -> matrix -> sapply -> lapply -> FUN -> do.call
+Exécution arrêtée
