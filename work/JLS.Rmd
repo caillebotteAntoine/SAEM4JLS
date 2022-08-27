@@ -177,12 +177,13 @@ model <- SAEM_model(
   # === Paramètre de regression === #
   regression.parameter = list(
     regression_parameter('beta', 1, function(...) SPGD(1, theta0 = beta,
-                                                      step = 0.05, lambda = 1/sqrt(N),
+                                                      step = 0.05, lambda = lambda, alpha = 1,
                                                       normalized.grad = T,
                                                       zeta.der.B, N, zeta.B, 
                                                       Z$alpha,  Z$phi1, Z$phi2, Z$phi3,Z$b) )
   )
 )
+lambda <- 1/sqrt(N)
 ```
 
 ```{r saem load}
