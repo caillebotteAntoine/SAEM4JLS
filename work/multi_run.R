@@ -21,9 +21,9 @@ parameter <- list(sigma2 = .05^2,
                   omega2 = c(0.005, 40, 1),
                   bara = 90,
                   barb = 30,
-                  baralpha = 0.5,
+                  baralpha = 1.9,
                   beta = rep(0,p))
-parameter$beta[1:4] <-  c(-.8, -.2 , .3 , .9)
+parameter$beta[1:4] <-  c(-2, -1 , 1 , 2)
 #=======================================#
 t <- seq(60,120, length.out = 10) #time values
 set.seed(123)
@@ -43,7 +43,10 @@ S.data.time <- S.data$obs
 S.data.time.log.sum <- sum(log(S.data.time))
 
 #==============================================================================#
-sigma2_b <- sigma2_alpha <- 0.1
+sigma2_b <- sigma2_alpha <- 0.2^2
+dt$sigma2_b <- sigma2_b
+lbd <- 1.2
+message(lbd)
 
 h <- fct_vector(function(b, ...) N*log(b*a^-b),
                 function(b, ...) (b-1)*S.data.time.log.sum,
@@ -82,35 +85,6 @@ zeta.der.B <- function(beta, i, alpha, phi1, phi2, phi3, b)
 #==============================================================================#
 #==============================================================================#
 
-model_lasso <- SAEM_model(
-  function(sigma2, ...) -n/(2*sigma2),
-  function(phi1, phi2, phi3, ...) mean((Y - get_obs(phi1, phi2, phi3) )^2 ), 'sigma2',
-
-  # === Variable Latente === #
-  latent_vars = list(
-    # === Non linear model === #
-    latent_variable('phi', dim = G, size = 3, prior = list(mean = 'mu', variance = 'omega2'),
-                    add_on = c('zeta(phi1 = phi1, phi2 = phi2, phi3 = phi3, ...)' )),
-
-    # === S.data model === #
-    latent_variable('b', prior = list(mean = 'barb', variance.hyper = 'sigma2_b'),
-                    add_on = c('zeta(b = b, ...) +',
-                               'sum(h$eval(b = b, ..., i = c(1,2)))' )),
-    latent_variable('alpha', prior = list(mean = 'baralpha', variance.hyper = 'sigma2_alpha'),
-                    add_on = c('zeta(alpha = alpha, ...) +',
-                               'alpha*h$eval(alpha = alpha,..., i = 3)'))
-  ),
-
-  # === Paramètre de regression === #
-  regression.parameter = list(
-    regression_parameter('beta', 1, function(...) SPGD(5, theta0 = beta,
-                                                       step = 0.05, lambda = 1/sqrt(N), alpha = 0,
-                                                       normalized.grad = T,
-                                                       zeta.der.B, N, zeta.B,
-                                                       Z$alpha,  Z$phi1, Z$phi2, Z$phi3,Z$b) )
-  )
-)
-
 model <- SAEM_model(
   function(sigma2, ...) -n/(2*sigma2),
   function(phi1, phi2, phi3, ...) mean((Y - get_obs(phi1, phi2, phi3) )^2 ), 'sigma2',
@@ -133,7 +107,36 @@ model <- SAEM_model(
   # === Paramètre de regression === #
   regression.parameter = list(
     regression_parameter('beta', 1, function(...) SPGD(5, theta0 = beta,
-                                                       step = 0.05, lambda = 1/sqrt(N), alpha = 1,
+                                                       step = 0.05, lambda = lbd/sqrt(N), alpha = 0,
+                                                       normalized.grad = T,
+                                                       zeta.der.B, N, zeta.B,
+                                                       Z$alpha,  Z$phi1, Z$phi2, Z$phi3,Z$b) )
+  )
+)
+
+model_lasso <- SAEM_model(
+  function(sigma2, ...) -n/(2*sigma2),
+  function(phi1, phi2, phi3, ...) mean((Y - get_obs(phi1, phi2, phi3) )^2 ), 'sigma2',
+
+  # === Variable Latente === #
+  latent_vars = list(
+    # === Non linear model === #
+    latent_variable('phi', dim = G, size = 3, prior = list(mean = 'mu', variance = 'omega2'),
+                    add_on = c('zeta(phi1 = phi1, phi2 = phi2, phi3 = phi3, ...)' )),
+
+    # === S.data model === #
+    latent_variable('b', prior = list(mean = 'barb', variance.hyper = 'sigma2_b'),
+                    add_on = c('zeta(b = b, ...) +',
+                               'sum(h$eval(b = b, ..., i = c(1,2)))' )),
+    latent_variable('alpha', prior = list(mean = 'baralpha', variance.hyper = 'sigma2_alpha'),
+                    add_on = c('zeta(alpha = alpha, ...) +',
+                               'alpha*h$eval(alpha = alpha,..., i = 3)'))
+  ),
+
+  # === Paramètre de regression === #
+  regression.parameter = list(
+    regression_parameter('beta', 1, function(...) SPGD(5, theta0 = beta,
+                                                       step = 0.05, lambda = lbd/sqrt(N), alpha = 1,
                                                        normalized.grad = T,
                                                        zeta.der.B, N, zeta.B,
                                                        Z$alpha,  Z$phi1, Z$phi2, Z$phi3,Z$b) )
@@ -150,7 +153,7 @@ init.options <- list(x0 = list(phi = c(1,80,4), b = 20, alpha = 0.1),
 
 load.SAEM(model)
 
-SAEM.options <- list(niter = 200, sim.iter = 5, burnin = 190,
+SAEM.options <- list(niter = 200, sim.iter = 5, burnin = 150,
                      adptative.sd = 0.6)
 
 rds_filename <- paste0('data/res', gsub(' ','_',  gsub('-','_', gsub(':','_', Sys.time()) )), '_')
@@ -162,36 +165,43 @@ oracle <- maximisation(1, do.call(S$eval, var.true), parameter, var.true)
 
 f <- function(i)
 {
+  message(paste0('=============================   ', i , '    =============================='))
+
   # ---  Initialisation des paramètres --- #
   parameter0 <- parameter %>% sapply(function(x) x* runif(1, 1.2,1.4))
-
+  parameter0$beta <- runif(p, min = -1, max = 1)
 
 
   res_lasso <- SAEM4JLS::run(model_lasso, parameter0, init.options, SAEM.options, verbatim = 3*(i==1) )
 
-  parameter0 <- res_lasso[SAEM.options$niter]
-  SAEM.options$niter <- 5
-  SAEM.options$burnin <- 4
+  parameter200 <- res_lasso[SAEM.options$niter]#on récupère les paramètres
+  id <- which(parameter200$beta !=0) #pour garder que les beta_k non nulle
 
-  res <- SAEM4JLS::run(model, parameter0, init.options, SAEM.options, verbatim = 3*(i==1) )
-  return(list(res = res, res_lasso = res_lasso))
+  assign('U', U[,id], envir = globalenv()) #on change la matrice de cov
+
+  parameter200$beta <- parameter200$beta[id] #On garde que les beta_k non null
+
+  res <- SAEM4JLS::run(model, parameter200, init.options, SAEM.options, verbatim = 3*(i==1) )
+
+  #Reconstruction du beta p variable pour comparaison
+  res.beta <- res[SAEM.options$niter]$beta
+  beta <- rep(0, time = length(res_lasso[1]$beta))
+  beta[id] <- res.beta
+
+  return(list(res = res, res_lasso = res_lasso, beta_final = beta))
   # saveRDS(res, paste0(rds_filename, i, '.rds'))
 }
 
-setwd('work/')
+# setwd('work/')
 message(getwd())
 
-SAEM.options$niter <- 5
-SAEM.options$burnin <- 4
-
 plan(multisession, workers = cores)
-res <- future_map(1:cores, f, .options = furrr_options(seed = T, globals = ls()) )
+res <- future_map(1:pmax(cores - 5, 1), f, .options = furrr_options(seed = T, globals = ls()) )
 plan(sequential)
 
 
 
 saveRDS(list(res = res, oracle = oracle, parameter = parameter, data = dt, G = G, ng = ng, p = p, t = t, link = m, Y = Y),
-        file = paste0('multi_run_data_', gsub(' ','_',  gsub('-','_', gsub(':','_', Sys.time()) )), '.rds'))
-
+        file = paste0('multi_run_data_', gsub(' ','_',  gsub('-','_', gsub(':','_', Sys.time()) )), '_', lbd, '.rds'))
 
 

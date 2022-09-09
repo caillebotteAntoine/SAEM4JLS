@@ -12,6 +12,7 @@ SPGD(
   n,
   f,
   lambda,
+  alpha,
   ...,
   mini.batch.size = NULL,
   normalized.grad = F,
