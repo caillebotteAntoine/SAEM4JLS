@@ -47,7 +47,7 @@ dt <- dt[c("mu 1","mu 2","mu 3","omega2 1","omega2 2","omega2 3","sigma2", "b","
 gg <- plot( multi_run_data$res[[1]]$res_lasso, true.value = multi_run_data$oracle, exclude = 'beta', var = 'parameter') +
   labs(title = '')
 gg
-ggsave('plot_rapport/para_lbd_1_sqrtn_penalized.png', gg)
+ggsave('plot_rapport/para_lbd_1_sqrtn_penalized.png', gg, width = 8.2 , height = 5.6)
 
 rmse <- function(x) sqrt(mean(x^2))
 
@@ -82,21 +82,26 @@ gg <- dt %>% melt(id = NULL) %>%
 
 gg
 
-ggsave('plot_rapport/violion_plot.png', gg)
+ggsave('plot_rapport/violion_plot.png', gg, width = 8.2 , height = 5.6)
 
 #===============================================================================#
 
-gg <- beta %>% melt(id = NULL) %>%
+tmp_beta <- beta %>% melt(id = NULL) %>%
   mutate(variable = rep(1:ncol(beta), each = nrow(beta)) %>% factor) %>%
-  { .[which(.$value != 0), ] } %>%
+  { .[which(.$value != 0), ] }
+gg <- tmp_beta %>%
 
-  ggplot(aes(variable, value, fill = variable)) + geom_boxplot() +
+  ggplot(aes(variable, value)) + geom_boxplot(aes( fill = variable)) +
   theme(legend.position = 'null') +
   labs(x = 'Selected variables')
 
-gg
+gg <- gg +
+  geom_point(data = data.frame(variable = unique(tmp_beta$variable),
+                               value = c(-2,-1,1,2, rep(0, tmp_beta$variable %>% unique %>% length - 4) )),
+             shape = 8, aes(col = variable) )
 
-ggsave('plot_rapport/beta_lbd_1_sqrtn_penalized.png', gg)
+
+ggsave('plot_rapport/beta_lbd_1_sqrtn_penalized.png', gg, width = 8.2 , height = 5.6)
 
 #===============================================================================#
 
@@ -124,38 +129,42 @@ data.frame(rrmse = res %>% apply(2, rmse),
   xtable(align = c(rep('c|', ncol(.)), 'c') , digits = 2, display = rep('g', ncol(.)+1) )
 
 #===============================================================================#
-gg <- dt %>% melt(id = NULL) %>%
+beta_tmp_2 <- dt %>% melt(id = NULL) %>%
   mutate(variable = rep(1:ncol(dt), each = nrow(dt)) %>% factor) %>%
-  { .[which(.$value != 0), ] } %>%
+  { .[which(.$value != 0), ] }
+
+gg <- beta_tmp_2 %>%
 
   ggplot(aes(variable, value, fill = variable)) + geom_boxplot() +
   theme(legend.position = 'null') +
   labs(x = 'Selected variables')
 
+gg <- gg +
+  geom_point(data = data.frame(variable = unique(beta_tmp_2$variable),
+                               value = c(-2,-1,1,2, rep(0, beta_tmp_2$variable %>% unique %>% length - 4) )),
+             shape = 8, aes(col = variable) )
 gg
 
-ggsave('plot_rapport/beta_lbd_1_sqrtn_unpenalized.png', gg)
+ggsave('plot_rapport/beta_lbd_1_sqrtn_unpenalized.png', gg, width = 8.2 , height = 5.6)
 
 #===============================================================================#
-
-
-gg <- multi_run_data$res[[1]]$res$beta[,1:4] %>%
+beta_tmp_3 <-  multi_run_data$res[[1]]$res$beta[,1:4] %>%
   as.data.frame() %>% mutate(iteration = 1:nrow(.)) %>%
-  melt(id = 'iteration') %>%
+  melt(id = 'iteration')
+
+gg <-beta_tmp_3  %>%
 
   ggplot(aes(iteration, value, col = variable)) + geom_line() +
-
   scale_color_discrete('Component of beta ', labels = paste0('beta ', 1:4))
 
-gg
-ggsave('plot_rapport/beta_lbd_1_sqrtn_penalized_cv.png', gg)
+ggsave('plot_rapport/beta_lbd_1_sqrtn_penalized_cv.png', gg, width = 8.2 , height = 5.6)
 
 #===============================================================================#
 
 gg <- plot( multi_run_data$res[[1]]$res, true.value = multi_run_data$oracle, exclude = 'beta', var = 'parameter') +
   labs(title = '')
 gg
-ggsave('plot_rapport/para_lbd_1_sqrtn_unpenalized.png', gg)
+ggsave('plot_rapport/para_lbd_1_sqrtn_unpenalized.png', gg, width = 8.2 , height = 5.6)
 
 
 
@@ -165,14 +174,15 @@ ggsave('plot_rapport/para_lbd_1_sqrtn_unpenalized.png', gg)
 #========================= 1_dot_2_sqrtn =========================#
 #========================= 1_dot_2_sqrtn =========================#
 #========================= 1_dot_2_sqrtn =========================#
-multi_run_data <- readRDS("~/work/SAEM4JLS/multi_run_data_2022_09_05_17_14_11.rds")
+# multi_run_data <- readRDS("~/work/SAEM4JLS/multi_run_data_2022_09_05_17_14_11.rds")
+multi_run_data <- readRDS("~/work/SAEM4JLS/multi_run_data_1_dot_2_sqrtn_0_dot_04.rds")
 
 #===============================================================================#
 
 gg <- plot( multi_run_data$res[[1]]$res_lasso, true.value = multi_run_data$oracle, exclude = 'beta', var = 'parameter') +
   labs(title = '')
 gg
-ggsave('plot_rapport/para_lbd_1_dot_2_sqrtn_unpenalized.png', gg)
+ggsave('plot_rapport/para_lbd_1_dot_2_sqrtn_unpenalized.png', gg, width = 8.2 , height = 5.6)
 
 #========================= LASSO =========================#
 
@@ -199,18 +209,23 @@ names(dt) <- c("sigma2", "mu 1","mu 2","mu 3","omega2 1","omega2 2","omega2 3","
 dt_lasso <- dt[c("mu 1","mu 2","mu 3","omega2 1","omega2 2","omega2 3","sigma2", "b","alpha" )]
 
 #===============================================================================#
-
-gg <- beta %>% melt(id = NULL) %>%
+beta_tmp_4 <- beta %>% melt(id = NULL) %>%
   mutate(variable = rep(1:ncol(beta), each = nrow(beta)) %>% factor) %>%
-  { .[which(.$value != 0), ] } %>%
+  { .[which(.$value != 0), ] }
+
+gg <- beta_tmp_4 %>%
 
   ggplot(aes(variable, value, fill = variable)) + geom_boxplot() +
   theme(legend.position = 'null') +
   labs(x = 'Selected variables')
 
+gg <- gg +
+  geom_point(data = data.frame(variable = unique(beta_tmp_4$variable),
+                               value = c(-2,-1,1,2, rep(0, beta_tmp_4$variable %>% unique %>% length - 4) )),
+             shape = 8, aes(col = variable) )
 gg
 
-ggsave('plot_rapport/beta_lbd_1_dot_2_sqrtn_penalized.png', gg)
+ggsave('plot_rapport/beta_lbd_1_dot_2_sqrtn_penalized.png', gg, width = 8.2 , height = 5.6)
 
 #===============================================================================#
 f <- function(res) res[[3]]
@@ -218,17 +233,24 @@ f <- function(res) res[[3]]
 dt_beta <- lapply(multi_run_data$res, f) %>% reduce(rbind)
 res <- t(t(dt_beta[,1:4])/multi_run_data$parameter$beta[1:4] - 1)
 
-gg <- dt_beta %>% melt(id = NULL) %>%
+beta_tmp_5 <- dt_beta %>% melt(id = NULL) %>%
   mutate(variable = rep(1:ncol(dt_beta), each = nrow(dt_beta)) %>% factor) %>%
   { .[which(.$value != 0), ] } %>%
+  filter(variable != 936)
+
+
+gg <- beta_tmp_5%>%
 
   ggplot(aes(variable, value, fill = variable)) + geom_boxplot() +
   theme(legend.position = 'null') +
   labs(x = 'Selected variables')
-
 gg
-
-ggsave('plot_rapport/beta_lbd_1_dot_2_sqrtn_unpenalized.png', gg)
+gg <- gg +
+  geom_point(data = data.frame(variable = unique(beta_tmp_4$variable),
+                               value = c(-2,-1,1,2, rep(0, beta_tmp_4$variable %>% unique %>% length - 4) )),
+             shape = 8, aes(col = variable) )
+gg
+ggsave('plot_rapport/beta_lbd_1_dot_2_sqrtn_unpenalized.png', gg, width = 8.2 , height = 5.6)
 
 #===============================================================================#
 
@@ -250,7 +272,7 @@ data.frame(rrmse = res %>% apply(2, rmse),
 gg <- plot( multi_run_data$res[[1]]$res, true.value = multi_run_data$oracle, exclude = 'beta', var = 'parameter') +
   labs(title = '')
 gg
-ggsave('plot_rapport/para_lbd_1_dot_2sqrtn_unpenalized.png', gg)
+ggsave('plot_rapport/para_lbd_1_dot_2sqrtn_unpenalized.png', gg, width = 8.2 , height = 5.6)
 #===============================================================================#
 
 

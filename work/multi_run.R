@@ -195,6 +195,14 @@ f <- function(i)
 # setwd('work/')
 message(getwd())
 
+
+
+require(future)
+require(furrr)
+
+cores <- future::availableCores()-1
+message(cores)
+
 plan(multisession, workers = cores)
 res <- future_map(1:pmax(cores - 5, 1), f, .options = furrr_options(seed = T, globals = ls()) )
 plan(sequential)
