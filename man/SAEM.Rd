@@ -42,6 +42,9 @@ SAEM(
 
 \item{verbatim}{1 = message only, 2 add MCMC, 3 add full MCMC}
 }
+\value{
+
+}
 \description{
 SAEM algorithm perform parameter estimation for nonlinear mixed effects
 }

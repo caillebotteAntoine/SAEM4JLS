@@ -1,0 +1,32 @@
+* Résumé de la fin du stage,
+* du début de la thèse
+* Contexte / Perspective de bio
+* 
+
+
+prise en compte de la témpérature/humidité ? (on a les données ? sous quel formes ?)
+
+impact et interaction entre climat variabilité génétique et attacque ECB
+
+
+BONUS : comment gérer la double localisation Jouy/Moulon (administratif etc)
+
+0) Rappel du model du stage (notation, etc)
+1) Conclusion du stage : ce qui a était fait, ce qui s'est bien/mal passé 
+2) Perspective du stage à finir :
+	Réussir à inférer tout les paramètres du model,
+	Application donnée réelle ?
+	Tester d'autre pénalisation ?
+
+
+3) Discution : apparition de la pyrale dans le champ
+   Modélisation possible ?
+
+
+4) Gouter
+
+
+
+
+
+     

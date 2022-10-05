@@ -34,6 +34,9 @@ SPGD(
 
 \item{m}{number of iteration for the average computation of theta}
 }
+\value{
+
+}
 \description{
 compute a minimization of : f(theta) + pen(theta) where pen is the elastic net
 }
