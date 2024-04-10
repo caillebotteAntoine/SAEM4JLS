@@ -15,7 +15,8 @@ require(SAEM4JLS)
 # multi_run_data <- readRDS("~/work/SAEM4JLS/multi_run_data_2022_09_06_17_05_53.rds") #
 
 
-multi_run_data <- readRDS("~/work/SAEM4JLS/multi_run_data_2022_09_07_16_30_08_1.rds") #
+#multi_run_data <- readRDS("multi_run_data_2022_09_07_16_30_08_1.rds") #
+multi_run_data <- readRDS("multi_run_data_1_dot_2_sqrtn.rds")
 multi_run_data$data$sigma2_b
 
 #========================= LASSO =========================#
@@ -100,7 +101,7 @@ gg <- gg +
                                value = c(-2,-1,1,2, rep(0, tmp_beta$variable %>% unique %>% length - 4) )),
              shape = 8, aes(col = variable) )
 
-
+gg
 ggsave('plot_rapport/beta_lbd_1_sqrtn_penalized.png', gg, width = 8.2 , height = 5.6)
 
 #===============================================================================#
@@ -164,8 +165,49 @@ ggsave('plot_rapport/beta_lbd_1_sqrtn_penalized_cv.png', gg, width = 8.2 , heigh
 gg <- plot( multi_run_data$res[[1]]$res, true.value = multi_run_data$oracle, exclude = 'beta', var = 'parameter') +
   labs(title = '')
 gg
-ggsave('plot_rapport/para_lbd_1_sqrtn_unpenalized.png', gg, width = 8.2 , height = 5.6)
+ggsave('plot_rapport/para_lbd_1_dot_2_sqrtn_unpenalized.png', gg, width = 8.2 , height = 5.6)
 
+#===============================================================================#
+
+
+f <- function(res,v){
+  # if(v == 'beta') return(NA)
+  x <- as_tibble(res[[v]]) %>% na.omit %>% {.[nrow(.),]}
+  names(x) <- if(ncol(x) == 1) v else paste0(v, 1:ncol(x))
+  x
+}
+
+g <- function(v) lapply(multi_run_data$res, function(x) f(x$res, v)) %>% reduce(rbind)
+# g <- function(v) lapply(multi_run_data$res, function(x) f(x$res, v)) %>% reduce(rbind)
+
+var <- names( multi_run_data$res[[1]]$res ) %>% {.[-length(.)]}
+data <- lapply( var, function(v) g(v) )
+names(data) <- var
+
+
+dt <-  na.omit(as.data.frame(data))
+names(dt) <- unlist( data %>% sapply(function(d) names(d)) )
+names(dt) <- c("sigma2", "mu 1","mu 2","mu 3","omega2 1","omega2 2","omega2 3","b","alpha" )
+dt <- dt[c("mu 1","mu 2","mu 3","omega2 1","omega2 2","omega2 3","sigma2", "b","alpha" )]
+
+gg <- dt %>% melt(id = NULL) %>%
+
+  mutate(variable = factor(variable, levels = c(paste0('mu ', 1:3), paste0('omega2 ', 1:3), 'sigma2', 'b', 'alpha'))) %>%
+  ggplot(aes(value, variable, fill = variable)) +
+
+  geom_violin() +
+  geom_boxplot(width = 0.3, col = 'black', size = 0.5) +
+
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+
+  facet_wrap( vars(variable), scales = 'free') +
+  theme(legend.position = 'null') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1) ) +
+  labs(x = '', y = '')
+
+gg
+
+ggsave('plot_rapport/violion_plot_unpenalized.png', gg, width = 8.2 , height = 5.6)
 
 
 

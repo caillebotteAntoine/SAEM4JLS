@@ -1,6 +1,7 @@
 
 
 
+setOldClass("difftime")
 
 SAEM_res <- setClass(
   Class = "SAEM_res",
@@ -9,7 +10,7 @@ SAEM_res <- setClass(
   slots = list(Z = 'list',
                times_elasped  = 'difftime'),
 
-  prototype = prototype(Z = list(), chain = list(), times_elasped = difftime(NULL, NULL) )
+  prototype = prototype(Z = list(), times_elasped = difftime(NULL, NULL) )
 
 )
 
@@ -25,6 +26,7 @@ setMethod('initialize', 'SAEM_res', function(.Object, ..., param, niter, Z){
     }) )
 
     .Object@Z <- Z
+    .Object@times_elasped <- difftime(NULL, NULL)
   }
   return(.Object)
 })

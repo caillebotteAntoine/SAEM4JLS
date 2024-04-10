@@ -56,11 +56,16 @@ create_JLS_HD_data <- function(G, ng, t, m, link, param, U = NULL)
 
   survival <- data.frame(id = 1:(G*ng), gen = rep(1:G, each = ng) )
 
-  if(is.null(U) || (ncol(U) < p & nrow(U) != G*ng))
-  {
-    U <- matrix(runif(G*ng*p, min  = -1, max = 1), ncol = p)
+  if(p == 1){
+    U <- matrix(sample(c(0,1), G*ng, replace = T), ncol = p)
   }else{
-    U <- U[,1:p]
+
+    if(is.null(U) || (ncol(U) < p & nrow(U) != G*ng))
+    {
+      U <- matrix(runif(G*ng*p, min  = -1, max = 1), ncol = p)
+    }else{
+      U <- U[,1:p]
+    }
   }
 
   survival_fct <- function(i)

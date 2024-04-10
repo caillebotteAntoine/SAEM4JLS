@@ -12,11 +12,11 @@ g <- function(v) lapply(1:length(multi_run_data$res),
                         function(i) f(multi_run_data$res[[i]]$res_lasso, v) %>% mutate(id = i)) %>% reduce(rbind)
 
 var <- names( multi_run_data$res[[1]]$res )
-data <- lapply( var, function(v) g(v) )
+data <- lapply( var[-6], function(v) g(v) )
 
 
-dt <- g('mu')
-dt %>% melt(id = c('iteration', 'id')) %>%
+#dt <- g('mu')
+data %>% melt(id = c('iteration', 'id')) %>%
   ggplot(aes(iteration, value, col = factor(variable),
              group = interaction(factor(variable),factor(id)) )) +
   geom_line() +
@@ -114,6 +114,7 @@ gg <- beta %>% melt(id = NULL) %>%
   theme(legend.position = 'null') +
   labs(x = 'Selected variables')
 
+gg
 ggsave('beta_selection_good.png', gg)
 
 
